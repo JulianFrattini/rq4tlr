@@ -6,9 +6,28 @@ This repository contains the replication package for the study on how requiremen
 
 This repository consists of the following artifacts.
 
+- analysismanual/ : directory containing all data and soure code produced during the manual analysis of the study
+  - data/rq4tlr-manual-variablex.xslx : Excel workbook containing the manual ratings of variable values
+  - src/ : source code to process the manually generated data
+    - ira.py : utility file implementing the calculation of percentage agreement and Bennett's S-score
+    - overlap-requirements.ipynb : inter-rater agreement calculation on the requirements-level
+    - overlap-sentences.ipynb : inter-rater agreement calculation on the sentence-level
+
+The data used in this study stems from the repository [tobhey/**finegrained-traceability**](https://github.com/tobhey/finegrained-traceability). The data can be found in the *datasets* directory.
+
 ## System Requirements
 
+The code in this repository uses Python 3.10.0. 
+To execute the code locally, perform the following steps:
+
+1. Ensure that [Python 3.10](https://www.python.org/downloads/release/python-3100/) is installed on your machine.
+2. Install the [requirements](./requirements.txt) by executing `pip install -r requirements.txt`.
+
+Then, you can run the Jupyter notebooks locally.
+
 ## Usage
+
+To check the calculation of the inter-rater agreement, run the [overlap-requirements.ipynb](./analysismanual/src/overlap-requirements.ipynb) and the [overlap-sentences.ipynb](./analysismanual/src/overlap-sentences.ipynb) notebooks.
 
 ## License
 
