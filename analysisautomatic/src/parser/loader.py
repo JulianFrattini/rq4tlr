@@ -20,14 +20,21 @@ def parse_dataset(dataset_name: str, parser: AbstractUseCaseParser) -> list[UseC
     :param dataset_name: Name of the dataset file
     :return: List of UseCase objects
     """
+    # get a list of all use case files in the dataset directory
     dataset_path: str = f'./../data/{dataset_name}/'
-
     use_case_files = [f for f in os.listdir(dataset_path) if os.path.isfile(os.path.join(dataset_path, f))]
 
-    for use_case_file in use_case_files[:1]:
+    # prepare an empty list for the parsed use cases
+    use_cases: list[UseCase] = []
+
+    for use_case_file in use_case_files:
+        # determine the id and text of the use case
         use_case_id: str = use_case_file.split('.')[0]
         use_case_text: str = read_file_as_string(os.path.join(dataset_path, use_case_file))
 
+        # parse the use case with the provided parser
         uc: UseCase = parser.parse(ucid=use_case_id, uc_text=use_case_text)
-        print(uc)
+        use_cases.append(uc)
+
+    return use_cases
         

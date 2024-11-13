@@ -7,9 +7,10 @@ class UseCase:
     description: str = ""
     actors: list = field(default_factory=list)
     preconditions: str = ""
-    postconditions: str = ""
+    postconditions: list = field(default_factory=list)
     steps: list = field(default_factory=list)
     alternative: list = field(default_factory=list)
+    quality_requirements: list = field(default_factory=list)
 
 # Example usage
 use_case_example = UseCase(
