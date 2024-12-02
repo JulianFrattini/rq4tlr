@@ -6,6 +6,13 @@ This repository contains the replication package for the study on how requiremen
 
 This repository consists of the following artifacts.
 
+- analysisautomatic/ : directory containing all data and source code for the automatic analysis
+  - data/ : input for and output of the analysis
+    - input/ : raw input data in the form of directories of use cases in text files
+    - output/rq4tlr-automatic-variables.csv : automatic rating of variables 
+  - src/ : directory containing all source files, including the `main.py` which serves as the starting point
+  - [README.md](./analysisautomatic/README.md) : separate readme file explaining how to understand, use, and extend the analysis
+  - requirements.txt : specification of required libraries to run the analysis
 - analysismanual/ : directory containing all data and soure code produced during the manual analysis of the study
   - data/rq4tlr-manual-variablex.xslx : Excel workbook containing the manual ratings of variable values
   - src/ : source code to process the manually generated data
