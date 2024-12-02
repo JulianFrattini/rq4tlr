@@ -64,7 +64,7 @@ In case you want the automatic analysis to handle a new data set where the text 
 The parser must extend the `AbstractUseCaseParser` class, the specification of which can be found in the [usecaseparser.py](parser/usecaseparser.py) file.
 Then, append a tuple consisting of the data set `name` and an object of the respective parser subclass to the `parsers` attribute in the `main.py` file.
 
-```Python
+```diff
 parsers = [
     ('eTour', EtoursParser()), 
     ('iTrust', ItrustParser()),
@@ -82,7 +82,7 @@ Add this information as an attribute to the `sentence` data class in the [senten
 Then, create a new method in the [preprocessor.py](./src/preprocessor/preprocessor.py) script (this file already has the English language model for `spaCy` loaded).
 Finally, call the preprocessing step in the `preprocess_sentence()` method and add the new information to the preprocessed sentence object.
 
-```python
+```diff
 # Perform POS tagging
 pos_tagged = self.pos_tagging(literal)
 
@@ -112,7 +112,7 @@ The new file needs to contain a class that extends the `AbsProcessor` class spec
 As such, it needs a `name` attribute and a `process()` function.
 Once implemented, add it to the processor by extending the `__init__` function of the [processor](src/processor/processor.py):
 
-```python
+```diff
 def __init__(self):
     # setup all available processors
     self.processors: list[AbsProcessor] = [
