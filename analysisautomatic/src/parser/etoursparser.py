@@ -1,11 +1,11 @@
 from parser.usecaseparser import AbstractUseCaseParser
-from util.uc import UseCase
+from util.uc import RawUseCase
 
 class EtoursParser(AbstractUseCaseParser):
-    def parse(self, ucid: str, uc_text: str) -> UseCase:
+    def parse(self, ucid: str, uc_text: str) -> RawUseCase:
         lines: list[str] = uc_text.split('\n')
 
-        uc: UseCase = UseCase(id=ucid)
+        uc: RawUseCase = RawUseCase(id=ucid)
 
         # flags that are used to determine which section of the use case we are parsing
         is_parsing_steps: bool = False
