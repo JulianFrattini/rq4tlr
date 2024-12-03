@@ -6,19 +6,24 @@ This repository contains the replication package for the study on how requiremen
 
 This repository consists of the following artifacts.
 
-- analysisautomatic/ : directory containing all data and source code for the automatic analysis
-  - data/ : input for and output of the analysis
-    - input/ : raw input data in the form of directories of use cases in text files
-    - output/rq4tlr-automatic-variables.csv : automatic rating of variables 
-  - src/ : directory containing all source files, including the `main.py` which serves as the starting point
-  - [README.md](./analysisautomatic/README.md) : separate readme file explaining how to understand, use, and extend the analysis
-  - requirements.txt : specification of required libraries to run the analysis
-- analysismanual/ : directory containing all data and soure code produced during the manual analysis of the study
-  - data/rq4tlr-manual-variablex.xslx : Excel workbook containing the manual ratings of variable values
-  - src/ : source code to process the manually generated data
-    - ira.py : utility file implementing the calculation of percentage agreement and Bennett's S-score
-    - overlap-requirements.ipynb : inter-rater agreement calculation on the requirements-level
-    - overlap-sentences.ipynb : inter-rater agreement calculation on the sentence-level
+```
+├── analysisautomatic/ : directory containing all data and source code for the automatic analysis
+│   ├── data/ : input for and output of the analysis
+│   │   ├── input/ : raw input data in the form of directories of use cases in text files
+│   │   └── output/rq4tlr-automatic-variables.csv : automatic rating of variables 
+│   ├── src/ : directory containing all source files, including the `main.py` which serves as the starting point
+│   ├── README.md : separate readme file explaining how to understand, use, and extend the analysis
+│   └── requirements.txt : specification of required libraries to run the analysis
+├── analysismanual/ : directory containing all data and soure code produced during the manual analysis of the study
+│    ├── data/rq4tlr-manual-variablex.xslx : Excel workbook containing the manual ratings of variable values
+│    └── src/ : source code to process the manually generated data
+│        ├── ira.py : utility file implementing the calculation of percentage agreement and Bennett's S-score
+│        ├── overlap-requirements.ipynb : inter-rater agreement calculation on the requirements-level
+│        └── overlap-sentences.ipynb : inter-rater agreement calculation on the sentence-level
+└── documentation/ : directory for all additional documentation
+    └── figures/ : directory containing figures and graphs
+        └── rq4tlr-study-overview.graphml : visualization of the study process
+```    
 
 The data used in this study stems from the repository [tobhey/**finegrained-traceability**](https://github.com/tobhey/finegrained-traceability). The data can be found in the *datasets* directory.
 
