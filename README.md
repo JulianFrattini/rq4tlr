@@ -17,6 +17,7 @@ This repository consists of the following artifacts.
 ├── analysismanual/ : directory containing all data and soure code produced during the manual analysis of the study
 │    ├── data/rq4tlr-manual-variablex.xslx : Excel workbook containing the manual ratings of variable values
 │    └── src/ : source code to process the manually generated data
+│        ├── disagreements.py : utility script to detect all existing disagreements between two ratings
 │        ├── ira.py : utility file implementing the calculation of percentage agreement and Bennett's S-score
 │        ├── overlap-requirements.ipynb : inter-rater agreement calculation on the requirements-level
 │        └── overlap-sentences.ipynb : inter-rater agreement calculation on the sentence-level
@@ -40,6 +41,13 @@ Then, you can run the Jupyter notebooks locally.
 ## Usage
 
 To check the calculation of the inter-rater agreement, run the [overlap-requirements.ipynb](./analysismanual/src/overlap-requirements.ipynb) and the [overlap-sentences.ipynb](./analysismanual/src/overlap-sentences.ipynb) notebooks.
+
+To determine disagreements between two manual ratings, use the [disagreements.py](./analysismanual/src/disagreements.py) script.
+Ensure that `pandas` is installed and run (replace "sentences" with "requirements" for the requirements-level disagreements):
+
+```
+python disagreements.py --type sentences
+```
 
 ## License
 
