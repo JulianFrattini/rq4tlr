@@ -4,29 +4,29 @@ This repository contains the replication package for the study on how requiremen
 
 ## Structure of the Artifact
 
-This repository consists of the following artifacts.
+This repository consists of the following files.
 
 ```
-├── analysisautomatic/ : directory containing all data and source code for the automatic analysis
-│   ├── data/ : input for and output of the analysis
-│   │   ├── input/ : raw input data in the form of directories of use cases in text files
-│   │   └── output/rq4tlr-automatic-variables.csv : automatic rating of variables 
-│   ├── src/ : directory containing all source files, including the `main.py` which serves as the starting point
-│   ├── README.md : separate readme file explaining how to understand, use, and extend the analysis
-│   └── requirements.txt : specification of required libraries to run the analysis
-├── analysismanual/ : directory containing all data and soure code produced during the manual analysis of the study
-│    ├── data/rq4tlr-manual-variablex.xslx : Excel workbook containing the manual ratings of variable values
-│    └── src/ : source code to process the manually generated data
-│        ├── disagreements.py : utility script to detect all existing disagreements between two ratings
-│        ├── ira.py : utility file implementing the calculation of percentage agreement and Bennett's S-score
-│        ├── overlap-requirements.ipynb : inter-rater agreement calculation on the requirements-level
-│        └── overlap-sentences.ipynb : inter-rater agreement calculation on the sentence-level
-└── documentation/ : directory for all additional documentation
-    └── figures/ : directory containing figures and graphs
-        └── rq4tlr-study-overview.graphml : visualization of the study process
-```    
+├── data : directory containing all data collected for and produced during the study
+│   ├── input : data sets composed from a series of use cases from different domains
+│   │   ├── raw : original data as obtained from previous studies (see below)
+│   │   └── preprocessed : processed data put into a common json format
+│   ├── labeling/rq4tlr-manual-variables.xlsx : labels assigned manually for complex independent variables
+│   └── output/rq4tlr-automatic-variables.csv : labels assigned automatically for simpler independent variables
+├── documentation : directory for all additional documentation
+│   └── figures : directory containing figures and graphs
+│       └── rq4tlr-study-overview.graphml : visualization of the study process
+├── src : directory containing all source code
+│   ├── automatic : source code conducting the automatic labeling, including its own README file
+│   └── manual : source code to process the manually generated data
+│       ├── disagreements.py : utility script to detect all existing disagreements between two ratings
+│       ├── ira.py : utility file implementing the calculation of percentage agreement and Bennett's S-score
+│       ├── overlap-requirements.ipynb : inter-rater agreement calculation on the requirements-level
+│       └── overlap-sentences.ipynb : inter-rater agreement calculation on the sentence-level
+└── requirements.txt : specification of required libraries to run the analysis
+```
 
-The data used in this study stems from the repository [tobhey/**finegrained-traceability**](https://github.com/tobhey/finegrained-traceability). The data can be found in the *datasets* directory.
+The data used in this study stems from the repository [tobhey/**finegrained-traceability**](https://github.com/tobhey/finegrained-traceability). 
 
 ## System Requirements
 
