@@ -5,35 +5,35 @@ The automatic analysis aims to evaluate the use cases regarding those factors wh
 
 ## Process
 
-The core of the automatic analysis is the [main.py](src/main.py) script which ties all sub-scripts together. 
+The core of the automatic analysis is the [process.py](./process.py) script which ties all sub-scripts together. 
 Its essential interface is:
 
 - **Input**: a list of use cases in text files, located in the [data/input/](data/input) directory
 - **Output**: a `CSV` file where each use case from the input is associated with values for all automatically decided factors
 
-The `main.py` script delegates this task as follows:
+The `process.py` script delegates this task as follows:
 
 ```mermaid
 sequenceDiagram
-    participant main
+    participant process
     participant parse as parser
     participant prep as UseCasePreprocessor
     participant proc as Processor
 
     loop every dataset ds
-        main->>+parse: parse_dataset(ds)
-        parse-->>-main: raw_use_cases
+        process->>+parse: parse_dataset(ds)
+        parse-->>-process: raw_use_cases
     end
 
     loop every ruc in raw_use_cases
-        main ->>+ prep: preprocess_use_case(ruc)
-        prep -->>- main: use_case
+        process ->>+ prep: preprocess_use_case(ruc)
+        prep -->>- process: use_case
     end
 
-    main ->>+ proc: apply_processors(use_cases)
-    proc -->>- main: results
+    process ->>+ proc: apply_processors(use_cases)
+    proc -->>- process: results
 
-    main ->>+ main: results.to_csv()
+    process ->>+ process: results.to_csv()
 ```
 
 The individual components (e.g., the parser, preprocessor, and processor) delegate their task further.
@@ -51,7 +51,7 @@ Afterwards, you can continue with the usage of the analysis.
 
 ## Usage
 
-To execute the automatic analysis, run the `main.py` script, e.g., via `python .\main.py`.
+To execute the automatic analysis, run the `process.py` script, e.g., via `python .\process.py`.
 In case you installed the dependencies into a virtual environment, ensure that it is running.
 
 ## Development
@@ -62,7 +62,7 @@ To contribute to the automatic analysis, please consider the following recommend
 
 In case you want the automatic analysis to handle a new data set where the text files of the use cases do not follow any existing template, you need to develop a new parser.
 The parser must extend the `AbstractUseCaseParser` class, the specification of which can be found in the [usecaseparser.py](parser/usecaseparser.py) file.
-Then, append a tuple consisting of the data set `name` and an object of the respective parser subclass to the `parsers` attribute in the `main.py` file.
+Then, append a tuple consisting of the data set `name` and an object of the respective parser subclass to the `parsers` attribute in the `process.py` file.
 
 ```diff
 parsers = [
@@ -72,7 +72,7 @@ parsers = [
 ]
 ```
 
-The next execution of the `main.py` script will then include the new data set.
+The next execution of the `process.py` script will then include the new data set.
 
 ### Adding a Preprocessor Step
 
@@ -122,4 +122,4 @@ def __init__(self):
     ]
 ```
 
-The next execution of `main.py` will execute the additional processor and add a column with the given `name` to the resulting table.
+The next execution of `process.py` will execute the additional processor and add a column with the given `name` to the resulting table.

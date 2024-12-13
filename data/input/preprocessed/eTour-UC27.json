@@ -1,0 +1,25 @@
+{
+    "id": "eTour-UC27",
+    "name": "SearchSite",
+    "description": "Searching for a specific site on the computer.",
+    "actors": [
+        ""
+    ],
+    "preconditions": [],
+    "postconditions": [
+        "The system returns a list of sites found",
+        "The system returns a list of sites found",
+        "Interruption of the connection to the server ETOUR."
+    ],
+    "steps": [
+        "Activate the search functionality of a site.",
+        "Show the form for research",
+        "Fill in the form of research and submit",
+        "Processing the request"
+    ],
+    "alternative": [],
+    "quality_requirements": [
+        "The system requirements should return the results within a time limit set",
+        ""
+    ]
+}

@@ -1,0 +1,20 @@
+{
+    "id": "eTour-UC5",
+    "name": "ViewCulturalHeritageCard",
+    "description": "View the details of the selected cultural.",
+    "actors": [
+        "initialization Agency Operator"
+    ],
+    "preconditions": "The agency has logged.",
+    "postconditions": [
+        "The system displays the details of the selected cultural.",
+        "The system displays the details of the selected cultural.",
+        "Interruption of the connection to the server ETOUR."
+    ],
+    "steps": [
+        "View the list of cultural goods as a result of the use case SearchCulturalHeritage, it selects and activates a function to view the card.",
+        "Loads the data for the selected cultural."
+    ],
+    "alternative": [],
+    "quality_requirements": []
+}

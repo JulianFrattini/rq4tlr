@@ -1,0 +1,25 @@
+{
+    "id": "eTour-UC47",
+    "name": "ModifyTouristData",
+    "description": "Change data associated with your account.",
+    "actors": [
+        "initialized by Tourist"
+    ],
+    "preconditions": [],
+    "postconditions": [
+        "The system shall notify the successful modification of data.",
+        "The system shall notify the successful modification of data.",
+        "The Tourist cancels the operation.",
+        "Interruption of the connection to the server ETOUR."
+    ],
+    "steps": [
+        "Access to functionality for the modification of data.",
+        "Loads the data and displays them in a form.",
+        "Edit the fields in the form and submit.",
+        "Check the modified information and asks for confirmation of the change. Where the data is invalid or insufficient, the system activates the use case Errored.",
+        "Confirmation of the transaction change.",
+        "Stores the modified data."
+    ],
+    "alternative": [],
+    "quality_requirements": []
+}

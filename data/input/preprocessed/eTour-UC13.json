@@ -1,0 +1,24 @@
+{
+    "id": "eTour-UC13",
+    "name": "Active / InactiveTouristAccount",
+    "description": "Enable or disable the account of a tourist.",
+    "actors": [
+        "initialization Agency Operator"
+    ],
+    "preconditions": "The Agency is in the form of a tourist.",
+    "postconditions": [
+        "The notification of the outcome.",
+        "The notification of the outcome.",
+        "Interruption of the connection to the server ETOUR."
+    ],
+    "steps": [
+        "Activate the feature for the activation / deactivation by a given sheet tourist.",
+        "Asks for confirmation of activation / deactivation.",
+        "Confirm the operation.",
+        "Enable / disable the account of the visitor you selected."
+    ],
+    "alternative": [],
+    "quality_requirements": [
+        ""
+    ]
+}

@@ -1,0 +1,20 @@
+{
+    "id": "eTour-UC32",
+    "name": "ModifyPasswordError",
+    "description": "He was asked to enter a password but is not confirmed in a correct way.",
+    "actors": [
+        ""
+    ],
+    "preconditions": [],
+    "postconditions": [
+        "The system returns control to the user interaction.",
+        "The system returns control to the user interaction."
+    ],
+    "steps": [
+        "Notify an error message.",
+        "Confirmation of the reading of the notification.",
+        "Back to change your password."
+    ],
+    "alternative": [],
+    "quality_requirements": []
+}

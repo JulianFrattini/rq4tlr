@@ -1,0 +1,26 @@
+{
+    "id": "eTour-UC7",
+    "name": "ActiveConvention",
+    "description": "Convention active request by a refreshment point.",
+    "actors": [
+        "initialization Agency Operator"
+    ],
+    "preconditions": "The Agency is in the form of a designated point of rest.",
+    "postconditions": [
+        "The system shall notify the activation of the convention.",
+        "The system shall notify the activation of the convention.",
+        "Interruption of the connection to the server ETOUR."
+    ],
+    "steps": [
+        "Enable the activation function of the Convention.",
+        "Load the data request of the Convention from the point of rest and displays the corresponding form.",
+        "Check the data of the agreement and decide for activation.",
+        "Asks for confirmation of the activation.",
+        "Confirm the operation.",
+        "Processing the request."
+    ],
+    "alternative": [],
+    "quality_requirements": [
+        ""
+    ]
+}

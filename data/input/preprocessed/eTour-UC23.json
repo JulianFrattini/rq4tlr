@@ -1,0 +1,29 @@
+{
+    "id": "eTour-UC23",
+    "name": "ModifyNews",
+    "description": "Change data of a news on the computer.",
+    "actors": [
+        "initialization Agency Operator"
+    ],
+    "preconditions": "The agency has logged.",
+    "postconditions": [
+        "The system shall notify the successful amendment of news.",
+        "The system shall notify the successful amendment of news.",
+        "The Operator Agency cancels the operation.",
+        "Interruption of the connection to the server ETOUR."
+    ],
+    "steps": [
+        "Activate the editing functionality of a news.",
+        "View all news in a form.",
+        "Select a news from the list and submit the form.",
+        "Load the data of news and displays them in a form for editing.",
+        "Change data in the form and submit.",
+        "Check the modified information and asks for confirmation of the transaction. Where the data is invalid or insufficient, the system activates the use case Errored.",
+        "Confirm the operation of changing the data news.",
+        "Stores data modified news."
+    ],
+    "alternative": [],
+    "quality_requirements": [
+        ""
+    ]
+}
