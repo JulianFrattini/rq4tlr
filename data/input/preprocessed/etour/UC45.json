@@ -1,0 +1,24 @@
+{
+    "id": "UC45",
+    "name": "ViewPersonalStatistic",
+    "description": "Viewing statistics for Point Of Restaurants",
+    "actors": [
+        "initialization Operator Point Of Restaurants"
+    ],
+    "preconditions": [],
+    "postconditions": [
+        "The system displays the data on the screen.",
+        "The system displays the data on the screen.",
+        "Interruption of the connection to the server."
+    ],
+    "main": [
+        {
+            "steps": [
+                "Select the feature to display personal statistics.",
+                "Displays a form that shows data for the statistics associated refreshment point."
+            ]
+        }
+    ],
+    "alternative": [],
+    "quality_requirements": []
+}

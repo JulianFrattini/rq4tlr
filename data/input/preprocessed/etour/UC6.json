@@ -1,0 +1,27 @@
+{
+    "id": "UC6",
+    "name": "DeleteRefreshmentPoint",
+    "description": "Delete a refreshment from the system.",
+    "actors": [
+        "initialization Operator Agency."
+    ],
+    "preconditions": "The agency has logged.",
+    "postconditions": [
+        "The system shall notify the successful elimination of the point of rest.",
+        "The system shall notify the successful elimination of the point of rest.",
+        "Operator Agency cancels the operation.",
+        "Interruption ETOUR connection to the server."
+    ],
+    "main": [
+        {
+            "steps": [
+                "View a list of points of rest as a result of the use case SearchCulturalHeritage, it selects and activates a function of elimination.",
+                "Asks for confirmation of the transaction.",
+                "Confirm the deletion.",
+                "Deletes the selected point of rest."
+            ]
+        }
+    ],
+    "alternative": [],
+    "quality_requirements": []
+}

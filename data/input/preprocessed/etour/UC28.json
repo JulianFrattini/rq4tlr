@@ -1,0 +1,26 @@
+{
+    "id": "UC28",
+    "name": "DeleteTag",
+    "description": "Removes one or more search tags in the system.",
+    "actors": [
+        "initialization Agency Operator"
+    ],
+    "preconditions": "The agency has logged.",
+    "postconditions": [
+        "The system shall notify the successful elimination of selected tags.",
+        "The system shall notify the successful elimination of selected tags.",
+        "Interruption of the connection to the server ETOUR."
+    ],
+    "main": [
+        {
+            "steps": [
+                "Access the functionality to delete a tag.",
+                "Research in the existing system, the tags and displays them in a form.",
+                "Select one or more tags from the list and sends the request for deletion.",
+                "Delete the selected search tag."
+            ]
+        }
+    ],
+    "alternative": [],
+    "quality_requirements": []
+}

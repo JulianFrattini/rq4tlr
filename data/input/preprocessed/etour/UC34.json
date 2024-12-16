@@ -1,0 +1,26 @@
+{
+    "id": "UC34",
+    "name": "SEARCH",
+    "description": "Research and cultural heritage for all.",
+    "actors": [
+        "initialized by Guest User"
+    ],
+    "preconditions": [],
+    "postconditions": [
+        "The system displays a list of sites that meet the search criteria.",
+        "The system displays a list of sites that meet the search criteria.",
+        "Interruption of the connection to the server ETOUR."
+    ],
+    "main": [
+        {
+            "steps": [
+                "Activate the search functionality.",
+                "Displays the corresponding form.",
+                "Fill out the form and submit.",
+                "Gets the position of the Guest citing the case of use location and process research."
+            ]
+        }
+    ],
+    "alternative": [],
+    "quality_requirements": []
+}

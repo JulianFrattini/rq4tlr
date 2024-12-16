@@ -1,0 +1,24 @@
+{
+    "id": "UC36",
+    "name": "LoginError",
+    "description": "The data supplied for the login is incorrect.",
+    "actors": [
+        ""
+    ],
+    "preconditions": [],
+    "postconditions": [
+        "The system returns control to the user interaction.",
+        "The system returns control to the user interaction."
+    ],
+    "main": [
+        {
+            "steps": [
+                "Notice that the data entered for the login is not valid and asks for confirmation of the reading.",
+                "Confirmation of the reading of the notification.",
+                "Recovers the previous state."
+            ]
+        }
+    ],
+    "alternative": [],
+    "quality_requirements": []
+}

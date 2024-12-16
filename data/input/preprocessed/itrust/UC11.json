@@ -1,0 +1,42 @@
+{
+    "id": "UC11",
+    "name": "Document Office Visit",
+    "description": "",
+    "actors": [],
+    "preconditions": [],
+    "postconditions": [],
+    "main": [
+        {
+            "steps": [
+                "The HCP enters a MID",
+                "[E1] or name of a patient and confirms their selection [E2].",
+                "The HCP documents the office visit date; hospital location of the office visit, if any, (the default should be the HCP's home location); and notes (numbers, characters, #, ;, ?, -, ', ., :, blankspace and carriage return are all allowed input values) about an office visit.",
+                "The HCP's medical identification number should also be maintained.",
+                "Additionally, the HCP can document none, one, or more medications (NDC, see Data Format 6.6) prescribed",
+                "[S3]; none, one, or more lab procedures that are ordered (LOINC code, see Data Format 6.11)(UC26); none, one, or more diagnoses (via the ICD-9CM code); none, one, or more medical procedures (CPT code) performed; and none, one, or more immunizations given (CPT Code, see UC15, S1) chosen from appropriate pull-down lists.",
+                "The HCP may also add a patient referral (UC33).",
+                "All events are logged (UC5, S8)."
+            ]
+        },
+        {
+            "steps": [
+                "HCPs can return to an office visit and modify or delete the fields of the office visit [date, hospital, notes, prescriptions, laboratory procedures (UC26), referral (UC33), diagnoses, procedures, and/or immunizations].",
+                "The event is logged (UC 5, S8) and the HCP is returned in the specific office visit record to verify his or her changes."
+            ]
+        }
+    ],
+    "alternative": [
+        {
+            "steps": [
+                "The HCP types an invalid medical identification number and is prompted to try again."
+            ]
+        },
+        {
+            "steps": [
+                "The patient chosen is not the desired patient.",
+                "The health care personnel does not confirm the selection and is prompted to try again."
+            ]
+        }
+    ],
+    "quality_requirements": []
+}

@@ -1,0 +1,31 @@
+{
+    "id": "UC17",
+    "name": "Proactively Determine Needed Care",
+    "description": "",
+    "actors": [],
+    "preconditions": [],
+    "postconditions": [],
+    "main": [
+        {
+            "steps": [
+                "An alive patient who has not had an office visit for more than one year and who has been diagnosed with diabetes mellitus",
+                "[is diagnosed with ICD code beginning with 250] asthma",
+                "[is diagnosed with ICD code beginning with 493], or circulatory-system disease [is diagnosed with an ICD code between 390 and 459 inclusive]."
+            ]
+        },
+        {
+            "steps": [
+                "An alive patient over 50 years old who has not had a flu shot",
+                "[CPT codes 90656, 90658, 90660 per http://www.influenza.com/index.cfm?fa=ADDITIONAL_RES_HC_2 during the months Sept - Dec of the last calendar year (or during the months Sept - Dec of the current calendar year if the retrieval time is between Sept - Dec)."
+            ]
+        },
+        {
+            "steps": [
+                "An alive patient under the age of 19 who has not had proper immunizations per the immunization schedule.",
+                "The catch up schedule is relevant when the patient did not begin the immunizations according to the recommended schedule."
+            ]
+        }
+    ],
+    "alternative": [],
+    "quality_requirements": []
+}

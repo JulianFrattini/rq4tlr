@@ -1,0 +1,48 @@
+{
+    "id": "UC33",
+    "name": "Refer and Provide Consultation",
+    "description": "",
+    "actors": [],
+    "preconditions": [],
+    "postconditions": [],
+    "main": [
+        {
+            "steps": [
+                "An HCP chooses to refer a patient to another receiving HCP through the referral feature on a patient's office visit page (UC11).",
+                "The sending HCP must select a receiving HCP by either entering the HCP's MID and confirming the selection, or by searching for the HCP by name.",
+                "The sending HCP is also presented with a text box to include notes about the referral.",
+                "The sending HCP then chooses a priority from 1-3 (1 is most important, 3 is least important) for the referral.",
+                "The HCP may send the referral, cancel the referral [E1], or edit the referral [E2].",
+                "Upon sending a referral, the patient, sending HCP, and receiving HCP receive a message summarizing the newly created referral information (sending HCP name & specialty, receiving HCP name & specialty, patient name, referral notes, and referral creation timestamp); additionally, the sending and receiving HCP messages include the referral priority."
+            ]
+        },
+        {
+            "steps": [
+                "An HCP chooses to view received referrals.",
+                "The receiving HCP is presented with a list of referrals sorted by priority (from most important to least important).",
+                "The receiving HCP then selects a referral to view details and is presented with the name and specialty of the sending HCP, the patient's name, the referral notes, the referral priority, the office visit date with a link to the office visit, and the time the referral was created."
+            ]
+        },
+        {
+            "steps": [
+                "A sending HCP views a list of previously sent patient referrals.",
+                "The HCP may sort the list of referrals by patient name, receiving HCP name, time generated, and/or priority.",
+                "The HCP chooses a specific referral from the list to view complete details about the referral: patient name, receiving HCP name and specialty, time generated, priority, office visit date, and notes."
+            ]
+        }
+    ],
+    "alternative": [
+        {
+            "steps": [
+                "The receiving HCP chosen is not the desired HCP.",
+                "The sending HCP does not confirm the selection and is prompted to try again."
+            ]
+        },
+        {
+            "steps": [
+                "The patient, receiving HCP, referral notes, and/or referral priority are invalid, and the HCP is prompted to enter this information again."
+            ]
+        }
+    ],
+    "quality_requirements": []
+}

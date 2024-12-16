@@ -1,0 +1,24 @@
+{
+    "id": "UC49",
+    "name": "ViewPreferredSite",
+    "description": "View the list of personal favorites.",
+    "actors": [
+        "initialized by Tourist"
+    ],
+    "preconditions": [],
+    "postconditions": [
+        "The system displays the list of bookmarks.",
+        "The system displays the list of bookmarks.",
+        "Interruption of the connection to the server ETOUR."
+    ],
+    "main": [
+        {
+            "steps": [
+                "Select the feature to display the list of personal favorites.",
+                "Upload the list of bookmarks."
+            ]
+        }
+    ],
+    "alternative": [],
+    "quality_requirements": []
+}

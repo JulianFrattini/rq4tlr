@@ -1,0 +1,26 @@
+{
+    "id": "UC54",
+    "name": "ModifyComment",
+    "description": "Edit the comment previously issued.",
+    "actors": [
+        "initialized by Tourist"
+    ],
+    "preconditions": [],
+    "postconditions": [
+        "The system shall notify the alterations of the comment",
+        "The system shall notify the alterations of the comment",
+        "Interruption of the connection to the server ETOUR."
+    ],
+    "main": [
+        {
+            "steps": [
+                "Choose to change the comment on the feedback for the site issued by the appropriate functionality.",
+                "Verify the data entered and asks for confirmation of the change. Where the data is invalid or insufficient, the system activates the use case Errored.",
+                "Confirm the change of the comment.",
+                "Edit commentary on selected feedback"
+            ]
+        }
+    ],
+    "alternative": [],
+    "quality_requirements": []
+}

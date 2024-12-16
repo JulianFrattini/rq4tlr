@@ -1,0 +1,40 @@
+{
+    "id": "UC1",
+    "name": "Create and Disable Patients",
+    "description": "",
+    "actors": [],
+    "preconditions": [],
+    "postconditions": [],
+    "main": [
+        {
+            "steps": [
+                "The HCP enters a patient as a new user of iTrust Medical Records system.",
+                "Only the name and email are is provided.",
+                "The patient's assigned MID and a secret key (the initial password) is personally provided to the user, with which the user can reset his/her password.",
+                "The HCP can edit the patient according to data format 6.4 [E1] with all initial values (except patient MID) defaulting to null and/or 0 as appropriate.",
+                "Patient MID should be the number assigned when the patient is added to the system and cannot be edited.",
+                "The HCP does not have the ability to enter/edit/view the patient's security question/password."
+            ]
+        },
+        {
+            "steps": [
+                "The HCP provides a deceased date (data format 6.4).",
+                "An optional diagnosis code is entered as the cause of death."
+            ]
+        }
+    ],
+    "alternative": [
+        {
+            "steps": [
+                "The system prompts the enterer/editor to correct the format of a required data field because the input of that data field does not match that specified in data format 6.4 for patients."
+            ]
+        },
+        {
+            "steps": [
+                "The enterer/editor is presented with the name of the user and determines if it is invalid or not the right person.",
+                "The enterer/editor is prompted to try again."
+            ]
+        }
+    ],
+    "quality_requirements": []
+}

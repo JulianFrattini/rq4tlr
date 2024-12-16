@@ -1,0 +1,24 @@
+{
+    "id": "UC10",
+    "name": "ViewRefreshmentPointCard",
+    "description": "View the details of a selected point of rest.",
+    "actors": [
+        "initialization Agency Operator"
+    ],
+    "preconditions": "The agency has logged.",
+    "postconditions": [
+        "The system displays the details of the selected point of rest.",
+        "The system displays the details of the selected point of rest.",
+        "Interruption of the connection to the server ETOUR."
+    ],
+    "main": [
+        {
+            "steps": [
+                "View the list of points of rest as a result of the use case SearchRefreshmentPoint, it selects and activates a function to view the card.",
+                "Upload data to a selected restaurant."
+            ]
+        }
+    ],
+    "alternative": [],
+    "quality_requirements": []
+}
