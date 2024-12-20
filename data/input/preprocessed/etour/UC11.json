@@ -11,14 +11,12 @@
         "The system displays the history of conventions concerning the point of eating selected.",
         "Interruption of the connection to the server ETOUR."
     ],
-    "main": [
-        {
-            "steps": [
-                "Access the features on the display of historical conventions.",
-                "Upload data on conventions from the restaurant selected."
-            ]
-        }
-    ],
-    "alternative": [],
+    "main": {
+        "UC11": [
+            "Access the features on the display of historical conventions.",
+            "Upload data on conventions from the restaurant selected."
+        ]
+    },
+    "alternative": {},
     "quality_requirements": []
 }

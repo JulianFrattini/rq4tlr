@@ -11,14 +11,12 @@
         "The system displays the details of the selected point of rest.",
         "Interruption of the connection to the server ETOUR."
     ],
-    "main": [
-        {
-            "steps": [
-                "View the list of points of rest as a result of the use case SearchRefreshmentPoint, it selects and activates a function to view the card.",
-                "Upload data to a selected restaurant."
-            ]
-        }
-    ],
-    "alternative": [],
+    "main": {
+        "UC10": [
+            "View the list of points of rest as a result of the use case SearchRefreshmentPoint, it selects and activates a function to view the card.",
+            "Upload data to a selected restaurant."
+        ]
+    },
+    "alternative": {},
     "quality_requirements": []
 }

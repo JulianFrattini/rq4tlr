@@ -11,13 +11,11 @@
         "The system confirms the success of Operation",
         "Interruption of the connection to the server"
     ],
-    "main": [
-        {
-            "steps": [
-                "Choose to change your password by pressing the appropriate"
-            ]
-        }
-    ],
-    "alternative": [],
+    "main": {
+        "UC31": [
+            "Choose to change your password by pressing the appropriate"
+        ]
+    },
+    "alternative": {},
     "quality_requirements": []
 }

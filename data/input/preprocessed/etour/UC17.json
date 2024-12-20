@@ -11,20 +11,18 @@
         "The system shall notify the successful modification of the banner.",
         "Interruption of the connection to the server ETOUR."
     ],
-    "main": [
-        {
-            "steps": [
-                "Receives a list of turning points of the rest use case SearchRefreshmentPoint and select one from accessing the function of editing a banner.",
-                "View the list of banner associated with the point of rest.",
-                "Select a banner from the list and enter the editing functionality.",
-                "Displays a form for the selection of an image.",
-                "Select a picture and send the request to change the system.",
-                "Check the characteristics of the inserted and asks for confirmation of the change of the banner. In the event that the inserted image is not valid, enable the use case Errored.",
-                "Confirmation of the transaction change.",
-                "Bookmark this new image for the selected banner."
-            ]
-        }
-    ],
-    "alternative": [],
+    "main": {
+        "UC17": [
+            "Receives a list of turning points of the rest use case SearchRefreshmentPoint and select one from accessing the function of editing a banner.",
+            "View the list of banner associated with the point of rest.",
+            "Select a banner from the list and enter the editing functionality.",
+            "Displays a form for the selection of an image.",
+            "Select a picture and send the request to change the system.",
+            "Check the characteristics of the inserted and asks for confirmation of the change of the banner. In the event that the inserted image is not valid, enable the use case Errored.",
+            "Confirmation of the transaction change.",
+            "Bookmark this new image for the selected banner."
+        ]
+    },
+    "alternative": {},
     "quality_requirements": []
 }

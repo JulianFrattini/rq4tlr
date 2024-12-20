@@ -11,14 +11,12 @@
         "The system displays a list of sites visited.",
         "Interruption of the connection to the server ETOUR."
     ],
-    "main": [
-        {
-            "steps": [
-                "Select the feature to display the list of sites visited personal.",
-                "Upload the list of sites for which the tourist has issued a Feedback"
-            ]
-        }
-    ],
-    "alternative": [],
+    "main": {
+        "UC50": [
+            "Select the feature to display the list of sites visited personal.",
+            "Upload the list of sites for which the tourist has issued a Feedback"
+        ]
+    },
+    "alternative": {},
     "quality_requirements": []
 }

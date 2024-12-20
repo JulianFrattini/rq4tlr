@@ -11,14 +11,12 @@
         "The system displays the data on the screen.",
         "Interruption of the connection to the server."
     ],
-    "main": [
-        {
-            "steps": [
-                "Select the feature to display personal statistics.",
-                "Displays a form that shows data for the statistics associated refreshment point."
-            ]
-        }
-    ],
-    "alternative": [],
+    "main": {
+        "UC45": [
+            "Select the feature to display personal statistics.",
+            "Displays a form that shows data for the statistics associated refreshment point."
+        ]
+    },
+    "alternative": {},
     "quality_requirements": []
 }

@@ -5,23 +5,19 @@
     "actors": [],
     "preconditions": [],
     "postconditions": [],
-    "main": [
-        {
-            "steps": [
-                "Through the Personal Health Records page, an LHCP chooses a chronic disease and a patient.",
-                "The data in the database is analyzed according to the risk factors for the disease to determine if the patient exhibits a certain risk factor.",
-                "Currently available risk factors for chronic diseases are defined for Diabetes and Type 1 and Type2 and Heart Disease.",
-                "When the chosen patient satisfies the preconditions of the chosen chronic disease [E1], the LHCP is provided with a warning message if that patient exhibits three or more risk factors.",
-                "The message will display the risk factors that the patients exhibit."
-            ]
-        }
-    ],
-    "alternative": [
-        {
-            "steps": [
-                "The LHCP chooses to examine a patient for which the preconditions do not apply (e.g., an adult shouldn't be tested for child diabetes) and the LHCP is prompted that no analysis can occur."
-            ]
-        }
-    ],
+    "main": {
+        "UC16": [
+            "Through the Personal Health Records page, an LHCP chooses a chronic disease and a patient.",
+            "The data in the database is analyzed according to the risk factors for the disease to determine if the patient exhibits a certain risk factor.",
+            "Currently available risk factors for chronic diseases are defined for Diabetes and Type 1 and Type2 and Heart Disease.",
+            "When the chosen patient satisfies the preconditions of the chosen chronic disease [E1], the LHCP is provided with a warning message if that patient exhibits three or more risk factors.",
+            "The message will display the risk factors that the patients exhibit."
+        ]
+    },
+    "alternative": {
+        "UC16E1": [
+            "The LHCP chooses to examine a patient for which the preconditions do not apply (e.g., an adult shouldn't be tested for child diabetes) and the LHCP is prompted that no analysis can occur."
+        ]
+    },
     "quality_requirements": []
 }

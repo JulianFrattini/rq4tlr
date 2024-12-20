@@ -11,14 +11,12 @@
         "The system displays the details of the selected cultural.",
         "Interruption of the connection to the server ETOUR."
     ],
-    "main": [
-        {
-            "steps": [
-                "View the list of cultural goods as a result of the use case SearchCulturalHeritage, it selects and activates a function to view the card.",
-                "Loads the data for the selected cultural."
-            ]
-        }
-    ],
-    "alternative": [],
+    "main": {
+        "UC5": [
+            "View the list of cultural goods as a result of the use case SearchCulturalHeritage, it selects and activates a function to view the card.",
+            "Loads the data for the selected cultural."
+        ]
+    },
+    "alternative": {},
     "quality_requirements": []
 }

@@ -12,16 +12,14 @@
         "The registered user cancels the operation.",
         "Interruption of the connection to the server ETOUR."
     ],
-    "main": [
-        {
-            "steps": [
-                "Activate the login feature.",
-                "Displays the corresponding form.",
-                "Fill out the form with login information and submit.",
-                "Check the correctness of the data, if not corrected on the use case LoginError."
-            ]
-        }
-    ],
-    "alternative": [],
+    "main": {
+        "UC35": [
+            "Activate the login feature.",
+            "Displays the corresponding form.",
+            "Fill out the form with login information and submit.",
+            "Check the correctness of the data, if not corrected on the use case LoginError."
+        ]
+    },
+    "alternative": {},
     "quality_requirements": []
 }

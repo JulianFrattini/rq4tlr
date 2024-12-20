@@ -10,16 +10,14 @@
         "The system shall notify the successful operation logout.",
         "The system shall notify the successful operation logout."
     ],
-    "main": [
-        {
-            "steps": [
-                "Access the functionality of disconnection from the system.",
-                "Asks for confirmation of the transaction.",
-                "Confirm the request for disconnection.",
-                "Disconnects the Registered User."
-            ]
-        }
-    ],
-    "alternative": [],
+    "main": {
+        "UC37": [
+            "Access the functionality of disconnection from the system.",
+            "Asks for confirmation of the transaction.",
+            "Confirm the request for disconnection.",
+            "Disconnects the Registered User."
+        ]
+    },
+    "alternative": {},
     "quality_requirements": []
 }

@@ -11,17 +11,15 @@
         "The system returns a list of sites found",
         "Interruption of the connection to the server ETOUR."
     ],
-    "main": [
-        {
-            "steps": [
-                "Activate the search functionality of a site.",
-                "Show the form for research",
-                "Fill in the form of research and submit",
-                "Processing the request"
-            ]
-        }
-    ],
-    "alternative": [],
+    "main": {
+        "UC27": [
+            "Activate the search functionality of a site.",
+            "Show the form for research",
+            "Fill in the form of research and submit",
+            "Processing the request"
+        ]
+    },
+    "alternative": {},
     "quality_requirements": [
         "The system requirements should return the results within a time limit set"
     ]

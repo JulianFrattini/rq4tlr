@@ -10,15 +10,13 @@
         "The system returns control to the user interaction.",
         "The system returns control to the user interaction."
     ],
-    "main": [
-        {
-            "steps": [
-                "Notify an error message.",
-                "Confirmation of the reading of the notification.",
-                "Back to change your password."
-            ]
-        }
-    ],
-    "alternative": [],
+    "main": {
+        "UC32": [
+            "Notify an error message.",
+            "Confirmation of the reading of the notification.",
+            "Back to change your password."
+        ]
+    },
+    "alternative": {},
     "quality_requirements": []
 }

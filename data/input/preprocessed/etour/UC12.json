@@ -11,14 +11,12 @@
         "The system displays the card's Tourist selected.",
         "Interruption of the connection to the server ETOUR."
     ],
-    "main": [
-        {
-            "steps": [
-                "Tourists from the list obtained by activating the use case SearchTourist will select and activate a function for displaying the card.",
-                "Upload data to the selected account."
-            ]
-        }
-    ],
-    "alternative": [],
+    "main": {
+        "UC12": [
+            "Tourists from the list obtained by activating the use case SearchTourist will select and activate a function for displaying the card.",
+            "Upload data to the selected account."
+        ]
+    },
+    "alternative": {},
     "quality_requirements": []
 }

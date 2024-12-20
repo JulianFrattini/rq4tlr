@@ -1,9 +1,10 @@
 from parsers.usecaseparser import AbstractUseCaseParser
-from structure.rawusecase import RawUseCase, RawSubflow
+from structure.rawusecase import RawUseCase
 
 class EtoursParser(AbstractUseCaseParser):
     def parse(self, ucid: str, uc_texts: dict[str, str]) -> RawUseCase:
         # in the eTours data set, every use case is contained in one single text file
+        uc_file: str = list(uc_texts.keys())[0].split('.')[0]
         uc_text: str = list(uc_texts.values())[0]
         lines: list[str] = uc_text.split('\n')
 
@@ -11,7 +12,7 @@ class EtoursParser(AbstractUseCaseParser):
 
         # flags that are used to determine which section of the use case we are parsing
         is_parsing_steps: bool = False
-        subflow: RawSubflow = RawSubflow()
+        subflow: list[str] = []
         is_parsing_postconditions: bool = False
         is_parsing_quality_requirements: bool = False
 
@@ -41,10 +42,10 @@ class EtoursParser(AbstractUseCaseParser):
                 # a number may be followed by a period and then a space
                 if line.strip()[0].isdigit():
                     step: str = ' '.join(line.split(' ')[1:]).strip()
-                    subflow.steps.append(step)
+                    subflow.append(step)
                 else:
                     # add the one subflow to the main flow of the use case
-                    uc.main.append(subflow)
+                    uc.main[uc_file] = subflow
                     is_parsing_steps = False
 
             # parse the postconditions

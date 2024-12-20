@@ -5,18 +5,14 @@
     "actors": [],
     "preconditions": [],
     "postconditions": [],
-    "main": [
-        {
-            "steps": [
-                "By default, the patient is presented with a list sorted by dates, most recent access first."
-            ]
-        },
-        {
-            "steps": [
-                "The patient may choose to view the list sorted by the role of the accessor relative to the patient (personal health representative, LHCP, UAP, Emergency Responder; any order is fine as long as the list is sorted by role) as well as by date for each role type, most recent access first."
-            ]
-        }
-    ],
-    "alternative": [],
+    "main": {
+        "UC8S1": [
+            "By default, the patient is presented with a list sorted by dates, most recent access first."
+        ],
+        "UC8S2": [
+            "The patient may choose to view the list sorted by the role of the accessor relative to the patient (personal health representative, LHCP, UAP, Emergency Responder; any order is fine as long as the list is sorted by role) as well as by date for each role type, most recent access first."
+        ]
+    },
+    "alternative": {},
     "quality_requirements": []
 }

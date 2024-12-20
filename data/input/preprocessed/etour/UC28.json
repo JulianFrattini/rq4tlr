@@ -11,16 +11,14 @@
         "The system shall notify the successful elimination of selected tags.",
         "Interruption of the connection to the server ETOUR."
     ],
-    "main": [
-        {
-            "steps": [
-                "Access the functionality to delete a tag.",
-                "Research in the existing system, the tags and displays them in a form.",
-                "Select one or more tags from the list and sends the request for deletion.",
-                "Delete the selected search tag."
-            ]
-        }
-    ],
-    "alternative": [],
+    "main": {
+        "UC28": [
+            "Access the functionality to delete a tag.",
+            "Research in the existing system, the tags and displays them in a form.",
+            "Select one or more tags from the list and sends the request for deletion.",
+            "Delete the selected search tag."
+        ]
+    },
+    "alternative": {},
     "quality_requirements": []
 }

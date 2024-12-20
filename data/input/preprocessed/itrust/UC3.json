@@ -5,49 +5,35 @@
     "actors": [],
     "preconditions": [],
     "postconditions": [],
-    "main": [
-        {
-            "steps": [
-                "If the security question/answer has been set (it is not null)",
-                "[E2], present security question and obtain answer."
-            ]
-        },
-        {
-            "steps": [
-                "If answer to security question is correct, allow user to change their password.",
-                "An email notification is sent."
-            ]
-        },
-        {
-            "steps": [
-                "Electronic sessions must terminate after a pre-determined period of inactivity.",
-                "Allow the administrator to set the length of this period of time and ensure that all authorization is disabled after a period of inactivity that exceeds this length."
-            ]
-        },
-        {
-            "steps": [
-                "A LHCP is presented with a screen of links to the following: Recent Laboratory Results: recent (within the last month) laboratory results (UC26) for laboratory procedures he/she ordered in office visits, any upcoming appointments for the day.",
-                "(In the notification center) and rejection/acceptance of comprehensive report."
-            ]
-        },
-        {
-            "steps": [
-                "A patient is presented with a screen of links to the following: Any upcoming appointments."
-            ]
-        }
-    ],
-    "alternative": [
-        {
-            "steps": [
-                "The user may try three times.",
-                "After three failed attempts with a userid in a given session, disallow attempts to log in via IP address for 15 minutes (see comments in the source code)."
-            ]
-        },
-        {
-            "steps": [
-                "If the patient has never stored a security question/answer, the user is asked for the random password assigned on creation of the account."
-            ]
-        }
-    ],
+    "main": {
+        "UC3S1": [
+            "If the security question/answer has been set (it is not null)",
+            "[E2], present security question and obtain answer."
+        ],
+        "UC3S2": [
+            "If answer to security question is correct, allow user to change their password.",
+            "An email notification is sent."
+        ],
+        "UC3S3": [
+            "Electronic sessions must terminate after a pre-determined period of inactivity.",
+            "Allow the administrator to set the length of this period of time and ensure that all authorization is disabled after a period of inactivity that exceeds this length."
+        ],
+        "UC3S4": [
+            "A LHCP is presented with a screen of links to the following: Recent Laboratory Results: recent (within the last month) laboratory results (UC26) for laboratory procedures he/she ordered in office visits, any upcoming appointments for the day.",
+            "(In the notification center) and rejection/acceptance of comprehensive report."
+        ],
+        "UC3S5": [
+            "A patient is presented with a screen of links to the following: Any upcoming appointments."
+        ]
+    },
+    "alternative": {
+        "UC3E1": [
+            "The user may try three times.",
+            "After three failed attempts with a userid in a given session, disallow attempts to log in via IP address for 15 minutes (see comments in the source code)."
+        ],
+        "UC3E2": [
+            "If the patient has never stored a security question/answer, the user is asked for the random password assigned on creation of the account."
+        ]
+    },
     "quality_requirements": []
 }

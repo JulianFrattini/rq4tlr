@@ -11,16 +11,14 @@
         "The system returns a list of accounts that meet Tourist your search criteria.",
         "Interruption of the connection to the server ETOUR."
     ],
-    "main": [
-        {
-            "steps": [
-                "Access the search functionality of a tourist.",
-                "Show the form.",
-                "Fill out the form and submit.",
-                "Processing the request."
-            ]
-        }
-    ],
-    "alternative": [],
+    "main": {
+        "UC14": [
+            "Access the search functionality of a tourist.",
+            "Show the form.",
+            "Fill out the form and submit.",
+            "Processing the request."
+        ]
+    },
+    "alternative": {},
     "quality_requirements": []
 }

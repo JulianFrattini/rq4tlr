@@ -2,12 +2,6 @@ from dataclasses import dataclass, field
 from dataclasses import asdict
 
 @dataclass
-class RawSubflow:
-    # a flow of use case steps
-
-    steps: list[str] = field(default_factory=list)
-
-@dataclass
 class RawUseCase:
     # a raw, unprocessed use case that simply formats the text files into attributes
 
@@ -20,8 +14,9 @@ class RawUseCase:
     postconditions: list[str] = field(default_factory=list)
 
     # subflows of the use case, where each use case can contain multiple main and alternative subflows
-    main: list[RawSubflow] = field(default_factory=list)
-    alternative: list[RawSubflow] = field(default_factory=list)
+    # the two attributes main and alternative consist of a mapping for filenames (e.g., UC1S2) to a list of subflow steps
+    main: dict[str, list[str]] = field(default_factory=dict)
+    alternative: dict[str, list[str]] = field(default_factory=dict)
 
     quality_requirements: list[str] = field(default_factory=list)
 

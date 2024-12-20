@@ -11,14 +11,12 @@
         "The system displays all feedback regarding the site selected.",
         "Interruption of the connection to the server"
     ],
-    "main": [
-        {
-            "steps": [
-                "View the list of sites as a result of the use case SearchSite, it selects and activates a function to view the feedback.",
-                "Upload Site Feedback selected."
-            ]
-        }
-    ],
-    "alternative": [],
+    "main": {
+        "UC24": [
+            "View the list of sites as a result of the use case SearchSite, it selects and activates a function to view the feedback.",
+            "Upload Site Feedback selected."
+        ]
+    },
+    "alternative": {},
     "quality_requirements": []
 }

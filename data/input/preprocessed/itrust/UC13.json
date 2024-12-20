@@ -5,20 +5,16 @@
     "actors": [],
     "preconditions": [],
     "postconditions": [],
-    "main": [
-        {
-            "steps": [
-                "A patient's DLHCP chooses to add or delete a patient's [E1, E2] personal representative by typing that person's MID",
-                "[E1, E2]."
-            ]
-        }
-    ],
-    "alternative": [
-        {
-            "steps": [
-                "The health care personnel types an invalid medical identification number and is prompted to try again."
-            ]
-        }
-    ],
+    "main": {
+        "UC13": [
+            "A patient's DLHCP chooses to add or delete a patient's [E1, E2] personal representative by typing that person's MID",
+            "[E1, E2]."
+        ]
+    },
+    "alternative": {
+        "UC13E1": [
+            "The health care personnel types an invalid medical identification number and is prompted to try again."
+        ]
+    },
     "quality_requirements": []
 }

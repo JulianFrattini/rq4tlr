@@ -11,16 +11,14 @@
         "The notification system has been elimination of selected accounts Tourist.",
         "Interruption of the connection to the server ETOUR."
     ],
-    "main": [
-        {
-            "steps": [
-                "Tourists from the list obtained by activating the use case SearchTourist will select and activate a feature for disposal.",
-                "Asks for confirmation of the transaction.",
-                "Confirm the operation.",
-                "Delete the selected data."
-            ]
-        }
-    ],
-    "alternative": [],
+    "main": {
+        "UC16": [
+            "Tourists from the list obtained by activating the use case SearchTourist will select and activate a feature for disposal.",
+            "Asks for confirmation of the transaction.",
+            "Confirm the operation.",
+            "Delete the selected data."
+        ]
+    },
+    "alternative": {},
     "quality_requirements": []
 }
