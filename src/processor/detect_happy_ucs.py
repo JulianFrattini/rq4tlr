@@ -1,5 +1,5 @@
 from processor.absprocessor import AbsProcessor
-from util.uc import UseCase
+from structure.usecase import UseCase
 
 class DetectHappyUCs(AbsProcessor):
 

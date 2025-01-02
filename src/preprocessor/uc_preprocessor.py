@@ -1,6 +1,7 @@
 from preprocessor.preprocessor import Preprocessor
 
-from util.uc import RawUseCase, UseCase
+from structure.rawusecase import RawUseCase
+from structure.usecase import UseCase
 
 class UseCasePreprocessor:
 
@@ -18,23 +19,24 @@ class UseCasePreprocessor:
         preprocessed_use_case = UseCase(
             id=raw_use_case.id,
             name=raw_use_case.name,
-            description=raw_use_case.description)
+            description=raw_use_case.description,
+            actors=raw_use_case.actors)
 
-        # preprocess all single sentences
-        sentence_attributes: list[str] = ['preconditions']
-        for attribute in sentence_attributes:
-            setattr(preprocessed_use_case, 
-                    attribute, 
-                    self.preprocessor.preprocess_sentence(
-                        getattr(raw_use_case, attribute)))
-
-        # preprocess the lists of sentences
-        list_attributes: list[str] = ['actors', 'postconditions', 'steps', 'alternative', 'quality_requirements']
+        # preprocess all attributes which are lists of strings
+        list_attributes: list[str] = ['preconditions', 'postconditions', 'quality_requirements']
         for attribute in list_attributes:
             setattr(preprocessed_use_case, 
                     attribute, 
                     [self.preprocessor.preprocess_sentence(sentence) 
                      for sentence 
                      in getattr(raw_use_case, attribute)])
+
+        # preprocess the main and alternative subflows
+        for subflow_type in ['main', 'alternative']:
+            subflows = getattr(raw_use_case, subflow_type)
+            preprocessed_subflows = {}
+            for key, steps in subflows.items():
+                preprocessed_subflows[key] = [self.preprocessor.preprocess_sentence(step) for step in steps]
+            setattr(preprocessed_use_case, subflow_type, preprocessed_subflows)
 
         return preprocessed_use_case

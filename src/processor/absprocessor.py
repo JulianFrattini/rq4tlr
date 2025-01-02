@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from util.uc import UseCase   
+from structure.usecase import UseCase   
 
 class AbsProcessor(ABC):
 

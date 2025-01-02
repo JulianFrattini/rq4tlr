@@ -1,15 +1,107 @@
 # Automatic Analysis
 
-This sub-directory contains the implementation of the automatic analysis of use cases.
-The automatic analysis aims to evaluate the use cases regarding those factors which can be decided automatically.
+This sub-directory contains all executable scripts as well as utility scripts for several use cases.
 
-## Process
+## Structure
 
-The core of the automatic analysis is the [process.py](./process.py) script which ties all sub-scripts together. 
-Its essential interface is:
+This directory contains the following files.
 
-- **Input**: a list of use cases in text files, located in the [data/input/](data/input) directory
+```
+├── parsers : directory for parsers from text files to use case objects
+│   ├── etoursparser.py : text file parser for the etours data set
+│   ├── itrustparser.py : text file parser for the itrust data set
+│   └── usecaseparer.py : abstract parser class which all parsers must extend
+├── preprocessor : directory for preprocessing steps
+│   ├── preprocessor.py : sentence-level NLP steps
+│   └── uc_preprocessor.py : use-case-level NLP steps
+├── processor : directory for processing steps, i.e., implementation of quality factors
+│   ├── absprocessor.py : abstract processor class which must be extended by all actual processors
+│   ├── processor.py : central processor that applies all quality factors
+│   └── (processors) : implementation of the processors
+├── structure : directory for definition of classes
+│   ├── rawusecase.py : definition of the RawUseCase class
+│   ├── sentence.py : definition of the Sentence class
+│   └── usecase.py : definition of the UseCase class
+├── util : directory for utility scripts
+│   ├── loader.py : script that loads all use case text files from a directory
+│   ├── readfile.py : script that reads a text file from the disc
+│   └── static.py : collection of static variables like file paths
+├── disagreements.py : script that detects disagreements between two ratings
+├── get_item_list.py : script that generates a table of indices from the raw data
+├── parse.py : script to parse the raw use case text files into Python objects
+└── process.py : script to evaluate quality factors on preprocessed use cases
+```
+
+## Executables
+
+On the highest level, it contains the following executable scripts:
+
+| Script | Purpose | Description |
+|---|---|---|
+| `disagreements.py` | Detects disagreements between two manual ratings | [Disagreements](#disagreements) |
+| `get_item_list.py` | Generates a tables of indices from the raw data set | [Get Item List](#get-item-list) |
+| `parse.py` | Parses all text files into a common format | [Parse](#parse) |
+| `process.py` | Processes the parsed use cases | [Process](#process) |
+
+The subsequent sections describe each executable in detail. 
+Consider the [system requirements](#system-requirements) for running the scripts.
+
+### Disagreements
+
+The `disagreements.py` script detects and prints all disagreements between the manual ratings of two raters.
+To execute it, run:
+
+```
+python .\disagreements.py --level <requirements/sentences>
+```
+
+The output is empty if there are no disagreements.
+Otherwise, the script prints all disagreements to the console.
+
+### Get Item List
+
+The `get_item_list.py` script generates a table of indices for each item in the raw dataset.
+This output can be used for manual labeling, as it produces a raw list where each item (i.e., use case or sentence within use case descriptions) occupies one row.
+The script can be executed via the following command:
+
+```
+python .\get_item_list.py --dataset <etour/itrust> --level <requirement/sentence>
+```
+
+Depending on the `level` argument, the script will create a table in the data/input/supplementary/ directory.
+For the configurations `--dataset etour` and `--level sentence`, the head of the table looks as follows:
+
+| UC | Subflowtype | Subflow | File | Line |
+|---|---|---|---|---|
+| 1 | 1 | 0 | UC1 | 1 |
+| 1 | 1 | 0 | UC1 | 2 |
+| 1 | 1 | 0 | UC1 | 3 |
+| 1 | 1 | 0 | UC1 | 4 |
+| 2 | 1 | 0 | UC2 | 1 |
+| ... | | | | |
+
+In this table, every sentence from the eTour data set is represented in one row.
+
+### Parse
+
+The `parse.py` script reads the raw use case text files, parses them into `RawUseCase` structures (defined in [rawusecase.py](./structure/rawusecase.py)), and stores tham as `json` files in the data/input/preprocessed/ directory.
+To execute the parser, run the following command in an environment that has all `requirements.txt` installed:
+
+```
+python .\parse.py --dataset <etour/itrust>
+```
+
+The resulting json files are the input for further processing steps.
+
+### Process
+
+The `process.py` script processes the prepared requirements (in their `RawUseCase` format) and evaluates the quality factors on them.
+The high-level interface of the script is the following:
+
+- **Input**: a list of use cases in `json` files following the `RawUseCase` format, located in the [data/input/preprocessed](data/input/preprocessed) directory
 - **Output**: a `CSV` file where each use case from the input is associated with values for all automatically decided factors
+
+#### Overview
 
 The `process.py` script delegates this task as follows:
 
@@ -38,43 +130,16 @@ sequenceDiagram
 
 The individual components (e.g., the parser, preprocessor, and processor) delegate their task further.
 
-## System Requirements
-
-Before running the automatic analysis, ensure that [Python 3.10](https://www.python.org/downloads/release/python-3100/) and [pip](https://pypi.org/project/pip/) are available on your machine.
-Then, execute the following steps:
-
-1. Optionally, create a virtual environment via `python -m venv .venv` and activate it via `.venv\Scripts\activate`
-2. Install the necessary requirements via `pip install -r requirements.txt`
-3. Install the spaCy language model via `python -m spacy download en_core_web_sm`
-
-Afterwards, you can continue with the usage of the analysis.
-
-## Usage
+#### Usage
 
 To execute the automatic analysis, run the `process.py` script, e.g., via `python .\process.py`.
-In case you installed the dependencies into a virtual environment, ensure that it is running.
+In case you installed the dependencies into a virtual environment, ensure that this virtual environment is running.
 
-## Development
+#### Development
 
 To contribute to the automatic analysis, please consider the following recommendations.
 
-### Developing a new Parser
-
-In case you want the automatic analysis to handle a new data set where the text files of the use cases do not follow any existing template, you need to develop a new parser.
-The parser must extend the `AbstractUseCaseParser` class, the specification of which can be found in the [usecaseparser.py](parser/usecaseparser.py) file.
-Then, append a tuple consisting of the data set `name` and an object of the respective parser subclass to the `parsers` attribute in the `process.py` file.
-
-```diff
-parsers = [
-    ('eTour', EtoursParser()), 
-    ('iTrust', ItrustParser()),
-+    ('<new dataset name>', NewParser())
-]
-```
-
-The next execution of the `process.py` script will then include the new data set.
-
-### Adding a Preprocessor Step
+##### Adding a Preprocessor Step
 
 In case a [new processor](#adding-a-new-factor-processor) requires additional preprocessing steps, you need to create a new preprocessor.
 First, determine the type of information that the sentence-level preprocessor creates.
@@ -97,7 +162,7 @@ preprocessed: sentence = sentence(
 )
 ```
 
-### Adding a new Factor Processor
+##### Adding a new Factor Processor
 
 To implement the automatic analysis of a new factor, you need to develop a new processor.
 Create a new file for the new processor in the [processor](src/processor/) subdirectory.
@@ -123,3 +188,14 @@ def __init__(self):
 ```
 
 The next execution of `process.py` will execute the additional processor and add a column with the given `name` to the resulting table.
+
+## System Requirements
+
+Before running any script, ensure that [Python 3.10](https://www.python.org/downloads/release/python-3100/) and [pip](https://pypi.org/project/pip/) are available on your machine.
+Then, execute the following steps:
+
+1. Optionally, create a virtual environment via `python -m venv .venv` and activate it via `.venv\Scripts\activate`
+2. Install the necessary requirements via `pip install -r requirements.txt`
+3. Install the spaCy language model via `python -m spacy download en_core_web_sm`
+
+Afterwards, you can continue with the usage of the scripts.

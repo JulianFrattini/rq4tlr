@@ -17,15 +17,10 @@ This repository consists of the following files.
 │   └── figures : directory containing figures and graphs
 │       └── rq4tlr-study-overview.graphml : visualization of the study process
 ├── src : directory containing all source code
-│   ├── automatic : source code conducting the automatic labeling, including its own README file
-│   └── manual : source code to process the manually generated data
-│       ├── disagreements.py : utility script to detect all existing disagreements between two ratings
-│       ├── ira.py : utility file implementing the calculation of percentage agreement and Bennett's S-score
-│       ├── overlap-requirements.ipynb : inter-rater agreement calculation on the requirements-level
-│       └── overlap-sentences.ipynb : inter-rater agreement calculation on the sentence-level
 └── requirements.txt : specification of required libraries to run the analysis
 ```
 
+The src subdirectory contains its own [README.md](./src/README.md) with more detailed descriptions.
 The data used in this study stems from the repository [tobhey/**finegrained-traceability**](https://github.com/tobhey/finegrained-traceability). 
 
 ## System Requirements

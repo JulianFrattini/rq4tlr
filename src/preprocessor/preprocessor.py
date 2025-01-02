@@ -1,6 +1,6 @@
 import spacy
 
-from util.sentence import sentence
+from structure.sentence import sentence
 
 class Preprocessor:
     def __init__(self):

@@ -1,7 +1,7 @@
 import pandas as pd
 import argparse
 
-file_name: str = '../data/rq4tlr-manual-variables.xlsx'
+file_name: str = '../data/labeling/rq4tlr-manual-variables.xlsx'
 
 factors_requirement: list[str] = ['Functional Duplication', 
                       'Use Case Naming Problems', 
@@ -47,20 +47,20 @@ def compare(rating1: pd.DataFrame, rating2: pd.DataFrame, factors: list[str], co
 
 if __name__ == "__main__":
     # parse the arguments
-    parser = argparse.ArgumentParser(description='Define the type of comparison.')
+    parser = argparse.ArgumentParser(description='Define the level of comparison.')
     parser.add_argument(
-        '--type', 
+        '--level', 
         choices=['requirements', 'sentences'], 
         required=True, 
         help='Whether to run the comparison on "requirements" or "sentence" level')
     args = parser.parse_args()
 
-    if args.type == 'requirements':
+    if args.level == 'requirements':
         rating1 = pd.read_excel(file_name, sheet_name='Requirements')
         rating2 = pd.read_excel(file_name, sheet_name='Requirements Overlap')
         compose_id = lambda row: f'{row["Dataset"]}-{row["File"]}'
         compare(rating1, rating2, factors_requirement, compose_id)
-    elif args.type == 'sentences':
+    elif args.level == 'sentences':
         rating1 = pd.read_excel(file_name, sheet_name='Sentence')
         rating2 = pd.read_excel(file_name, sheet_name='Sentence Overlap')
         compose_id = lambda row: f'{row["Dataset"]}-{row["File"]}-{row["Line"]}'

@@ -1,6 +1,6 @@
 from processor.absprocessor import AbsProcessor
 
-from util.uc import UseCase
+from structure.usecase import UseCase
 import pandas as pd
 
 from processor.detect_happy_ucs import DetectHappyUCs
