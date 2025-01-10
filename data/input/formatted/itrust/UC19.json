@@ -1,0 +1,34 @@
+{
+    "id": "UC19",
+    "dataset": "itrust",
+    "name": "View Prescription Report",
+    "description": "",
+    "actors": [],
+    "preconditions": [],
+    "postconditions": [],
+    "main": {
+        "UC19S1": [
+            "The user (patient or personal health representative) can choose to view a list of (1) their own prescriptions or (2) the prescriptions for whom the user is a person health representative by choosing one patient from a a list of these patients.",
+            "A prescription list is then displayed [S3], sorted by start date (the later date is ranked earlier)."
+        ],
+        "UC19S2": [
+            "The user (LHCP) selects a patient from the list of requested reports.",
+            "At this point, the LHCP can view a prescription list for that patient",
+            "[S3], sorted by start date (the later date is ranked earlier)."
+        ],
+        "UC19S3": [
+            "The prescription report is titled with the patient name.",
+            "The prescription list includes medication, date prescribed, start date, end date for each prescription, and the name of the doctor who prescribed the medication."
+        ]
+    },
+    "alternative": {
+        "UC19E1": [
+            "The LHCP types an invalid medical identification number and is prompted to try again."
+        ],
+        "UC19E2": [
+            "The patient chosen is not the desired patient.",
+            "The LHCP does not confirm the selection and is prompted to try again."
+        ]
+    },
+    "quality_requirements": []
+}

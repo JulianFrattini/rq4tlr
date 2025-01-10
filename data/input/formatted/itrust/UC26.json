@@ -1,0 +1,42 @@
+{
+    "id": "UC26",
+    "dataset": "itrust",
+    "name": "View/Edit Lab Procedure Status",
+    "description": "",
+    "actors": [],
+    "preconditions": [],
+    "postconditions": [],
+    "main": {
+        "UC26S1": [
+            "An HCP can create a lab procedure for a given office visit.",
+            "The HCP selects a procedure code, a priority from 1 to 3 (1=most important, 3=not as important), and Lab Technician (listed with his/her specialty and the number of pending lab procedures in his/her priority queue, grouped by priority).",
+            "The HCP saves the new lab procedure, or cancels the lab procedure creation [E1], [E2].",
+            "The status of the lab procedure is marked as in transit."
+        ],
+        "UC26S2": [
+            "An HCP can view a previously created lab procedure for a given office visit.",
+            "The HCP can view patient name, lab procedure code, current lab procedure status, timestamp, and Lab Technician name."
+        ],
+        "UC26S3": [
+            "An HCP can reassign a previously created lab procedure to a different Lab Technician if the lab procedure is not yet in the testing state.",
+            "The HCP selects a different Lab Technician from the list of available Lab Technicians (displayed with Lab Technician specialty and the number of pending lab procedures in his/her priority queue, grouped by priority).",
+            "The HCP confirms the reassignment, or cancels the reassignment [E2]."
+        ],
+        "UC26S4": [
+            "An HCP can remove a previously created lab procedure for a given office visit.",
+            "The HCP chooses to remove the lab procedure as long as the status is either in transit or received.",
+            "The HCP is prompted to confirm that he/she wishes to remove the lab procedure."
+        ]
+    },
+    "alternative": {
+        "UC26E1": [
+            "The lab procedure code is not the intended lab procedure code.",
+            "The HCP selects a different procedure code."
+        ],
+        "UC26E2": [
+            "The selected Lab Technician is not the intended Lab Technician.",
+            "The HCP selects a different Lab Technician."
+        ]
+    },
+    "quality_requirements": []
+}

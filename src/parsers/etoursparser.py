@@ -8,7 +8,7 @@ class EtoursParser(AbstractUseCaseParser):
         uc_text: str = list(uc_texts.values())[0]
         lines: list[str] = uc_text.split('\n')
 
-        uc: RawUseCase = RawUseCase(id=ucid)
+        uc: RawUseCase = RawUseCase(id=ucid, dataset="etour")
 
         # flags that are used to determine which section of the use case we are parsing
         is_parsing_steps: bool = False

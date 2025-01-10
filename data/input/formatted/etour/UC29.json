@@ -1,0 +1,23 @@
+{
+    "id": "UC29",
+    "dataset": "etour",
+    "name": "ExistingErrorTag",
+    "description": "He was asked to enter a search tags already in the system.",
+    "actors": [
+        ""
+    ],
+    "preconditions": [],
+    "postconditions": [
+        "The system returns control to the user interaction.",
+        "The system returns control to the user interaction."
+    ],
+    "main": {
+        "UC29": [
+            "Notice the error message and asks for confirmation of its reading.",
+            "Confirmation of the reading of the notification.",
+            "Recovers the previous state."
+        ]
+    },
+    "alternative": {},
+    "quality_requirements": []
+}

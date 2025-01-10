@@ -34,7 +34,7 @@ def main(dataset: str):
         dataset (str): The name of the dataset to parse.
     """
     # load the textual use cases
-    raw_use_cases: dict[str, str] = load_dataset(data_path=PATH_RAW_INPUT, dataset_name=dataset)
+    raw_use_cases: dict[str, dict] = load_dataset(data_path=PATH_RAW_INPUT, dataset_name=dataset)
 
     # parse the raw use cases into RawUseCase objects
     parsed_use_cases: list[RawUseCase] = []

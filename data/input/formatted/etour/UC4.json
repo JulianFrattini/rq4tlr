@@ -1,0 +1,27 @@
+{
+    "id": "UC4",
+    "dataset": "etour",
+    "name": "SearchCulturalHeritage",
+    "description": "Returns the list of cultural objects in the system according to certain parameters.",
+    "actors": [
+        ""
+    ],
+    "preconditions": [],
+    "postconditions": [
+        "The system returns a list of cultural goods that meet the search criteria.",
+        "The system returns a list of cultural goods that meet the search criteria.",
+        "Interruption of the connection to the server ETOUR."
+    ],
+    "main": {
+        "UC4": [
+            "Activate the search functionality of a cultural object.",
+            "Show the form for research.",
+            "Fill in the search form and submit.",
+            "Processing the request."
+        ]
+    },
+    "alternative": {},
+    "quality_requirements": [
+        "The system requirements should return the results within a set time."
+    ]
+}

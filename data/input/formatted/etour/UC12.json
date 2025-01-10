@@ -1,0 +1,23 @@
+{
+    "id": "UC12",
+    "dataset": "etour",
+    "name": "ViewTouristCard",
+    "description": "View the details of a selected account Tourist.",
+    "actors": [
+        "initialization Agency Operator"
+    ],
+    "preconditions": "The agency has logged.",
+    "postconditions": [
+        "The system displays the card's Tourist selected.",
+        "The system displays the card's Tourist selected.",
+        "Interruption of the connection to the server ETOUR."
+    ],
+    "main": {
+        "UC12": [
+            "Tourists from the list obtained by activating the use case SearchTourist will select and activate a function for displaying the card.",
+            "Upload data to the selected account."
+        ]
+    },
+    "alternative": {},
+    "quality_requirements": []
+}

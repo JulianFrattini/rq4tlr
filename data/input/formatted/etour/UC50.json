@@ -1,0 +1,23 @@
+{
+    "id": "UC50",
+    "dataset": "etour",
+    "name": "ViewVisitedSites",
+    "description": "View the list of sites for which it has issued a feedback.",
+    "actors": [
+        "initialized by Tourist"
+    ],
+    "preconditions": [],
+    "postconditions": [
+        "The system displays a list of sites visited.",
+        "The system displays a list of sites visited.",
+        "Interruption of the connection to the server ETOUR."
+    ],
+    "main": {
+        "UC50": [
+            "Select the feature to display the list of sites visited personal.",
+            "Upload the list of sites for which the tourist has issued a Feedback"
+        ]
+    },
+    "alternative": {},
+    "quality_requirements": []
+}

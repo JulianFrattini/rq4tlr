@@ -1,0 +1,20 @@
+{
+    "id": "UC56",
+    "dataset": "etour",
+    "name": "Localization",
+    "description": "Returns the current position of the tourist.",
+    "actors": [
+        "System initialization"
+    ],
+    "preconditions": [],
+    "postconditions": [
+        "The system receives the position of the tourist.",
+        "The system receives the position of the tourist.",
+        "The position of the tourist is not detectable by GPS."
+    ],
+    "main": {},
+    "alternative": {},
+    "quality_requirements": [
+        "The GPS requirements into the transaction in more than 5 seconds."
+    ]
+}

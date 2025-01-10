@@ -1,0 +1,30 @@
+{
+    "id": "UC26",
+    "dataset": "etour",
+    "name": "ModifyComment",
+    "description": "Editing a comment by a feedback selected.",
+    "actors": [
+        "initialization Agency Operator"
+    ],
+    "preconditions": "The agency has logged.",
+    "postconditions": [
+        "The notification system has been modified for the comment feedback selected.",
+        "The notification system has been modified for the comment feedback selected.",
+        "Operator Agency cancels the operation.",
+        "Interruption of the connection to the server"
+    ],
+    "main": {
+        "UC26": [
+            "View the list of sites as a result of the use case SearchSite, it selects and activates a function of change in the selected comment.",
+            "Upload feedback issued to that site and displays them in a form.",
+            "Select a feedback from the list and submit the form.",
+            "Displays a form for editing the comment of feedback selected.",
+            "Edit the comment and submit the form.",
+            "Verify the data entered and asks for confirmation of the change. Where the data is invalid or insufficient, the system activates the use case Errored.",
+            "Confirm the operation.",
+            "Remember the comment changed."
+        ]
+    },
+    "alternative": {},
+    "quality_requirements": []
+}

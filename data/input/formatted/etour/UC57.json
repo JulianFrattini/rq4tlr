@@ -1,0 +1,27 @@
+{
+    "id": "UC57",
+    "dataset": "etour",
+    "name": "AdvancedSearch",
+    "description": "The tourist searching for a site using the potential offered by the Advanced Search.",
+    "actors": [
+        "initialized by Tourist"
+    ],
+    "preconditions": [],
+    "postconditions": [
+        "The system displays a list of results.",
+        "The system displays a list of results.",
+        "Interruption of the connection to the server ETOUR."
+    ],
+    "main": {
+        "UC57": [
+            "Enable the advanced search feature from your personal area.",
+            "View the advanced search form.",
+            "Fill in the form of advanced search and submit.",
+            "Gets the position of relying on the tourist event of the use location and process the request."
+        ]
+    },
+    "alternative": {},
+    "quality_requirements": [
+        "The system requirements into the transaction in more than 15 seconds."
+    ]
+}

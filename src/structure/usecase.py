@@ -4,8 +4,9 @@ from structure.sentence import sentence
 @dataclass
 class UseCase:
     # a processed use case where certain fields that contain sentences have been enriched with syntactic information
-
+    
     id: int
+    dataset: str
     name: str = ""
     description: str = ""
     actors: list = field(default_factory=list)

@@ -1,0 +1,28 @@
+{
+    "id": "UC18",
+    "dataset": "itrust",
+    "name": "Maintain Hospital Listing",
+    "description": "",
+    "actors": [],
+    "preconditions": [],
+    "postconditions": [],
+    "main": {
+        "UC18S1": [
+            "The administrator will store (1) hospital Id number for the hospital",
+            "[E1]; and (2) up to 30 alphanumeric characters giving the name of the hospital"
+        ],
+        "UC18S2": [
+            "The system shall enable the administrator to add a new entry for a hospital, or modify the hospital name in an existing entry.",
+            "Note that the administrator is not allowed through the system interface to delete an existing entry or modify the hospital ID number in an existing entry."
+        ]
+    },
+    "alternative": {
+        "UC18E1": [
+            "The administrator types an invalid hospital ID and is prompted to try again."
+        ],
+        "UC18E2": [
+            "The administrator types an invalid hospital name and is prompted to try again."
+        ]
+    },
+    "quality_requirements": []
+}

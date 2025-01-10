@@ -1,0 +1,25 @@
+{
+    "id": "UC37",
+    "dataset": "itrust",
+    "name": "Safe Drug Prescription",
+    "description": "",
+    "actors": [],
+    "preconditions": [],
+    "postconditions": [],
+    "main": {
+        "UC37S1": [
+            "The drug desired to be prescribed is checked against the patient's drug allergies.",
+            "The HCP is notified of drug allergy."
+        ],
+        "UC37S2": [
+            "The drug desired to be prescribed is checked for interactions between other drugs currently taken by the patient.",
+            "The HCP is notified of possible interactions."
+        ],
+        "UC37S3": [
+            "The HCP selects one or more reasons out the nine reasons listed here for the overriding.[E1]",
+            "The patient is sent a fake email that the HCP has prescribed a medication that he/she is allergic to or that has a known interaction with a drug he/she is taking."
+        ]
+    },
+    "alternative": {},
+    "quality_requirements": []
+}

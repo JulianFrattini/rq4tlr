@@ -1,0 +1,23 @@
+{
+    "id": "UC11",
+    "dataset": "etour",
+    "name": "ViewConventionHistory",
+    "description": "View the history of conventions derived from a selected point of rest.",
+    "actors": [
+        "initialization Agency Operator"
+    ],
+    "preconditions": "The Agency is in the form of a designated point of rest.",
+    "postconditions": [
+        "The system displays the history of conventions concerning the point of eating selected.",
+        "The system displays the history of conventions concerning the point of eating selected.",
+        "Interruption of the connection to the server ETOUR."
+    ],
+    "main": {
+        "UC11": [
+            "Access the features on the display of historical conventions.",
+            "Upload data on conventions from the restaurant selected."
+        ]
+    },
+    "alternative": {},
+    "quality_requirements": []
+}

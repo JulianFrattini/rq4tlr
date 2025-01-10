@@ -1,0 +1,30 @@
+{
+    "id": "UC8",
+    "dataset": "etour",
+    "name": "ModifyDataRefreshmentPointAgency",
+    "description": "Edit the data pertaining to a designated point of rest.",
+    "actors": [
+        "initialization Agency Operator"
+    ],
+    "preconditions": "The agency has logged.",
+    "postconditions": [
+        "The system has been reporting the information required by the point of rest.",
+        "The system has been reporting the information required by the point of rest.",
+        "Operator Agency cancels the operation.",
+        "Interruption of the connection to the server ETOUR."
+    ],
+    "main": {
+        "UC8": [
+            "View a list of points of rest as a result of the use case SearchRefreshmentPoint, it selects an active and functional data changes.",
+            "Upload data from the point of rest and displays the form of change.",
+            "Change data in the form and submit.",
+            "Verify the data entered in form and asks for confirmation of the transaction. Where the data is invalid or insufficient, the system activates the use case Errored.",
+            "Confirm the operation.",
+            "Stores the modified data of the point of rest."
+        ]
+    },
+    "alternative": {},
+    "quality_requirements": [
+        "The system requirements blocks of input controls in the form once we receive confirmation of the change to avoid multiple submissions before the end of the operation."
+    ]
+}

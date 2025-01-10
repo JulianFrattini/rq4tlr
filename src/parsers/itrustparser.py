@@ -14,7 +14,7 @@ class ItrustParser(AbstractUseCaseParser):
         return steps
 
     def parse(self, ucid: str, uc_texts: dict[str, str], uc_name: str) -> RawUseCase:
-        uc: RawUseCase = RawUseCase(id=ucid, name=uc_name)
+        uc: RawUseCase = RawUseCase(id=ucid, dataset="itrust", name=uc_name)
 
         # determine the main flows
         main_flows: list[str] = [ucfile for ucfile in uc_texts.keys() if 'E' not in ucfile]

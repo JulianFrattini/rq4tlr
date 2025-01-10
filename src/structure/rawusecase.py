@@ -6,6 +6,7 @@ class RawUseCase:
     # a raw, unprocessed use case that simply formats the text files into attributes
 
     id: int
+    dataset: str = ""
     name: str = ""
     description: str = ""
     actors: list = field(default_factory=list)

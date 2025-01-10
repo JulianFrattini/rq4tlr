@@ -1,0 +1,25 @@
+{
+    "id": "UC16",
+    "dataset": "etour",
+    "name": "DeleteTouristAccount",
+    "description": "Delete the account of a tourist from the system.",
+    "actors": [
+        "initialization Agency Operator"
+    ],
+    "preconditions": "The agency has logged.",
+    "postconditions": [
+        "The notification system has been elimination of selected accounts Tourist.",
+        "The notification system has been elimination of selected accounts Tourist.",
+        "Interruption of the connection to the server ETOUR."
+    ],
+    "main": {
+        "UC16": [
+            "Tourists from the list obtained by activating the use case SearchTourist will select and activate a feature for disposal.",
+            "Asks for confirmation of the transaction.",
+            "Confirm the operation.",
+            "Delete the selected data."
+        ]
+    },
+    "alternative": {},
+    "quality_requirements": []
+}

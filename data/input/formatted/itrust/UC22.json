@@ -1,0 +1,40 @@
+{
+    "id": "UC22",
+    "dataset": "itrust",
+    "name": "",
+    "description": "",
+    "actors": [],
+    "preconditions": [],
+    "postconditions": [],
+    "main": {
+        "UC22S1": [
+            "The system shall enable the administrator to (1) add a new entry for an appointment type, including its type name with up to 30 alpha characters and duration in the unit of minutes",
+            "[E1], and (2) modify the duration in an existing entry [E1].",
+            "A new entry shall not have the same type name as that of any existing entry [E1].",
+            "Note that the administrator is not allowed through the system interface to delete an existing entry or modify the appointment type name in an existing entry."
+        ],
+        "UC22S2": [
+            "The LHCP chooses to schedule an appointment with a patient (it is assumed that the LHCP and patient have already worked out the details of the appointment in person or via telephone outside of the system).",
+            "The LHCP enters the patient MID, selects the type of appointment from a pull-down menu of the existing appointment types, enter the appointment date and start time (only a date/time equal or after the current date/time is allowed).",
+            "The user interface shall provide both the option of typing in a specific date in the date format and the option of selecting a date from a calendar for the current month), enter comment (optional) up to 1000 characters such as reason for the appointment",
+            "[E1]."
+        ],
+        "UC22S3": [
+            "A user (an LHCP or patient) wishes to view a list of his or her upcoming appointments (i.e., a list including appointments whose appointment date and start time is equal or later than the current date/time).",
+            "The user chooses to open his or her upcoming appointment list.",
+            "Each row in the list includes the appointment type, appointment date and start time, duration, and the name of either the patient (only for the user being an LHCP) or the LHCP (only for the user being a patient).",
+            "The appointments in the list shall be ordered by appointment date and start time, the soonest upcoming first.",
+            "The row for each conflicting appointment is highlighted in bold (a conflicting appointment is one that has overlap in its appointment duration period with that of at least another appointment of the same user).",
+            "When viewing the calendar, the user selects an appointment from the list to read comment by clicking the Read Comment link beside the row for the appointment, and then the comment for the appointment shall be displayed in a new page [E2]."
+        ]
+    },
+    "alternative": {
+        "UC22E1": [
+            "The user inputs invalid information and is prompted to try again."
+        ],
+        "UC22E2": [
+            "The comment is empty and the text No Comment (without link) is displayed instead of the Read Comment link."
+        ]
+    },
+    "quality_requirements": []
+}
