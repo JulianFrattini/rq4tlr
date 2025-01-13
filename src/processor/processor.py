@@ -1,36 +1,105 @@
-from processor.absprocessor import AbsProcessor
-
 from structure.usecase import UseCase
 import pandas as pd
 
-from processor.detect_happy_ucs import DetectHappyUCs
-from processor.calc_large_ucs import CalculateLargeUseCases
+from processor.uc.ucprocessor import UCProcessor
+from processor.uc.detect_happy_ucs import DetectHappyUCs
+from processor.uc.calc_large_ucs import CalculateLargeUseCases
+
+from processor.sentence.sentenceprocessor import SentenceProcessor
+from processor.sentence.detect_anaphora import DetectAnaphora
 
 class Processor:
 
     def __init__(self):
-        # setup all available processors
-        self.processors: list[AbsProcessor] = [
+        # setup all available processors on their respective levels
+        self.processors_uc: list[UCProcessor] = [
             DetectHappyUCs(),
             CalculateLargeUseCases()
         ]
 
-    def apply_processors(self, ucs: list[UseCase]) -> pd.DataFrame:
-        """Applies all registered processors to a list of use cases and returns a DataFrame with the results
+        self.processors_subflow: list[SentenceProcessor] = []
+
+        self.processors_sentence: list[SentenceProcessor] = [
+            DetectAnaphora()
+        ]
+
+    def apply_processors(self, results: pd.DataFrame, datapoints: list, processors: list) -> pd.DataFrame:
+        """Applies a list of processors to a list of datapoints. The processors and datapoints must be on the same level, i.e., if the processors are on use-case level, the datapoints must be use-cases as well.
+        
+        :param datapoints: the list of datapoints to process
+        :param processors: the list of processors to apply
+        :return: a DataFrame with the results of the processing"""
+
+        # apply the processors
+        for processor in processors:
+            results[processor.name] = [processor.process(datapoint) 
+                for datapoint in datapoints]
+
+        return results
+
+    def apply_uc_processors(self, ucs: list[UseCase]) -> pd.DataFrame:
+        """Applies all registered processors on use-case level to a list of use cases and returns a DataFrame with the results
         
         :param ucs: the list of use cases to process
         
         :return: a DataFrame with the results of the processing
         """
 
-        # create a new dataframe to store the results and insert the ids of each use case from the ucs list
-        results = pd.DataFrame(columns=['id'])
+        # prepare a datafrane to store the results
+        results = pd.DataFrame(columns=['dataset', 'id'])
+        results['dataset'] = [uc.dataset for uc in ucs]
         results['id'] = [uc.id for uc in ucs]
 
-        # apply each processor to each use case
+        # apply all processors
+        results = self.apply_processors(results, ucs, self.processors_uc)
+        return results
 
-        for processor in self.processors:
-            results[processor.name] = [processor.process(uc) for uc in ucs]
+    def apply_subflow_processors(self, ucs: list[UseCase]) -> pd.DataFrame:
+        # prepare a datafrane to store the results
+        results = pd.DataFrame(columns=['dataset', 'uc', 'file'])
+        datapoints: list[str] = []
+        index = 0
+        for uc in ucs:
+            for filename in uc.main:
+                file = uc.main[filename]
+                results.loc[index] = [uc.dataset, uc.id, filename]
+                datapoints.append(file)
+                index += 1
+            for filename in uc.alternative:
+                file = uc.alternative[filename]
+                results.loc[index] = [uc.dataset, uc.id, filename]
+                datapoints.append(file)
+                index += 1
 
-        # return the results
+        # apply all processors
+        results = self.apply_processors(results, datapoints, self.processors_subflow)
+        return results
+
+    def apply_sentence_processors(self, ucs: list[UseCase]) -> pd.DataFrame:
+        # prepare a datafrane to store the results
+        results = pd.DataFrame(columns=['dataset', 'uc', 'file', 'line'])
+        datapoints: list[str] = []
+        index = 0
+        for uc in ucs:
+            for filename in uc.main:
+                file = uc.main[filename]
+                for sentence_index, line in enumerate(file):
+                    # prepare an entry for the current data point in the results dataframe
+                    results.loc[index] = [uc.dataset, uc.id, filename, sentence_index+1]
+                    datapoints.append(line)
+
+                    # increment the index
+                    index += 1
+            for filename in uc.alternative:
+                file = uc.alternative[filename]
+                for sentence_index, line in enumerate(file):
+                    # prepare an entry for the current data point in the results dataframe
+                    results.loc[index] = [uc.dataset, uc.id, filename, sentence_index+1]
+                    datapoints.append(line)
+
+                    # increment the index
+                    index += 1
+
+        # apply all processors
+        results = self.apply_processors(results, datapoints, self.processors_sentence)
         return results

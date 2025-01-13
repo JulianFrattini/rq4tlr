@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from structure.usecase import UseCase   
 
-class AbsProcessor(ABC):
+class UCProcessor(ABC):
 
     @property
     @abstractmethod

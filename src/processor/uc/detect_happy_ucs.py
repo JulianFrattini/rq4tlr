@@ -1,7 +1,7 @@
-from processor.absprocessor import AbsProcessor
+from processor.uc.ucprocessor import UCProcessor
 from structure.usecase import UseCase
 
-class DetectHappyUCs(AbsProcessor):
+class DetectHappyUCs(UCProcessor):
 
     name: str = "happy_ucs"
 

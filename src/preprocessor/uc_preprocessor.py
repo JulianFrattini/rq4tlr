@@ -18,6 +18,7 @@ class UseCasePreprocessor:
         # set up the preprocessed use case and copy all attributes that do not change
         preprocessed_use_case = UseCase(
             id=raw_use_case.id,
+            dataset=raw_use_case.dataset,
             name=raw_use_case.name,
             description=raw_use_case.description,
             actors=raw_use_case.actors)

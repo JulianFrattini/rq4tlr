@@ -42,11 +42,17 @@ def main():
 
     # STEP 3: process the use case by running all processing steps to produce a table of data
     processor = Processor()
-    results: pd.DataFrame = processor.apply_processors(ucs=use_cases)
-
-    # STEP 4: save the processed data to a file
-    output_filename: str = os.path.join(PATH_OUTPUT, 'rq4tlr-automatic-variables.csv')
-    results.to_csv(output_filename, index=False)
+    results_uc: pd.DataFrame = processor.apply_uc_processors(ucs=use_cases)
+    output_filename_ucs: str = os.path.join(PATH_OUTPUT, 'rq4tlr-automatic-uc.csv')
+    results_uc.to_csv(output_filename_ucs, index=False)
+    
+    results_subflow: pd.DataFrame = processor.apply_subflow_processors(ucs=use_cases)
+    output_filename_subflow: str = os.path.join(PATH_OUTPUT, 'rq4tlr-automatic-subflow.csv')
+    results_subflow.to_csv(output_filename_subflow, index=False)
+    
+    results_sentence: pd.DataFrame = processor.apply_sentence_processors(ucs=use_cases)
+    output_filename_sentence: str = os.path.join(PATH_OUTPUT, 'rq4tlr-automatic-sentence.csv')
+    results_sentence.to_csv(output_filename_sentence, index=False)
 
 if __name__ == "__main__":
     main()

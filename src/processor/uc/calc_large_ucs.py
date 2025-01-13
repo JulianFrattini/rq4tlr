@@ -1,7 +1,7 @@
-from processor.absprocessor import AbsProcessor
+from processor.uc.ucprocessor import UCProcessor
 from structure.usecase import UseCase
 
-class CalculateLargeUseCases(AbsProcessor):
+class CalculateLargeUseCases(UCProcessor):
 
     name: str = "large_ucs"
 

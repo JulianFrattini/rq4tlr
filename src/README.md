@@ -173,14 +173,15 @@ The files for processors follow a naming convention depending on the output type
 | `detect` | Boolean | [detect_happy_ucs.py](src/processor/detect_happy_ucs.py) |
 | `calc` | Numeric | [calc_large_ucs.py](src/processor/calc_large_ucs.py) |
 
-The new file needs to contain a class that extends the `AbsProcessor` class specified in the [absprocessor](src/processor/absprocessor.py) file.
-As such, it needs a `name` attribute and a `process()` function.
-Once implemented, add it to the processor by extending the `__init__` function of the [processor](src/processor/processor.py):
+The new file should be located in the subfolder that corresponds to its level (e.g., use case or sentence).
+The new file needs to contain a class that extends the respective abstract class of its level (e.g., [ucprocessor.py](./processor/uc/ucprocessor.py) for use case level processors).
+Additionally, every processor needs a `name` attribute and a `process()` function.
+Once implemented, add it to the respective list of processor by extending the `__init__` function of the [processor](src/processor/processor.py):
 
 ```diff
 def __init__(self):
     # setup all available processors
-    self.processors: list[AbsProcessor] = [
+    self.processors_uc: list[AbsProcessor] = [
         DetectHappyUCs(),
         CalculateLargeUseCases(),
 +       NewProcessor()
