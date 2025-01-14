@@ -4,6 +4,7 @@ import pandas as pd
 from processor.uc.ucprocessor import UCProcessor
 from processor.uc.detect_happy_ucs import DetectHappyUCs
 from processor.uc.calc_large_ucs import CalculateLargeUseCases
+from processor.uc.calc_meaningless_actors import CalculateMeaninglessActors
 
 from processor.sentence.sentenceprocessor import SentenceProcessor
 from processor.sentence.detect_anaphora import DetectAnaphora
@@ -14,7 +15,8 @@ class Processor:
         # setup all available processors on their respective levels
         self.processors_uc: list[UCProcessor] = [
             DetectHappyUCs(),
-            CalculateLargeUseCases()
+            CalculateLargeUseCases(),
+            CalculateMeaninglessActors()
         ]
 
         self.processors_subflow: list[SentenceProcessor] = []
