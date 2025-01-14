@@ -9,6 +9,7 @@ from processor.uc.calc_meaningless_actors import CalculateMeaninglessActors
 from processor.sentence.sentenceprocessor import SentenceProcessor
 from processor.sentence.detect_anaphora import DetectAnaphora
 from processor.sentence.detect_optional import DetectOptional
+from processor.sentence.calc_requirements_length import CalcRequirementsLength
 
 class Processor:
 
@@ -24,7 +25,8 @@ class Processor:
 
         self.processors_sentence: list[SentenceProcessor] = [
             DetectAnaphora(),
-            DetectOptional()
+            DetectOptional(),
+            CalcRequirementsLength()
         ]
 
     def apply_processors(self, results: pd.DataFrame, datapoints: list, processors: list) -> pd.DataFrame:
