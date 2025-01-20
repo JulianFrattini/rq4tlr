@@ -1,6 +1,11 @@
+import csv
 import os, json
+from collections import defaultdict
+
 import pandas as pd
 
+from src.structure.TLR_goldstandard import TLR_goldstandard
+from src.util.static import PATH_RAW_GOLDSTANDARDS
 from structure.rawusecase import RawUseCase
 from structure.usecase import UseCase
 
@@ -28,17 +33,55 @@ def get_use_cases(dataset: str) -> list[RawUseCase]:
 
     return items
 
+
+def get_TLR_goldstandard(dataset) -> TLR_goldstandard:
+    """Read the goldstandard from the dataset folder and return them as a list TLR_goldstandard object
+
+       :param dataset: the dataset to get the goldstandard for
+       :return: the goldstandard object
+    """
+    path: str = os.path.join(PATH_RAW_GOLDSTANDARDS, dataset)
+
+    goldstandards: list[TLR_goldstandard] = []
+    for filename in os.listdir(path):
+        file_path = os.path.join(path, filename)
+        if os.path.isfile(file_path):
+            with open(file_path, 'r', encoding='utf-8') as file:
+                reader = csv.reader(file, delimiter=',')
+                # Skip the header
+                next(reader)
+
+                links = defaultdict(list)
+                # Populate the dictionary with lists of values
+                for row in reader:
+                    links[row[0]].append(row[1])
+
+                tlr_goldstandard = TLR_goldstandard(dataset=dataset, links=links)
+
+                goldstandards.append(tlr_goldstandard)
+
+    if len(goldstandards) == 1:
+        return goldstandards[0]
+    elif len(goldstandards) == 0:
+        raise ValueError('No TLR goldstandard found')
+    else:
+        raise ValueError('Multiple TLR goldstandards found')
+    pass
+
+
 def main():
     # STEP 1: parse the raw test files into RawUseCase objects
     raw_use_cases: list[RawUseCase] = []
+    goldstandards = defaultdict(list)
     for dataset in ['etour', 'itrust']:
         parsed = get_use_cases(dataset)
         raw_use_cases = raw_use_cases + parsed
+        goldstandards[dataset] = get_TLR_goldstandard(dataset)
 
     # STEP 2: preprocess the raw use case objects
     preprocessor = UseCasePreprocessor()
     use_cases: list[UseCase] = [
-        preprocessor.preprocess_use_case(ruc) for ruc in raw_use_cases]
+        preprocessor.preprocess_use_case(ruc, goldstandards) for ruc in raw_use_cases]
 
     # STEP 3: process the use case by running all processing steps to produce a table of data
     processor = Processor()

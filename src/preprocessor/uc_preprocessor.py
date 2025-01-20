@@ -8,12 +8,14 @@ class UseCasePreprocessor:
     def __init__(self):
         self.preprocessor = Preprocessor()
 
-    def preprocess_use_case(self, raw_use_case: RawUseCase) -> UseCase:
+    def preprocess_use_case(self, raw_use_case: RawUseCase, goldstandards) -> UseCase:
         """
         Preprocesses a raw use case by performing all preprocessing steps and returning a preprocessed use case object
 
         :param raw_use_case: the use case to preprocess
+        :goldstandards: a dictionary of the goldstandards
         :return: the preprocessed use case
+
         """
         # set up the preprocessed use case and copy all attributes that do not change
         preprocessed_use_case = UseCase(
@@ -21,7 +23,8 @@ class UseCasePreprocessor:
             dataset=raw_use_case.dataset,
             name=raw_use_case.name,
             description=raw_use_case.description,
-            actors=raw_use_case.actors)
+            actors=raw_use_case.actors,
+            goldstandard=goldstandards[raw_use_case.dataset])
 
         # preprocess all attributes which are lists of strings
         list_attributes: list[str] = ['preconditions', 'postconditions', 'quality_requirements']
