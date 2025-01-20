@@ -12,7 +12,13 @@
         "The system receives the position of the tourist.",
         "The position of the tourist is not detectable by GPS."
     ],
-    "main": {},
+    "main": {
+        "UC56": [
+            "The system requires the data for the position.",
+            "The GPS calculates the position of the tourist.",
+            "The system is on hold until the data of the position."
+        ]
+    },
     "alternative": {},
     "quality_requirements": [
         "The GPS requirements into the transaction in more than 5 seconds."
