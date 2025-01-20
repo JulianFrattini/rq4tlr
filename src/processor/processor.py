@@ -11,6 +11,11 @@ from processor.sentence.detect_anaphora import DetectAnaphora
 from processor.sentence.detect_optional import DetectOptional
 from processor.sentence.calc_requirements_length import CalcRequirementsLength
 
+from src.processor.uc.detect_meaningless_uc import DetectMeaninglessUC
+from src.processor.uc.detect_scattered_requirements import DetectScatteredRequirements
+from src.processor.uc.detect_tangled_requirements import DetectTangledRequirements
+
+
 class Processor:
 
     def __init__(self):
@@ -18,7 +23,10 @@ class Processor:
         self.processors_uc: list[UCProcessor] = [
             DetectHappyUCs(),
             CalculateLargeUseCases(),
-            CalculateMeaninglessActors()
+            CalculateMeaninglessActors(),
+            DetectMeaninglessUC(),
+            DetectTangledRequirements(),
+            DetectScatteredRequirements()
         ]
 
         self.processors_subflow: list[SentenceProcessor] = []
