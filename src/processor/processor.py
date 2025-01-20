@@ -11,6 +11,7 @@ from processor.sentence.detect_anaphora import DetectAnaphora
 from processor.sentence.detect_optional import DetectOptional
 from processor.sentence.calc_requirements_length import CalcRequirementsLength
 
+from src.processor.sentence.detect_incomplete_comparisons import DetectIncompleteComparisons
 from src.processor.sentence.detect_starts_without_subject import DetectStartsWithoutSubject
 from src.processor.uc.detect_meaningless_uc import DetectMeaninglessUC
 from src.processor.uc.detect_scattered_requirements import DetectScatteredRequirements
@@ -36,7 +37,8 @@ class Processor:
             DetectAnaphora(),
             DetectOptional(),
             CalcRequirementsLength(),
-            DetectStartsWithoutSubject()
+            DetectStartsWithoutSubject(),
+            DetectIncompleteComparisons()
         ]
 
     def apply_processors(self, results: pd.DataFrame, datapoints: list, processors: list) -> pd.DataFrame:
