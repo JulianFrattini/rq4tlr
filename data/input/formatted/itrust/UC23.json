@@ -8,8 +8,7 @@
     "postconditions": [],
     "main": {
         "UC23S1": [
-            "The LHCP enters a patient medical identification number (MID)",
-            "[E1] and confirms his/her input [E2]."
+            "The LHCP enters a patient medical identification number (MID) [E1] and confirms his/her input [E2]."
         ],
         "UC23S3": [
             "The LHCP can view of the comprehensive patient report for the specified patient, including the information below.",
