@@ -1,6 +1,9 @@
 from dataclasses import dataclass, field
 from structure.sentence import sentence
 
+from src.structure.TLR_goldstandard import TLR_goldstandard
+
+
 @dataclass
 class UseCase:
     # a processed use case where certain fields that contain sentences have been enriched with syntactic information
@@ -18,3 +21,5 @@ class UseCase:
     alternative: dict[str, list[sentence]] = field(default_factory=dict)
 
     quality_requirements: list[sentence] = field(default_factory=list)
+
+    goldstandard: TLR_goldstandard = field(default_factory=TLR_goldstandard)
