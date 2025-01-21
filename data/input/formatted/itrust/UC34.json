@@ -9,18 +9,15 @@
     "main": {
         "UC34S1": [
             "An LHCP or UAP can add and delete patients from his or her monitoring list.",
-            "A patient is added to the list by the LHCP or UAP typing in the patient's MID",
-            "[E1] or name.",
-            "An LHCP can delete a patient from his or her monitoring list by the LHCP typing the the patient's MID",
-            "[E1].",
+            "A patient is added to the list by the LHCP or UAP typing in the patient's MID [E1] or name.",
+            "An LHCP can delete a patient from his or her monitoring list by the LHCP typing the the patient's MID [E1].",
             "In both cases, the LHCP is presented the name of the patient and must confirm the add/delete.",
             "For each patient from the monitoring list, the LHCP can choose to edit which types of remote monitoring information (blood pressure, glucose levels, height, weight, and pedometer readings) should be submitted by the patient.",
             "By default, all types of information are selected for monitoring."
         ],
         "UC34S2": [
             "A patient whose at least one physiologic data type is specified to be under monitoring chooses to report their physiologic data.",
-            "He or she can report his or her blood pressure (systolic and diastolic)",
-            "[E2] and/or glucose levels [E3].",
+            "He or she can report his or her blood pressure (systolic and diastolic) [E2] and/or glucose levels [E3].",
             "The input data, a timestamp, and the fact that the status is self-reported are saved."
         ],
         "UC34S3": [
@@ -39,8 +36,7 @@
             "A UAP can select to report physiologic measurements.",
             "He/she is presented with a list of the patients whose at least one physiologic data type is specified to be under monitoring and for whom he/she is allowed to report measurements.",
             "He or she can select a patient and then enter data.",
-            "He or she can report the blood pressure (systolic and diastolic)",
-            "[E2] and/or glucose levels [E3] for the patient.",
+            "He or she can report the blood pressure (systolic and diastolic) [E2] and/or glucose levels [E3] for the patient.",
             "The input data, a timestamp, and the fact the the status was reported by case manager and their MID are saved.",
             "Only the applicable input entries (those whose corresponding data types of the patient are specified to be under monitoring) are displayed to the UAP."
         ],
@@ -48,8 +44,7 @@
             "A patient can select to report physiologic measurements for those whose at least one physiologic data type is specified to be under monitoring andfor whom he/she is a patient representative.",
             "He/she is presented with a list of the patients whose at least one physiologic data type is specified to be under monitoring and for which he/she is allowed to report measurements.",
             "He or she can select a patient and then enter data.",
-            "He or she can report the blood pressure (systolic and diastolic)",
-            "[E2] and/or glucose levels [E3] for the patient.",
+            "He or she can report the blood pressure (systolic and diastolic) [E2] and/or glucose levels [E3] for the patient.",
             "The input data and a timestamp and the fact that the status was reported by patient representative and their MID are saved.",
             "Only the applicable input entries (those whose corresponding data types of the patient are specified to be under monitoring) are displayed to the patient."
         ]
