@@ -5,7 +5,7 @@ import spacy
 
 class ItrustParser(AbstractUseCaseParser):
     def __init__(self):
-        self.nlp = spacy.load("en_core_web_sm")
+        self.nlp = spacy.load("en_core_web_md")
 
     def parse_subflow(self, text: str) -> list[str]:
         doc = self.nlp(text)

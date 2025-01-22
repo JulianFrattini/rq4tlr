@@ -81,7 +81,7 @@ def main():
     # STEP 2: preprocess the raw use case objects
     preprocessor = UseCasePreprocessor()
     use_cases: list[UseCase] = [
-        preprocessor.preprocess_use_case(ruc, goldstandards) for ruc in raw_use_cases]
+        preprocessor.preprocess_use_case(ruc, goldstandards, raw_use_cases) for ruc in raw_use_cases]
 
     # STEP 3: process the use case by running all processing steps to produce a table of data
     processor = Processor()

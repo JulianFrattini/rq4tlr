@@ -197,6 +197,6 @@ Then, execute the following steps:
 
 1. Optionally, create a virtual environment via `python -m venv .venv` and activate it via `.venv\Scripts\activate`
 2. Install the necessary requirements via `pip install -r requirements.txt`
-3. Install the spaCy language model via `python -m spacy download en_core_web_sm`
+3. Install the spaCy language model via `python -m spacy download en_core_web_md`
 
 Afterwards, you can continue with the usage of the scripts.
