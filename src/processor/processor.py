@@ -13,6 +13,7 @@ from processor.sentence.calc_requirements_length import CalcRequirementsLength
 
 from src.processor.sentence.detect_incomplete_comparisons import DetectIncompleteComparisons
 from src.processor.sentence.detect_starts_without_subject import DetectStartsWithoutSubject
+from src.processor.uc.calculate_similarity import CalculateSimilarity
 from src.processor.uc.detect_meaningless_uc import DetectMeaninglessUC
 from src.processor.uc.detect_scattered_requirements import DetectScatteredRequirements
 from src.processor.uc.detect_tangled_requirements import DetectTangledRequirements
@@ -28,7 +29,8 @@ class Processor:
             CalculateMeaninglessActors(),
             DetectMeaninglessUC(),
             DetectTangledRequirements(),
-            DetectScatteredRequirements()
+            DetectScatteredRequirements(),
+            CalculateSimilarity()
         ]
 
         self.processors_subflow: list[SentenceProcessor] = []
