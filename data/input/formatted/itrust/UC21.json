@@ -8,8 +8,7 @@
     "postconditions": [],
     "main": {
         "UC21S1": [
-            "The LHCP or ER enters a MID",
-            "[E1] and confirms the input [E2]."
+            "The LHCP or ER enters a MID [E1] and confirms the input [E2]."
         ]
     },
     "alternative": {
