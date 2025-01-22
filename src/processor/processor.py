@@ -11,12 +11,12 @@ from processor.sentence.detect_anaphora import DetectAnaphora
 from processor.sentence.detect_optional import DetectOptional
 from processor.sentence.calc_requirements_length import CalcRequirementsLength
 
-from src.processor.sentence.detect_incomplete_comparisons import DetectIncompleteComparisons
-from src.processor.sentence.detect_starts_without_subject import DetectStartsWithoutSubject
-from src.processor.uc.calculate_similarity import CalculateSimilarity
-from src.processor.uc.detect_meaningless_uc import DetectMeaninglessUC
-from src.processor.uc.detect_scattered_requirements import DetectScatteredRequirements
-from src.processor.uc.detect_tangled_requirements import DetectTangledRequirements
+from processor.sentence.detect_incomplete_comparisons import DetectIncompleteComparisons
+from processor.sentence.detect_starts_without_subject import DetectStartsWithoutSubject
+from processor.uc.calculate_similarity import CalculateSimilarity
+from processor.uc.detect_meaningless_uc import DetectMeaninglessUC
+from processor.uc.detect_scattered_requirements import DetectScatteredRequirements
+from processor.uc.detect_tangled_requirements import DetectTangledRequirements
 
 
 class Processor:

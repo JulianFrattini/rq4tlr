@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 from structure.sentence import sentence
 
-from src.structure.TLR_goldstandard import TLR_goldstandard
+from structure.TLR_goldstandard import TLR_goldstandard
 
 
 @dataclass

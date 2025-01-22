@@ -4,8 +4,8 @@ from collections import defaultdict
 
 import pandas as pd
 
-from src.structure.TLR_goldstandard import TLR_goldstandard
-from src.util.static import PATH_RAW_GOLDSTANDARDS
+from structure.TLR_goldstandard import TLR_goldstandard
+from util.static import PATH_RAW_GOLDSTANDARDS
 from structure.rawusecase import RawUseCase
 from structure.usecase import UseCase
 
