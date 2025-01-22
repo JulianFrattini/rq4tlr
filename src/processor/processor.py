@@ -5,18 +5,20 @@ from processor.uc.ucprocessor import UCProcessor
 from processor.uc.detect_happy_ucs import DetectHappyUCs
 from processor.uc.calc_large_ucs import CalculateLargeUseCases
 from processor.uc.calc_meaningless_actors import CalculateMeaninglessActors
+from processor.uc.calculate_similarity import CalculateSimilarity
+from processor.uc.detect_meaningless_uc import DetectMeaninglessUC
+from processor.uc.detect_scattered_requirements import DetectScatteredRequirements
+from processor.uc.detect_tangled_requirements import DetectTangledRequirements
+
+from processor.subflow.subflowprocessor import SubflowProcessor
+from processor.subflow.calc_coherence import CalculateCoherence
 
 from processor.sentence.sentenceprocessor import SentenceProcessor
 from processor.sentence.detect_anaphora import DetectAnaphora
 from processor.sentence.detect_optional import DetectOptional
 from processor.sentence.calc_requirements_length import CalcRequirementsLength
-
 from processor.sentence.detect_incomplete_comparisons import DetectIncompleteComparisons
 from processor.sentence.detect_starts_without_subject import DetectStartsWithoutSubject
-from processor.uc.calculate_similarity import CalculateSimilarity
-from processor.uc.detect_meaningless_uc import DetectMeaninglessUC
-from processor.uc.detect_scattered_requirements import DetectScatteredRequirements
-from processor.uc.detect_tangled_requirements import DetectTangledRequirements
 
 
 class Processor:
@@ -33,7 +35,9 @@ class Processor:
             CalculateSimilarity()
         ]
 
-        self.processors_subflow: list[SentenceProcessor] = []
+        self.processors_subflow: list[SentenceProcessor] = [
+            CalculateCoherence()
+            ]
 
         self.processors_sentence: list[SentenceProcessor] = [
             DetectAnaphora(),
