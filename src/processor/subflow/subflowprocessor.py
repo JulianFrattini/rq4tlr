@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from src.structure.sentence import sentence
+from structure.sentence import sentence
 
 class SubflowProcessor(ABC):
 

@@ -1,6 +1,6 @@
-from src.processor.subflow.subflowprocessor import SubflowProcessor
+from processor.subflow.subflowprocessor import SubflowProcessor
 
-from src.structure.sentence import sentence
+from structure.sentence import sentence
 
 class CalculateCoherence(SubflowProcessor):
 
