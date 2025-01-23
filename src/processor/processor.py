@@ -20,6 +20,7 @@ from processor.sentence.detect_optional import DetectOptional
 from processor.sentence.calc_requirements_length import CalcRequirementsLength
 from processor.sentence.detect_incomplete_comparisons import DetectIncompleteComparisons
 from processor.sentence.detect_starts_without_subject import DetectStartsWithoutSubject
+from processor.sentence.detect_passive import DetectPassive
 
 
 class Processor:
@@ -43,7 +44,8 @@ class Processor:
                 DetectOptional(),
                 CalcRequirementsLength(),
                 DetectStartsWithoutSubject(),
-                DetectIncompleteComparisons()
+                DetectIncompleteComparisons(),
+                DetectPassive()
             ]
         }
 

@@ -9,6 +9,9 @@ class sentence:
     # list of tuples with the word and its part of speech
     pos_tagged: list = field(default_factory=list)
 
+    # full NLP parse
+    doc: any = None
+
     def get_nouns(self) -> list[str]:
         """
         Get the nouns from the sentence

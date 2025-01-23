@@ -16,16 +16,12 @@ class Preprocessor:
         
         :return: the preprocessed sentence
         """
-        # Perform POS tagging
-        pos_tagged = self.pos_tagging(literal)
+        # preprocess the sentence
+        doc = self.nlp(literal)
 
         # Create the sentence object
         preprocessed: sentence = sentence(
             literal=literal, 
-            pos_tagged=pos_tagged)
+            pos_tagged=[(token.text, token.pos_) for token in doc],
+            doc=doc)
         return preprocessed
-
-    def pos_tagging(self, sentence: str) -> list[tuple[str, str]]:
-        doc = self.nlp(sentence)
-        sentence_parsed = [(token.text, token.pos_) for token in doc]
-        return sentence_parsed
