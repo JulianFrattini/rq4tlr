@@ -132,7 +132,12 @@ The individual components (e.g., the parser, preprocessor, and processor) delega
 
 #### Usage
 
-To execute the automatic analysis, run the `process.py` script, e.g., via `python .\process.py`.
+To execute the automatic analysis, run the `process.py` script with the `--level` (or `-l`) flag set to either a specific level ("usecase", "subflow", "sentence") or to "all" to run the full analysis.
+
+```
+python .\process.py --level <usecase, subflow, sentence, all>
+```
+
 In case you installed the dependencies into a virtual environment, ensure that this virtual environment is running.
 
 #### Development

@@ -1,6 +1,9 @@
 import csv
 import os, json
+import argparse
 from collections import defaultdict
+
+from util.static import LEVELS
 
 import pandas as pd
 
@@ -69,7 +72,7 @@ def get_TLR_goldstandard(dataset) -> TLR_goldstandard:
     pass
 
 
-def main():
+def main(selected_level: str):
     # STEP 1: parse the raw test files into RawUseCase objects
     raw_use_cases: list[RawUseCase] = []
     goldstandards = defaultdict(list)
@@ -85,17 +88,20 @@ def main():
 
     # STEP 3: process the use case by running all processing steps to produce a table of data
     processor = Processor()
-    results_uc: pd.DataFrame = processor.apply_uc_processors(ucs=use_cases)
-    output_filename_ucs: str = os.path.join(PATH_OUTPUT, 'rq4tlr-automatic-uc.csv')
-    results_uc.to_csv(output_filename_ucs, index=False)
-    
-    results_subflow: pd.DataFrame = processor.apply_subflow_processors(ucs=use_cases)
-    output_filename_subflow: str = os.path.join(PATH_OUTPUT, 'rq4tlr-automatic-subflow.csv')
-    results_subflow.to_csv(output_filename_subflow, index=False)
-    
-    results_sentence: pd.DataFrame = processor.apply_sentence_processors(ucs=use_cases)
-    output_filename_sentence: str = os.path.join(PATH_OUTPUT, 'rq4tlr-automatic-sentence.csv')
-    results_sentence.to_csv(output_filename_sentence, index=False)
+    for level in LEVELS:
+        if selected_level == level or selected_level == 'all':
+            results: pd.DataFrame = processor.apply_processors(level=level, ucs=use_cases)
+            output_filename: str = os.path.join(PATH_OUTPUT, f'rq4tlr-automatic-{level}.csv')
+            results.to_csv(output_filename, index=False)
 
 if __name__ == "__main__":
-    main()
+    # parse the arguments
+    parser = argparse.ArgumentParser(description='Specify the processing configuration')
+    parser.add_argument(
+        '-l', '--level', 
+        choices=LEVELS + ['all'], 
+        required=True, 
+        help='Level on which to perform the processing')
+    args = parser.parse_args()
+
+    main(selected_level=args.level)

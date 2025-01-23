@@ -1,4 +1,5 @@
 from structure.usecase import UseCase
+from util.static import LEVELS
 import pandas as pd
 
 from processor.uc.ucprocessor import UCProcessor
@@ -24,61 +25,55 @@ from processor.sentence.detect_starts_without_subject import DetectStartsWithout
 class Processor:
 
     def __init__(self):
-        # setup all available processors on their respective levels
-        self.processors_uc: list[UCProcessor] = [
-            DetectHappyUCs(),
-            CalculateLargeUseCases(),
-            CalculateMeaninglessActors(),
-            DetectMeaninglessUC(),
-            DetectTangledRequirements(),
-            DetectScatteredRequirements(),
-            CalculateSimilarity()
-        ]
-
-        self.processors_subflow: list[SentenceProcessor] = [
-            CalculateCoherence()
+        self.processors: dict[str, list] = {
+            LEVELS[0] : [ # use case level
+                DetectHappyUCs(),
+                CalculateLargeUseCases(),
+                CalculateMeaninglessActors(),
+                DetectMeaninglessUC(),
+                DetectTangledRequirements(),
+                DetectScatteredRequirements(),
+                CalculateSimilarity()
+            ], 
+            LEVELS[1] : [ # subflow level
+                CalculateCoherence()
+            ],
+            LEVELS[2] : [ # sentence level
+                DetectAnaphora(),
+                DetectOptional(),
+                CalcRequirementsLength(),
+                DetectStartsWithoutSubject(),
+                DetectIncompleteComparisons()
             ]
+        }
 
-        self.processors_sentence: list[SentenceProcessor] = [
-            DetectAnaphora(),
-            DetectOptional(),
-            CalcRequirementsLength(),
-            DetectStartsWithoutSubject(),
-            DetectIncompleteComparisons()
-        ]
+    def apply_processors(self, level: str, ucs: list[UseCase]) -> pd.DataFrame:
 
-    def apply_processors(self, results: pd.DataFrame, datapoints: list, processors: list) -> pd.DataFrame:
-        """Applies a list of processors to a list of datapoints. The processors and datapoints must be on the same level, i.e., if the processors are on use-case level, the datapoints must be use-cases as well.
-        
-        :param datapoints: the list of datapoints to process
-        :param processors: the list of processors to apply
-        :return: a DataFrame with the results of the processing"""
+        datapoints: list = []
+        results: pd.DataFrame = None
+        if level == LEVELS[0]:
+            datapoints, results = self.setup_data_ucs()
+        elif level == LEVELS[1]:
+            datapoints, results = self.setup_data_subflow(ucs)
+        elif level == LEVELS[2]:
+            datapoints, results = self.setup_data_sentence(ucs)
 
         # apply the processors
-        for processor in processors:
+        for processor in self.processors[level]:
             results[processor.name] = [processor.process(datapoint) 
                 for datapoint in datapoints]
 
         return results
 
-    def apply_uc_processors(self, ucs: list[UseCase]) -> pd.DataFrame:
-        """Applies all registered processors on use-case level to a list of use cases and returns a DataFrame with the results
-        
-        :param ucs: the list of use cases to process
-        
-        :return: a DataFrame with the results of the processing
-        """
-
+    def setup_data_ucs(self, ucs: list[UseCase]) -> pd.DataFrame:
         # prepare a datafrane to store the results
         results = pd.DataFrame(columns=['dataset', 'id'])
         results['dataset'] = [uc.dataset for uc in ucs]
         results['id'] = [uc.id for uc in ucs]
 
-        # apply all processors
-        results = self.apply_processors(results, ucs, self.processors_uc)
-        return results
+        return ucs, results
 
-    def apply_subflow_processors(self, ucs: list[UseCase]) -> pd.DataFrame:
+    def setup_data_subflow(self, ucs: list[UseCase]) -> pd.DataFrame:
         # prepare a datafrane to store the results
         results = pd.DataFrame(columns=['dataset', 'uc', 'file'])
         datapoints: list[str] = []
@@ -95,11 +90,9 @@ class Processor:
                 datapoints.append(file)
                 index += 1
 
-        # apply all processors
-        results = self.apply_processors(results, datapoints, self.processors_subflow)
-        return results
+        return datapoints, results
 
-    def apply_sentence_processors(self, ucs: list[UseCase]) -> pd.DataFrame:
+    def setup_data_sentence(self, ucs: list[UseCase]) -> pd.DataFrame:
         # prepare a datafrane to store the results
         results = pd.DataFrame(columns=['dataset', 'uc', 'file', 'line'])
         datapoints: list[str] = []
@@ -124,6 +117,4 @@ class Processor:
                     # increment the index
                     index += 1
 
-        # apply all processors
-        results = self.apply_processors(results, datapoints, self.processors_sentence)
-        return results
+        return datapoints, results
