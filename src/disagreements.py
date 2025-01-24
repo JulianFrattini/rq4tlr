@@ -16,7 +16,7 @@ factors_requirement: list[str] = ['Functional Duplication',
 factors_sentence: list[str] = ['Coordination Ambiguity', 
                                'Contains UI Design Details']
 
-def compare(rating1: pd.DataFrame, rating2: pd.DataFrame, factors: list[str], compose_id: callable):
+def compare(rating1: pd.DataFrame, rating2: pd.DataFrame, factors: list[str], compose_id: callable) -> int:
     # drop rows with missing values
     rating1 = rating1.dropna(subset=['Rater'])
     rating2 = rating2.dropna(subset=['Rater'])
@@ -32,6 +32,7 @@ def compare(rating1: pd.DataFrame, rating2: pd.DataFrame, factors: list[str], co
     rating2['ID'] = rating2.apply(compose_id, axis=1)
 
     # determine differences
+    disagreements: int = 0
     for factor in factors:
         for rid in rating1['ID']:
             if rid in rating2['ID'].values:
@@ -45,6 +46,10 @@ def compare(rating1: pd.DataFrame, rating2: pd.DataFrame, factors: list[str], co
                     print(f'  - {rater1}: {rating1.loc[rating1["ID"] == rid, "Comment"].values[0]}')
                     print(f'  - {rater2}: {rating2.loc[rating2["ID"] == rid, "Comment"].values[0]}')
 
+                    disagreements += 1
+    
+    return disagreements
+
 if __name__ == "__main__":
     # parse the arguments
     parser = argparse.ArgumentParser(description='Define the level of comparison.')
@@ -55,13 +60,15 @@ if __name__ == "__main__":
         help='Whether to run the comparison on "requirements" or "sentence" level')
     args = parser.parse_args()
 
+    disagreements: int = 0
     if args.level == 'requirements':
         rating1 = pd.read_excel(file_name, sheet_name='Requirements R1')
         rating2 = pd.read_excel(file_name, sheet_name='Requirements R2')
         compose_id = lambda row: f'{row["Dataset"]}-{row["File"]}'
-        compare(rating1, rating2, factors_requirement, compose_id)
+        disagreements = compare(rating1, rating2, factors_requirement, compose_id)
     elif args.level == 'sentences':
         rating1 = pd.read_excel(file_name, sheet_name='Sentences R1')
         rating2 = pd.read_excel(file_name, sheet_name='Sentences R2')
         compose_id = lambda row: f'{row["Dataset"]}-{row["File"]}-{row["Line"]}'
-        compare(rating1, rating2, factors_sentence, compose_id)
+        disagreements = compare(rating1, rating2, factors_sentence, compose_id)
+    print(f'Total disagreements: {disagreements}')
