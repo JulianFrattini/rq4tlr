@@ -11,10 +11,12 @@ factors_requirement: list[str] = ['Functional Duplication',
                       'Inputs or Outputs not quantified', 
                       'Contains NFRs', 
                       'Contains Actor-Actor Interaction',
-                      'Contains justifications']
+                      'Contains justifications',
+                      'Contains clarification']
 
 factors_sentence: list[str] = ['Coordination Ambiguity', 
-                               'Contains UI Design Details']
+                               'Contains UI Design Details',
+                               'Contains Alternative']
 
 def compare(rating1: pd.DataFrame, rating2: pd.DataFrame, factors: list[str], compose_id: callable) -> int:
     # drop rows with missing values
