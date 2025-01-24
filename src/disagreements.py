@@ -56,12 +56,12 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     if args.level == 'requirements':
-        rating1 = pd.read_excel(file_name, sheet_name='Requirements')
-        rating2 = pd.read_excel(file_name, sheet_name='Requirements Overlap')
+        rating1 = pd.read_excel(file_name, sheet_name='Requirements R1')
+        rating2 = pd.read_excel(file_name, sheet_name='Requirements R2')
         compose_id = lambda row: f'{row["Dataset"]}-{row["File"]}'
         compare(rating1, rating2, factors_requirement, compose_id)
     elif args.level == 'sentences':
-        rating1 = pd.read_excel(file_name, sheet_name='Sentence')
-        rating2 = pd.read_excel(file_name, sheet_name='Sentence Overlap')
+        rating1 = pd.read_excel(file_name, sheet_name='Sentences R1')
+        rating2 = pd.read_excel(file_name, sheet_name='Sentences R2')
         compose_id = lambda row: f'{row["Dataset"]}-{row["File"]}-{row["Line"]}'
         compare(rating1, rating2, factors_sentence, compose_id)
