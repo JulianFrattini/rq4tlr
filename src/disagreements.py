@@ -6,17 +6,17 @@ file_name: str = '../data/labeling/rq4tlr-manual-variables.xlsx'
 factors_requirement: list[str] = ['Functional Duplication', 
                       'Use Case Naming Problems', 
                       'Inappropriate Scope', 
-                      'Incoherent Text Order', 
-                      'Inconsistent Level of Abstraction', 
+                      'Incoherent Text Order',
                       'Inputs or Outputs not quantified', 
                       'Contains NFRs', 
                       'Contains Actor-Actor Interaction',
-                      'Contains justifications',
-                      'Contains clarification']
+                      'Contains justifications']
 
 factors_sentence: list[str] = ['Coordination Ambiguity', 
                                'Contains UI Design Details',
-                               'Contains Alternative']
+                               'Contains Alternative',
+                               'Inconsistent Level of Abstraction',
+                               'Contains Clarification']
 
 def compare(rating1: pd.DataFrame, rating2: pd.DataFrame, factors: list[str], compose_id: callable) -> int:
     # drop rows with missing values
