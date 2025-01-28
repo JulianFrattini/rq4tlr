@@ -1,5 +1,5 @@
-from src.processor.uc.ucprocessor import UCProcessor
-from src.structure.usecase import UseCase
+from processor.uc.ucprocessor import UCProcessor
+from structure.usecase import UseCase
 
 class DetectNonFunctionalRequirements(UCProcessor):
 
