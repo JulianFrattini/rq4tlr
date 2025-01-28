@@ -10,6 +10,7 @@ from processor.uc.calculate_similarity import CalculateSimilarity
 from processor.uc.detect_meaningless_uc import DetectMeaninglessUC
 from processor.uc.detect_scattered_requirements import DetectScatteredRequirements
 from processor.uc.detect_tangled_requirements import DetectTangledRequirements
+from processor.uc.detect_nfrs import DetectNonFunctionalRequirements
 
 from processor.subflow.subflowprocessor import SubflowProcessor
 from processor.subflow.calc_coherence import CalculateCoherence
@@ -34,7 +35,8 @@ class Processor:
                 DetectMeaninglessUC(),
                 DetectTangledRequirements(),
                 DetectScatteredRequirements(),
-                CalculateSimilarity()
+                CalculateSimilarity(),
+                DetectNonFunctionalRequirements()
             ], 
             LEVELS[1] : [ # subflow level
                 CalculateCoherence()
