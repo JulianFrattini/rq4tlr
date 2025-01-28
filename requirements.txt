@@ -3,5 +3,6 @@ seaborn==0.12.2
 openpyxl==3.0.10
 scikit-learn==1.4.2
 spacy==3.8.2
+negspacy==1.0.4
 numpy==1.26.4
 pytest-cov==6.0.0

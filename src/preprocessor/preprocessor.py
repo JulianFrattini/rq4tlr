@@ -1,4 +1,5 @@
 import spacy
+from negspacy.negation import Negex
 
 from structure.sentence import sentence
 
@@ -7,6 +8,8 @@ class Preprocessor:
         # Load the English model
         # to utilize the spacy model, run python -m spacy download en_core_web_md
         self.nlp = spacy.load("en_core_web_md")
+        # Add the negation detection pipeline
+        self.nlp.add_pipe("negex", config={"ent_types":["PERSON","ORG"]})
 
     def preprocess_sentence(self, literal: str) -> sentence:
         """
