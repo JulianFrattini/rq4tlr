@@ -9,4 +9,4 @@ class CalcComplexity(SentenceProcessor):
         """
         Calculate the number of noun chunks as a heuristic for sentence complexity
         """
-        return len(sentence.doc.noun_chunks)
+        return len(list(sentence.doc.noun_chunks))
