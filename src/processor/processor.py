@@ -54,7 +54,7 @@ class Processor:
         datapoints: list = []
         results: pd.DataFrame = None
         if level == LEVELS[0]:
-            datapoints, results = self.setup_data_ucs()
+            datapoints, results = self.setup_data_ucs(ucs)
         elif level == LEVELS[1]:
             datapoints, results = self.setup_data_subflow(ucs)
         elif level == LEVELS[2]:
