@@ -6,7 +6,6 @@ from processor.uc.ucprocessor import UCProcessor
 from processor.uc.detect_happy_ucs import DetectHappyUCs
 from processor.uc.calc_large_ucs import CalculateLargeUseCases
 from processor.uc.calc_meaningless_actors import CalculateMeaninglessActors
-from processor.uc.calculate_similarity import CalculateSimilarity
 from processor.uc.detect_meaningless_uc import DetectMeaninglessUC
 from processor.uc.detect_scattered_requirements import DetectScatteredRequirements
 from processor.uc.detect_tangled_requirements import DetectTangledRequirements
@@ -35,7 +34,6 @@ class Processor:
                 DetectMeaninglessUC(),
                 DetectTangledRequirements(),
                 DetectScatteredRequirements(),
-                CalculateSimilarity(),
                 DetectNonFunctionalRequirements()
             ], 
             LEVELS[1] : [ # subflow level
@@ -57,7 +55,7 @@ class Processor:
         datapoints: list = []
         results: pd.DataFrame = None
         if level == LEVELS[0]:
-            datapoints, results = self.setup_data_ucs()
+            datapoints, results = self.setup_data_ucs(ucs)
         elif level == LEVELS[1]:
             datapoints, results = self.setup_data_subflow(ucs)
         elif level == LEVELS[2]:
