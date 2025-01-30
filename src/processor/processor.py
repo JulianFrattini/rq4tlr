@@ -22,6 +22,7 @@ from processor.sentence.calc_requirements_length import CalcRequirementsLength
 from processor.sentence.detect_incomplete_comparisons import DetectIncompleteComparisons
 from processor.sentence.detect_starts_without_subject import DetectStartsWithoutSubject
 from processor.sentence.detect_passive import DetectPassive
+from processor.sentence.calc_complexity import CalcComplexity
 from processor.sentence.detect_negation import DetectNegation
 
 class Processor:
@@ -48,6 +49,7 @@ class Processor:
                 DetectStartsWithoutSubject(),
                 DetectIncompleteComparisons(),
                 DetectPassive(),
+                CalcComplexity(),
                 DetectNegation()
             ]
         }
@@ -57,7 +59,7 @@ class Processor:
         datapoints: list = []
         results: pd.DataFrame = None
         if level == LEVELS[0]:
-            datapoints, results = self.setup_data_ucs()
+            datapoints, results = self.setup_data_ucs(ucs)
         elif level == LEVELS[1]:
             datapoints, results = self.setup_data_subflow(ucs)
         elif level == LEVELS[2]:
