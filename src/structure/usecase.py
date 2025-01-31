@@ -23,5 +23,3 @@ class UseCase:
     quality_requirements: list[sentence] = field(default_factory=list)
 
     goldstandard: TLR_goldstandard = field(default_factory=TLR_goldstandard)
-
-    similarities: dict[str, float] = field(default_factory=dict)

@@ -1,13 +1,7 @@
-import spacy
 from processor.sentence.sentenceprocessor import SentenceProcessor
 from structure.sentence import sentence
 
 class DetectIncompleteComparisons(SentenceProcessor):
-
-    def __init__(self):
-        # Load the English model
-        # to utilize the spacy model, run python -m spacy download en_core_web_md
-        self.nlp = spacy.load("en_core_web_md")
 
     name: str = "incomplete_comparisons"
 
@@ -35,8 +29,7 @@ class DetectIncompleteComparisons(SentenceProcessor):
 
         :return: True if the sentence includes incomplete comparisons, False otherwise
         """
-        doc = self.nlp(sentence.literal)
-        incomplete_comparisons = []
+        doc = sentence.doc
 
         for token in doc:
             # Check for comparative adjectives (JJR) or adverbs (RBR)

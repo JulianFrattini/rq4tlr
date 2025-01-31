@@ -1,13 +1,7 @@
-import spacy
 from processor.sentence.sentenceprocessor import SentenceProcessor
 from structure.sentence import sentence
 
 class DetectAnaphora(SentenceProcessor):
-
-    def __init__(self):
-        # Load the English model
-        # to utilize the spacy model, run python -m spacy download en_core_web_md
-        self.nlp = spacy.load("en_core_web_md")
 
     name: str = "anaphora"
 
@@ -15,8 +9,7 @@ class DetectAnaphora(SentenceProcessor):
         """
         Determines, whether the sentence contains an ambiguous anaphora or not
         """
-        # Process the sentence with spaCy
-        doc = self.nlp(sentence.literal)
+        doc = sentence.doc
 
         # Identify noun phrases and pronouns
         noun_phrases = [chunk for chunk in doc.noun_chunks]

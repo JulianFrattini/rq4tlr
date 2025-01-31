@@ -1,13 +1,7 @@
-import spacy
 from processor.sentence.sentenceprocessor import SentenceProcessor
 from structure.sentence import sentence
 
 class DetectStartsWithoutNounPhrase(SentenceProcessor):
-
-    def __init__(self):
-        # Load the English model
-        # to utilize the spacy model, run python -m spacy download en_core_web_md
-        self.nlp = spacy.load("en_core_web_md")
 
     name: str = "starts_without_nounphrase"
 
@@ -19,7 +13,7 @@ class DetectStartsWithoutNounPhrase(SentenceProcessor):
 
         :return: True if the sentence does not start with a noun phrase, False otherwise
         """
-        doc = self.nlp(sentence.literal)
+        doc = sentence.doc
 
         # Get the first token of the sentence
         first_token = doc[0]
