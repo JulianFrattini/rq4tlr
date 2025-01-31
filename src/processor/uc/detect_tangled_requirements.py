@@ -13,4 +13,8 @@ class DetectTangledRequirements(UCProcessor):
 
         :return: True if the use case conveys tangled requirements, False otherwise
         """
-        return len(uc.goldstandard.links[uc.id]) > 1
+        targets = set()
+        for flow in uc.main | uc.alternative:
+            if flow in uc.goldstandard.links:
+                targets.update(uc.goldstandard.links[flow])
+        return len(targets) > 1

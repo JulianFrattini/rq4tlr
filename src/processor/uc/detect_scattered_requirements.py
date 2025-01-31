@@ -13,10 +13,12 @@ class DetectScatteredRequirements(UCProcessor):
 
         :return: True if the use case is part of scattered requirements, False otherwise
         """
-        targets = uc.goldstandard.links[uc.id]
-        for target in targets:
-            # Get all entries where the target is in the list
-            filtered_entries = {key: value for key, value in uc.goldstandard.links.items() if target in value}
-            if len(filtered_entries) > 1:
-                return True
+        for flow in uc.main | uc.alternative:
+            if flow in uc.goldstandard.links:
+                targets = uc.goldstandard.links[flow]
+                for target in targets:
+                    # Get all entries where the target is in the list
+                    filtered_entries = {key: value for key, value in uc.goldstandard.links.items() if target in value}
+                    if len(filtered_entries) > 1:
+                        return True
         return False

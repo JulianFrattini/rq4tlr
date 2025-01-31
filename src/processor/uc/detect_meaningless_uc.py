@@ -13,4 +13,7 @@ class DetectMeaninglessUC(UCProcessor):
 
         :return: True if the use case is meaningless, False otherwise
         """
-        return not uc.id in uc.goldstandard.links
+        for flow in uc.main | uc.alternative:
+            if flow in uc.goldstandard.links:
+                return False
+        return True
