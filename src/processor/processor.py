@@ -19,10 +19,12 @@ from processor.sentence.detect_anaphora import DetectAnaphora
 from processor.sentence.detect_optional import DetectOptional
 from processor.sentence.calc_requirements_length import CalcRequirementsLength
 from processor.sentence.detect_incomplete_comparisons import DetectIncompleteComparisons
-from processor.sentence.detect_starts_without_subject import DetectStartsWithoutSubject
 from processor.sentence.detect_passive import DetectPassive
 from processor.sentence.calc_complexity import CalcComplexity
 from processor.sentence.detect_negation import DetectNegation
+
+from src.processor.sentence.detect_starts_without_nounphrase import DetectStartsWithoutNounPhrase
+
 
 class Processor:
 
@@ -44,7 +46,7 @@ class Processor:
                 DetectAnaphora(),
                 DetectOptional(),
                 CalcRequirementsLength(),
-                DetectStartsWithoutSubject(),
+                DetectStartsWithoutNounPhrase(),
                 DetectIncompleteComparisons(),
                 DetectPassive(),
                 CalcComplexity(),

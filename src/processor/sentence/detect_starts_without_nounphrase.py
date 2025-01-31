@@ -2,24 +2,27 @@ import spacy
 from processor.sentence.sentenceprocessor import SentenceProcessor
 from structure.sentence import sentence
 
-class DetectStartsWithoutSubject(SentenceProcessor):
+class DetectStartsWithoutNounPhrase(SentenceProcessor):
 
     def __init__(self):
         # Load the English model
         # to utilize the spacy model, run python -m spacy download en_core_web_md
         self.nlp = spacy.load("en_core_web_md")
 
-    name: str = "starts_without_subject"
+    name: str = "starts_without_nounphrase"
 
     def process(self, sentence: sentence) -> bool:
         """
-        Detects when a sentence in a requirement does not start with the subject.
+        Detects when a sentence in a requirement does not start with a noun phrase.
         
         :param sentence: the sentence to process
 
-        :return: True if the sentence does not start with the subject, False otherwise
+        :return: True if the sentence does not start with a noun phrase, False otherwise
         """
         doc = self.nlp(sentence.literal)
+
+        # Get the first token of the sentence
+        first_token = doc[0]
 
         # Find the first noun phrase (np)
         first_noun_phrase = None
@@ -30,13 +33,7 @@ class DetectStartsWithoutSubject(SentenceProcessor):
         if not first_noun_phrase:
             return True  # No noun phrase found (unlikely, but just in case)
 
-        # Check if the subject is part of the first noun phrase
-        for token in doc:
-            # Look for the subject (subject could be a noun or a pronoun)
-            if "subj" in token.dep_:
-                if token in first_noun_phrase:
-                    return False  # Subject is within the first noun phrase
-                else:
-                    return True  # Subject is outside the first noun phrase
+        if first_token == first_noun_phrase[0]:  # The chunk starts with this token
+            return False
 
-        return True  # No subject found
+        return True
