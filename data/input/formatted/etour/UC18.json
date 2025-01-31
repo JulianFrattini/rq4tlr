@@ -9,7 +9,6 @@
     "preconditions": "The agency wants to put a new banner",
     "postconditions": [
         "The system returns control to the user interaction.",
-        "The system returns control to the user interaction.",
         "Interruption of the connection to the server ETOUR."
     ],
     "main": {

@@ -9,7 +9,6 @@
     "preconditions": [],
     "postconditions": [
         "The system returns a list of cultural goods that meet the search criteria.",
-        "The system returns a list of cultural goods that meet the search criteria.",
         "Interruption of the connection to the server ETOUR."
     ],
     "main": {

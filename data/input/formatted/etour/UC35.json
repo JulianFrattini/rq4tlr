@@ -9,7 +9,6 @@
     "preconditions": [],
     "postconditions": [
         "The system displays the area of work registered.",
-        "The system displays the area of work registered.",
         "The registered user cancels the operation.",
         "Interruption of the connection to the server ETOUR."
     ],

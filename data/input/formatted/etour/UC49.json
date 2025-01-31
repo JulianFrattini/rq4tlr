@@ -9,7 +9,6 @@
     "preconditions": [],
     "postconditions": [
         "The system displays the list of bookmarks.",
-        "The system displays the list of bookmarks.",
         "Interruption of the connection to the server ETOUR."
     ],
     "main": {

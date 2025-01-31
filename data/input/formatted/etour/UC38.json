@@ -9,7 +9,6 @@
     "preconditions": [],
     "postconditions": [
         "The notification about the insertion of new banner.",
-        "The notification about the insertion of new banner.",
         "The Point Of Operator Restaurant cancels the operation.",
         "The point of eating has already entered the maximum number of banners allowed.",
         "Interruption of the connection to the server ETOUR."

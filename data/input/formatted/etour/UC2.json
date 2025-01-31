@@ -9,7 +9,6 @@
     "preconditions": "The agency has logged.",
     "postconditions": [
         "The system shall notify the proper inclusion of the cultural.",
-        "The system shall notify the proper inclusion of the cultural.",
         "Operator Agency cancels the operation.",
         "Interruption of the connection to the server ETOUR."
     ],

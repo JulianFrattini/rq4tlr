@@ -9,7 +9,6 @@
     "preconditions": [],
     "postconditions": [
         "The system returns a list of sites found",
-        "The system returns a list of sites found",
         "Interruption of the connection to the server ETOUR."
     ],
     "main": {

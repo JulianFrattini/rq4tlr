@@ -9,7 +9,6 @@
     "preconditions": [],
     "postconditions": [
         "The system receives the position of the tourist.",
-        "The system receives the position of the tourist.",
         "The position of the tourist is not detectable by GPS."
     ],
     "main": {

@@ -9,7 +9,6 @@
     "preconditions": [],
     "postconditions": [
         "The system shall notify the successful modification of the banner.",
-        "The system shall notify the successful modification of the banner.",
         "The Point Of Operator Restaurant cancels the operation.",
         "Interruption of the connection to the server ETOUR."
     ],

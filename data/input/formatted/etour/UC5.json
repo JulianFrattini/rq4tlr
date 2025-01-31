@@ -9,7 +9,6 @@
     "preconditions": "The agency has logged.",
     "postconditions": [
         "The system displays the details of the selected cultural.",
-        "The system displays the details of the selected cultural.",
         "Interruption of the connection to the server ETOUR."
     ],
     "main": {

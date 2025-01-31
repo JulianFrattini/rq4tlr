@@ -9,7 +9,6 @@
     "preconditions": "The agency has logged.",
     "postconditions": [
         "The system has been reporting the information required by the selected account Tourist.",
-        "The system has been reporting the information required by the selected account Tourist.",
         "Interruption of the connection to the server ETOUR."
     ],
     "main": {

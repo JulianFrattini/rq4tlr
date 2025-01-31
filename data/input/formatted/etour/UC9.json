@@ -9,7 +9,6 @@
     "preconditions": [],
     "postconditions": [
         "The system returns a list of points of rest which meet your search criteria.",
-        "The system returns a list of points of rest which meet your search criteria.",
         "Interruption of the connection to the server ETOUR."
     ],
     "main": {

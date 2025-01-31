@@ -9,7 +9,6 @@
     "preconditions": [],
     "postconditions": [
         "The system shall notify the successful combination of feedback to the site",
-        "The system shall notify the successful combination of feedback to the site",
         "The Tourist cancel the operation",
         "Interruption of the connection to the server ETOUR."
     ],

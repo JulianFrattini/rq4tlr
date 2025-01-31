@@ -9,7 +9,6 @@
     "preconditions": "The Agency is in the form of a tourist.",
     "postconditions": [
         "The notification of the outcome.",
-        "The notification of the outcome.",
         "Interruption of the connection to the server ETOUR."
     ],
     "main": {

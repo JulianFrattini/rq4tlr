@@ -9,7 +9,6 @@
     "preconditions": "The Agency is in the form of a designated point of rest.",
     "postconditions": [
         "The system displays the history of conventions concerning the point of eating selected.",
-        "The system displays the history of conventions concerning the point of eating selected.",
         "Interruption of the connection to the server ETOUR."
     ],
     "main": {

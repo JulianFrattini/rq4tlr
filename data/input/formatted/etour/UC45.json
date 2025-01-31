@@ -9,7 +9,6 @@
     "preconditions": [],
     "postconditions": [
         "The system displays the data on the screen.",
-        "The system displays the data on the screen.",
         "Interruption of the connection to the server."
     ],
     "main": {

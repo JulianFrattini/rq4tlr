@@ -9,7 +9,6 @@
     "preconditions": [],
     "postconditions": [
         "The notification system has been removed from the site bookmarks.",
-        "The notification system has been removed from the site bookmarks.",
         "The Tourist cancel the operation",
         "Interruption of the connection to the server ETOUR."
     ],

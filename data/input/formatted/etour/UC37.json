@@ -8,7 +8,6 @@
     ],
     "preconditions": [],
     "postconditions": [
-        "The system shall notify the successful operation logout.",
         "The system shall notify the successful operation logout."
     ],
     "main": {

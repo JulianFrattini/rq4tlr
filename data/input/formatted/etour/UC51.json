@@ -9,7 +9,6 @@
     "preconditions": [],
     "postconditions": [
         "The notification about the insertion site to favorites",
-        "The notification about the insertion site to favorites",
         "Interruption of connection to the server ETOUR."
     ],
     "main": {

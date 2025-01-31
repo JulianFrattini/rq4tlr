@@ -9,7 +9,6 @@
     "preconditions": [],
     "postconditions": [
         "The system shall notify the alterations of the comment",
-        "The system shall notify the alterations of the comment",
         "Interruption of the connection to the server ETOUR."
     ],
     "main": {

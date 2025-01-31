@@ -9,7 +9,6 @@
     "preconditions": "The Agency is in the form of a designated point of rest.",
     "postconditions": [
         "The system shall notify the activation of the convention.",
-        "The system shall notify the activation of the convention.",
         "Interruption of the connection to the server ETOUR."
     ],
     "main": {

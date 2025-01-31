@@ -9,7 +9,6 @@
     "preconditions": [],
     "postconditions": [
         "The notification system has been changing the data point selected restaurants.",
-        "The notification system has been changing the data point selected restaurants.",
         "Restaurant Point Of Operator cancels the operation.",
         "Interruption of the connection to the server ETOUR."
     ],
