@@ -31,7 +31,6 @@ class EtoursParser(AbstractUseCaseParser):
                 continue
             elif line.startswith('Exit conditions:'):
                 is_parsing_postconditions = True
-                uc.postconditions.append(line.split(':')[1].strip())
             elif line.startswith('Quality requirements:'):
                 is_parsing_postconditions = False
                 is_parsing_quality_requirements = True
