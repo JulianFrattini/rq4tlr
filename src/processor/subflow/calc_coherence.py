@@ -15,7 +15,7 @@ class CalculateCoherence(SubflowProcessor):
 
         # skip sentences with 0 or 1 steps, as they do not have a predecessor
         if len(subflow) < 2:
-            return None
+            return -1.0
         else:
             # designate the first step as the initial predecessor
             predecessor: sentence = subflow[0]
