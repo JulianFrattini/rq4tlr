@@ -88,11 +88,60 @@ def main(selected_level: str):
 
     # STEP 3: process the use case by running all processing steps to produce a table of data
     processor = Processor()
+    level_results = {}
     for level in LEVELS:
         if selected_level == level or selected_level == 'all':
             results: pd.DataFrame = processor.apply_processors(level=level, ucs=use_cases)
             output_filename: str = os.path.join(PATH_OUTPUT, f'rq4tlr-automatic-{level}.csv')
             results.to_csv(output_filename, index=False)
+            level_results[level] = results
+
+    # STEP 4: aggregate to goldstandard level
+    final_df = aggregate_dataframes(level_results)
+    output_filename: str = os.path.join(PATH_OUTPUT, f'rq4tlr-automatic-aggregated.csv')
+    final_df.to_csv(output_filename, index=False)
+
+
+def aggregate_dataframes(level_results):
+    # First merge subflow and sentence
+    # Identify key columns
+    key_columns = ["dataset", "uc", "file"]
+    # Define aggregation dynamically
+    agg_funcs = {col: "any" for col in
+                 level_results["sentence"].select_dtypes(include=bool).columns}  # Apply `.any()` to all Boolean columns
+    agg_funcs.update({col: "max" for col in level_results["sentence"].select_dtypes(include="number").columns if
+                      col not in key_columns})  # Apply `.max()` to numeric columns except keys
+    # Group by key columns and apply aggregation
+    aggregated_df = level_results["sentence"].groupby(key_columns, as_index=False).agg(agg_funcs)
+    aggregated_df = aggregated_df.drop(columns=["line"],
+                                       errors="ignore")  # Using errors='ignore' to prevent errors if "line" column is not found
+    # Rename columns where numeric aggregation is done with "max"
+    aggregated_df = aggregated_df.rename(columns={col: f'max_{col}' for col in aggregated_df.columns if
+                                                  col not in key_columns and 'max' in agg_funcs.get(col, '')})
+
+    merged_df = pd.merge(level_results["subflow"], aggregated_df, on=["dataset", "uc", "file"], how="inner")
+
+
+    # Second merge use case results with dataframe
+    # Rename `id` to `uc` for merging
+    extra_df = level_results["usecase"].rename(columns={"id": "uc"})
+    # Merge DataFrames
+    final_df = pd.merge(extra_df, merged_df, on=["dataset", "uc"], how="right")
+
+    # Columns you want to move to the front
+    columns_to_move = ["dataset", "uc", "file"]
+
+    # Get the remaining columns that are not in the 'columns_to_move' list
+    remaining_columns = [col for col in final_df.columns if col not in columns_to_move]
+
+    # Create the new column order by putting 'columns_to_move' first
+    new_column_order = columns_to_move + remaining_columns
+
+    # Reorder the DataFrame
+    final_df = final_df[new_column_order]
+
+    return final_df
+
 
 if __name__ == "__main__":
     # parse the arguments
