@@ -1,20 +1,19 @@
-from processor.uc.ucprocessor import UCProcessor
-from structure.usecase import UseCase
+from src.processor.subflow.subflowprocessor import SubflowProcessor
 
-class DetectTangledRequirements(UCProcessor):
+from src.structure.subflow import SubFlow
 
-    name: str = "tangled_requirements"
 
-    def process(self, uc: UseCase) -> bool:
+class CalculateNumberOfTargetArtifacts(SubflowProcessor):
+
+    name: str = "number_of_linked_target_artifacts"
+
+    def process(self, subflow: SubFlow) -> int:
         """
-        Detects when a use case contains descriptions of several requirements or different functionalities i.e., has trace links to multiple target artifacts
-        
-        :param uc: the use case to process
+        Counts the number of target artifacts associated with this subflow
 
-        :return: True if the use case conveys tangled requirements, False otherwise
+        :param subflow: the subflow to process
+
+        :return: the number of target artifacts associated with this subflow
+
         """
-        targets = set()
-        for flow in uc.main | uc.alternative:
-            if flow in uc.goldstandard.links:
-                targets.update(uc.goldstandard.links[flow])
-        return len(targets) > 1
+        return len(subflow.parent_uc.goldstandard.links[subflow.flow_id])
