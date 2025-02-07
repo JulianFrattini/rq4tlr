@@ -1,5 +1,7 @@
 from abc import ABC, abstractmethod
-from structure.sentence import sentence
+
+from src.structure.subflow import SubFlow
+
 
 class SubflowProcessor(ABC):
 
@@ -9,5 +11,5 @@ class SubflowProcessor(ABC):
         pass
     
     @abstractmethod
-    def process(self, subflow: list[sentence]):
+    def process(self, subflow: SubFlow):
         pass

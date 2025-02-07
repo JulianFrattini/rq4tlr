@@ -2,19 +2,14 @@ from structure.usecase import UseCase
 from util.static import LEVELS
 import pandas as pd
 
-from processor.uc.ucprocessor import UCProcessor
 from processor.uc.detect_happy_ucs import DetectHappyUCs
 from processor.uc.calc_large_ucs import CalculateLargeUseCases
 from processor.uc.calc_meaningless_actors import CalculateMeaninglessActors
 from processor.uc.detect_meaningless_uc import DetectMeaninglessUC
-from processor.uc.detect_scattered_requirements import DetectScatteredRequirements
-from processor.uc.detect_tangled_requirements import DetectTangledRequirements
 from processor.uc.detect_nfrs import DetectNonFunctionalRequirements
 
-from processor.subflow.subflowprocessor import SubflowProcessor
 from processor.subflow.calc_coherence import CalculateCoherence
 
-from processor.sentence.sentenceprocessor import SentenceProcessor
 from processor.sentence.detect_anaphora import DetectAnaphora
 from processor.sentence.detect_optional import DetectOptional
 from processor.sentence.calc_requirements_length import CalcRequirementsLength
@@ -24,25 +19,29 @@ from processor.sentence.calc_complexity import CalcComplexity
 from processor.sentence.detect_negation import DetectNegation
 
 from src.processor.sentence.detect_starts_without_nounphrase import DetectStartsWithoutNounPhrase
+from src.processor.subflow.calc_max_number_of_refs_to_target_artifacts import \
+    CalculateMaxNumberOfReferencesToTargetArtifact
+from src.processor.subflow.calc_number_of_target_artifacts import CalculateNumberOfTargetArtifacts
+from src.structure.subflow import SubFlow
 
 
 class Processor:
 
     def __init__(self):
         self.processors: dict[str, list] = {
-            LEVELS[0] : [ # use case level
+            LEVELS[0]: [  # use case level
                 DetectHappyUCs(),
                 CalculateLargeUseCases(),
                 CalculateMeaninglessActors(),
                 DetectMeaninglessUC(),
-                DetectTangledRequirements(),
-                DetectScatteredRequirements(),
                 DetectNonFunctionalRequirements()
-            ], 
-            LEVELS[1] : [ # subflow level
-                CalculateCoherence()
             ],
-            LEVELS[2] : [ # sentence level
+            LEVELS[1]: [  # subflow level
+                CalculateCoherence(),
+                CalculateNumberOfTargetArtifacts(),
+                CalculateMaxNumberOfReferencesToTargetArtifact()
+            ],
+            LEVELS[2]: [  # sentence level
                 DetectAnaphora(),
                 DetectOptional(),
                 CalcRequirementsLength(),
@@ -67,8 +66,7 @@ class Processor:
 
         # apply the processors
         for processor in self.processors[level]:
-            results[processor.name] = [processor.process(datapoint) 
-                for datapoint in datapoints]
+            results[processor.name] = [processor.process(datapoint) for datapoint in datapoints]
 
         return results
 
@@ -83,18 +81,20 @@ class Processor:
     def setup_data_subflow(self, ucs: list[UseCase]) -> pd.DataFrame:
         # prepare a datafrane to store the results
         results = pd.DataFrame(columns=['dataset', 'uc', 'file'])
-        datapoints: list[str] = []
+        datapoints: list[SubFlow] = []
         index = 0
         for uc in ucs:
             for filename in uc.main:
                 file = uc.main[filename]
                 results.loc[index] = [uc.dataset, uc.id, filename]
-                datapoints.append(file)
+                subflow = SubFlow(parent_uc=uc, flow_id=filename, sentences=file)
+                datapoints.append(subflow)
                 index += 1
             for filename in uc.alternative:
                 file = uc.alternative[filename]
                 results.loc[index] = [uc.dataset, uc.id, filename]
-                datapoints.append(file)
+                subflow = SubFlow(parent_uc=uc, flow_id=filename, sentences=file)
+                datapoints.append(subflow)
                 index += 1
 
         return datapoints, results
@@ -109,7 +109,7 @@ class Processor:
                 file = uc.main[filename]
                 for sentence_index, line in enumerate(file):
                     # prepare an entry for the current data point in the results dataframe
-                    results.loc[index] = [uc.dataset, uc.id, filename, sentence_index+1]
+                    results.loc[index] = [uc.dataset, uc.id, filename, sentence_index + 1]
                     datapoints.append(line)
 
                     # increment the index
@@ -118,7 +118,7 @@ class Processor:
                 file = uc.alternative[filename]
                 for sentence_index, line in enumerate(file):
                     # prepare an entry for the current data point in the results dataframe
-                    results.loc[index] = [uc.dataset, uc.id, filename, sentence_index+1]
+                    results.loc[index] = [uc.dataset, uc.id, filename, sentence_index + 1]
                     datapoints.append(line)
 
                     # increment the index
