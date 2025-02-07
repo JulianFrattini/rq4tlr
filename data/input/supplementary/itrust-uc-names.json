@@ -17,7 +17,7 @@
     "UC18": "Maintain Hospital Listing",
     "UC19": "View Prescription Report",
     "UC21": "View Emergency Electronic Health Record",
-    "UC22": "",
+    "UC22": "Schedule Appointments",
     "UC23": "Comprehensive Patient Report",
     "UC24": "Take Satisfaction Survey",
     "UC25": "View Physician Satisfaction Survey",
@@ -33,7 +33,7 @@
     "UC35": "Report Adverse Event",
     "UC36": "Monitor Adverse Events",
     "UC37": "Safe Drug Prescription",
-    "UC38": "",
+    "UC38": "Maintain Drug Interaction",
     "UC40": "View Schedule Calendar",
     "UC42": "View Notification Center",
     "UC43": "View Activity Feed"
