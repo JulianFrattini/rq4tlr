@@ -107,15 +107,16 @@ def aggregate_dataframes(level_results):
     # Identify key columns
     key_columns = ["dataset", "uc", "file"]
     # Define aggregation dynamically
-    agg_funcs = {col: "any" for col in
-                 level_results["sentence"].select_dtypes(include=bool).columns}  # Apply `.any()` to all Boolean columns
+    bool_columns = level_results["sentence"].select_dtypes(include=bool).columns
+    agg_funcs = {col: "mean" for col in bool_columns}  # Compute ratio of `True` values
     agg_funcs.update({col: "max" for col in level_results["sentence"].select_dtypes(include="number").columns if
                       col not in key_columns})  # Apply `.max()` to numeric columns except keys
     # Group by key columns and apply aggregation
     aggregated_df = level_results["sentence"].groupby(key_columns, as_index=False).agg(agg_funcs)
     aggregated_df = aggregated_df.drop(columns=["line"],
                                        errors="ignore")  # Using errors='ignore' to prevent errors if "line" column is not found
-    # Rename columns where numeric aggregation is done with "max"
+    # Rename columns for clarity
+    aggregated_df = aggregated_df.rename(columns={col: f'ratio_of_{col}' for col in bool_columns})
     aggregated_df = aggregated_df.rename(columns={col: f'max_{col}' for col in aggregated_df.columns if
                                                   col not in key_columns and 'max' in agg_funcs.get(col, '')})
 
