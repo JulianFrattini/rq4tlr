@@ -29,7 +29,8 @@ This directory contains the following files.
 ├── disagreements.py : script that detects disagreements between two ratings
 ├── get_item_list.py : script that generates a table of indices from the raw data
 ├── parse.py : script to parse the raw use case text files into Python objects
-└── process.py : script to evaluate quality factors on preprocessed use cases
+├── process.py : script to evaluate quality factors on preprocessed use cases
+└── visualization.ipynb : interactive notebook visualizing the raw data
 ```
 
 ## Executables
