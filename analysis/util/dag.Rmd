@@ -30,7 +30,13 @@ vars <- vars %>% add_row(varname = "perf", fullname = "TLR performance", x = 2, 
 vars <- vars %>% add_row(varname = "dataset", fullname = "data set", x = -1, y = 0)
 vars <- vars %>% add_row(varname = "maxcomplex", fullname = "maximum step complexity", x = 0, y = 0.5)
 vars <- vars %>% add_row(varname = "maxlength", fullname = "maximum step length", x = 0, y = 0.3)
-vars <- vars %>% add_row(varname = "steps", fullname = "number of steps", x = 0, y = -0.3)
+vars <- vars %>% add_row(varname = "steps", fullname = "number of steps", x = 0, y = 0.1)
+vars <- vars %>% add_row(varname = "ilos", fullname = "inconsistent level of abstraction", x = 0, y = -0.1)
+vars <- vars %>% add_row(varname = "cuid", fullname = "contains ui design details", x = 0, y = -0.2)
+vars <- vars %>% add_row(varname = "clarify", fullname = "contains clarifications", x = 0, y = -0.3)
+vars <- vars %>% add_row(varname = "alt", fullname = "contains alternatives", x = 0, y = -0.4)
+vars <- vars %>% add_row(varname = "coherence", fullname = "coherence", x = 0, y = -0.5)
+
 #```
 
 #Extract named lists out of the data frame (one for the full name, one for the x and one for the y positions).
@@ -45,11 +51,16 @@ map.y <- setNames(vars$y, vars$varname)
 
 #```{r dag}
 dag <- dagify(
-  perf  ~ dataset + maxcomplex + maxlength + steps,
+  perf  ~ dataset + maxcomplex + maxlength + steps + ilos + cuid + clarify + alt + coherence,
   
-  
-  
-  maxcomplex ~ maxlength,
+  steps ~ dataset,
+  maxlength ~ dataset,
+  maxcomplex ~ dataset + maxlength,
+  ilos ~ dataset,
+  cuid ~ dataset,
+  clarify ~ dataset,
+  alt ~ dataset,
+  coherence ~ dataset,
   
   outcome = "perf", # determine TLR performance as the response variable
   labels = map.name,
@@ -61,8 +72,37 @@ ggdag_status(dag, use_labels = "label", text = FALSE) +
   theme_dag()
 ```
 
+The following table justifies the inclusion of each relationship between two variables in the causal DAG:
+
+| Relationship | Reasoning |
+|---|---|
+| `dataset` $\rightarrow$ `TLR performance` | The TLR algorithm may perform differently on different data sets due to their differing complexity, etc. |
+| `maximum step complexity` $\rightarrow$ `TLR performance` | The more complex the steps of a use case are, the more difficult it is to trace the use case to source code elements. |
+| `maximum step length` $\rightarrow$ `TLR performance` | The longer the steps of a use case are, the more difficult it is to trace the use case to source code elements. |
+| `number of steps` $\rightarrow$ `TLR performance` | The more steps a use case has, the more difficult it is to trace the use case to all source code elements. |
+
 The following variables were ignored due to their imbalanced distribution in the dataset:
 
 - `meaningless.actor`: the variable perfectly correlates with the `dataset` variable
-- 
+- `coordination.ambiguity`: there are too few instances of values beyond 0.0.
+- `happy.ucs`
+- `meaningless.ucs`
+- `contains.optional`
+- `incomplete comparisons`
+- `functional.duplication`
+- `user.case.naming.problem` -> candidate for manipulation
+- `inappropriate.scope`
+- `incoherent.text.order`
+- `inputs.or.outputs.not.quantified`
+- `actor.actor.interaction`
+- `contains.justifications`
+
+Candidates for consideration:
+
+- `tangled` (once transformed to number)
+- `scattered` (once transformed to number)
+- `nfr`?
+- `contains.anaphora`
+- `starts.with.noun` / `passive`
+- `negation`
 

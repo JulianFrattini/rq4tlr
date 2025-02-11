@@ -7,6 +7,12 @@ This repository contains the replication package for the study on how requiremen
 This repository consists of the following files.
 
 ```
+├── analysis : directory containing all files for the final data analysis
+│   ├── data/rq4tlr.csv : data parsed into a format usable for the final data analysis
+│   ├── pdf : directory containing all pre-compiled data analysis notebooks
+│   └── util : directory for utility scripts
+│       ├── dag.Rmd : specification of the causal assumptions
+│       └── data-preparation.Rmd : compilation and casting of final data set
 ├── data : directory containing all data collected for and produced during the study
 │   ├── input : data sets composed from a series of use cases from different domains
 │   │   ├── raw : original data as obtained from previous studies (see below)
