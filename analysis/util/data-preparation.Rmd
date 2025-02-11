@@ -1,0 +1,43 @@
+---
+title: "Data Preparation"
+author: "Anonymous"
+date: '2025-02-10'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+```
+
+This notebook contains the data preparation for the RQ4TLR study.
+
+## Data Loading
+
+```{r data-loading}
+df.ind <- read.csv('../../data/output/rq4tlr-merged.csv')
+
+# drop unnecessary columns
+df.ind <- df.ind %>% select(!c(Done, Rater))
+```
+
+```{r data-casting-bool}
+vars.bool <- c("Functional.Duplication", "Use.Case.Naming.Problems", "Inappropriate.Scope", "Incoherent.Text.Order", "Inputs.or.Outputs.not.quantified", "Contains.NFRs", "Contains.Actor.Actor.Interaction", "Contains.justifications", "happy_ucs", "meaningless_uc", "nfrs")
+
+to_bool <- function(value) {
+  return(value=="True")
+}
+
+df.ind <- df.ind %>% 
+  mutate_at(vars.bool, to_bool)
+```
+
+```{r data-status}
+str(df.ind)
+```
+
+```{r data-storing}
+write_csv(df.ind, file=file.path('../data/rq4tlr-data.csv'))
+```
+
