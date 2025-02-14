@@ -119,11 +119,11 @@ True,r2,itrust,19,UC19E2,False,False,False,False,False,False,False,False,0.0,0.0
 True,r2,itrust,21,UC21S1,False,True,False,False,False,False,False,False,0.0,0.0,0.0,0.0,0.0,UC21,False,4,0,False,False,-1.0,3,24,0.0,0.0,0.0,0.0,0.0,0.0,18,5
 True,r2,itrust,21,UC21E1,False,False,False,False,False,False,False,False,0.0,0.0,0.0,0.0,0.0,UC21,False,4,0,False,False,-1.0,2,32,0.0,0.0,0.0,0.0,0.0,0.0,15,2
 True,r2,itrust,21,UC21E2,False,False,False,False,False,False,False,False,0.0,0.0,0.0,0.0,0.0,UC21,False,4,0,False,False,0.0,2,32,0.0,0.0,0.0,0.0,0.0,1.0,16,3
-True,r2,itrust,22,UC22S1,False,True,False,False,False,False,False,False,0.0,0.0,0.0,0.0,0.6666666666666666,UC22,False,14,0,True,False,1.0,0,0,0.6666666666666666,0.0,0.3333333333333333,0.0,0.3333333333333333,0.6666666666666666,55,11
-True,r2,itrust,22,UC22S2,False,True,False,False,False,False,False,False,0.0,0.3333333333333333,0.0,0.0,0.0,UC22,False,14,0,True,False,1.0,0,0,0.3333333333333333,0.0,0.0,0.0,0.6666666666666666,0.0,53,12
+True,r2,itrust,22,UC22S1,False,False,False,False,False,False,False,False,0.0,0.0,0.0,0.0,0.6666666666666666,UC22,False,14,0,True,False,1.0,0,0,0.6666666666666666,0.0,0.3333333333333333,0.0,0.3333333333333333,0.6666666666666666,55,11
+True,r2,itrust,22,UC22S2,False,False,False,False,False,False,False,False,0.0,0.3333333333333333,0.0,0.0,0.0,UC22,False,14,0,True,False,1.0,0,0,0.3333333333333333,0.0,0.0,0.0,0.6666666666666666,0.0,53,12
 True,r2,itrust,22,UC22S3,False,True,False,False,False,False,False,False,0.0,0.16666666666666666,0.0,0.0,0.5,UC22,False,14,0,True,False,1.0,0,0,0.3333333333333333,0.0,0.1666666666666666,0.0,0.0,0.0,47,12
-True,r2,itrust,22,UC22E1,False,True,False,False,False,False,False,False,0.0,0.0,0.0,0.0,0.0,UC22,False,14,0,True,False,-1.0,0,0,0.0,0.0,0.0,0.0,0.0,0.0,12,2
-True,r2,itrust,22,UC22E2,False,True,False,False,False,False,False,False,0.0,0.0,0.0,0.0,0.0,UC22,False,14,0,True,False,-1.0,0,0,0.0,0.0,0.0,0.0,0.0,0.0,22,5
+True,r2,itrust,22,UC22E1,False,False,False,False,False,False,False,False,0.0,0.0,0.0,0.0,0.0,UC22,False,14,0,True,False,-1.0,0,0,0.0,0.0,0.0,0.0,0.0,0.0,12,2
+True,r2,itrust,22,UC22E2,False,False,False,False,False,False,False,False,0.0,0.0,0.0,0.0,0.0,UC22,False,14,0,True,False,-1.0,0,0,0.0,0.0,0.0,0.0,0.0,0.0,22,5
 True,r2,itrust,23,UC23S1,False,True,False,False,False,False,False,False,0.0,0.0,0.0,0.0,0.0,UC23,False,7,0,False,False,-1.0,2,32,1.0,0.0,0.0,0.0,0.0,0.0,24,4
 True,r2,itrust,23,UC23S3,False,False,False,False,False,False,False,False,0.0,0.0,0.0,0.0,0.5,UC23,False,7,0,False,False,1.0,9,24,0.5,0.0,0.0,0.0,0.5,0.5,133,34
 True,r2,itrust,23,UC23S4,False,False,False,False,False,False,False,False,0.0,0.0,0.0,0.0,0.0,UC23,False,7,0,False,False,-1.0,2,4,1.0,0.0,0.0,0.0,0.0,0.0,25,9
@@ -179,8 +179,8 @@ True,r2,itrust,36,UC36S3,False,False,False,False,False,False,False,False,0.0,0.0
 True,r2,itrust,37,UC37S1,False,False,False,False,False,False,False,False,0.0,0.0,0.0,0.0,0.0,UC37,True,6,0,False,False,1.0,2,6,0.0,0.0,0.0,0.0,0.5,0.0,15,2
 True,r2,itrust,37,UC37S2,False,False,False,False,False,False,False,False,0.0,0.0,0.0,0.0,0.0,UC37,True,6,0,False,False,1.0,3,10,0.0,0.0,0.0,0.0,0.5,0.0,19,4
 True,r2,itrust,37,UC37S3,False,False,False,False,False,False,False,False,0.0,0.0,0.0,0.0,0.0,UC37,True,6,0,False,False,0.0,3,24,0.5,0.0,0.0,0.0,0.5,0.0,36,11
-True,r2,itrust,38,UC38S1,False,True,False,False,False,False,False,False,0.0,0.0,0.0,0.3333333333333333,0.0,UC38,True,5,0,False,False,1.0,2,3,0.0,0.0,0.0,0.0,0.3333333333333333,0.0,20,5
-True,r2,itrust,38,UC38S2,False,True,False,False,False,False,False,False,0.0,0.0,0.0,0.0,0.0,UC38,True,5,0,False,False,1.0,2,3,0.0,0.0,0.0,0.0,0.0,0.0,19,5
+True,r2,itrust,38,UC38S1,False,False,False,False,False,False,False,False,0.0,0.0,0.0,0.3333333333333333,0.0,UC38,True,5,0,False,False,1.0,2,3,0.0,0.0,0.0,0.0,0.3333333333333333,0.0,20,5
+True,r2,itrust,38,UC38S2,False,False,False,False,False,False,False,False,0.0,0.0,0.0,0.0,0.0,UC38,True,5,0,False,False,1.0,2,3,0.0,0.0,0.0,0.0,0.0,0.0,19,5
 True,r2,itrust,40,UC40S1,False,False,False,False,False,False,False,False,0.0,0.0,0.0,0.0,0.0,UC40,True,19,0,True,False,1.0,0,0,0.3333333333333333,0.0,0.0,0.0,0.0,0.0,27,7
 True,r2,itrust,40,UC40S2,False,False,False,True,False,False,False,False,0.0,0.0,0.0,0.0,0.3333333333333333,UC40,True,19,0,True,False,1.0,0,0,0.2222222222222222,0.0,0.3333333333333333,0.0,0.2222222222222222,0.0,48,10
 True,r2,itrust,40,UC40S3,False,False,False,False,False,False,False,False,0.0,0.5,0.0,0.0,1.0,UC40,True,19,0,True,False,1.0,0,0,0.5,0.0,0.5,0.0,0.0,0.0,37,8
