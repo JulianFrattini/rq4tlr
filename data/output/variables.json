@@ -1,0 +1,129 @@
+[
+    {
+        "label": "duplicate",
+        "name": "Functional Duplication",
+        "type": "boolean"
+    }, {
+        "label": "nameproblem",
+        "name": "Use Case Naming Problems",
+        "type": "boolean"
+    }, {
+        "label": "scope",
+        "name": "Inappropriate Scope",
+        "type": "boolean"
+    }, {
+        "label": "textorder",
+        "name": "Incoherent Text Order",
+        "type": "boolean"
+    }, {
+        "label": "iounquantified",
+        "name": "Inputs or Outputs not quantified",
+        "type": "boolean"
+    }, {
+        "label": "actoractor",
+        "name": "Contains Actor-Actor Interaction",
+        "type": "boolean"
+    }, {
+        "label": "justification",
+        "name": "Contains justifications",
+        "type": "boolean"
+    }, {
+        "label": "coordambiguity",
+        "name": "Coordination Ambiguity",
+        "type": "ratio"
+    }, {
+        "label": "uidesign",
+        "name": "Contains UI Design Details",
+        "type": "ratio"
+    }, {
+        "label": "alternative",
+        "name": "Contains Alternative",
+        "type": "ratio"
+    }, {
+        "label": "inconsistentloa",
+        "name": "Inconsistent Level of Abstraction",
+        "type": "ratio"
+    }, {
+        "label": "clarification",
+        "name": "Contains Clarification",
+        "type": "ratio"
+    }, {
+        "label": "happy",
+        "temp_label": "happy_ucs",
+        "name": "Happy Use Case",
+        "type": "boolean"
+    }, {
+        "label": "size",
+        "temp_label": "large_ucs",
+        "name": "Use Case Size",
+        "type": "count"
+    }, {
+        "label": "meanactor",
+        "temp_label": "meaningless_actor",
+        "name": "Meaningless Actors",
+        "type": "count"
+    }, {
+        "label": "meanuc",
+        "temp_label": "meaningless_uc",
+        "name": "Meaningless Use Case",
+        "type": "boolean"
+    }, {
+        "label": "coherence",
+        "name": "Level of Coherence",
+        "type": "ratio"
+    }, {
+        "label": "outlinks",
+        "temp_label": "number_of_linked_target_artifacts",
+        "name": "Scatter",
+        "type": "count"
+    }, {
+        "label": "maxinlinks",
+        "temp_label": "max_number_of_refs_to_target_artifacts",
+        "name": "Tangle",
+        "type": "count"
+    }, {
+        "label": "anaphora",
+        "temp_label": "ratio_of_anaphora",
+        "name": "Anaphora",
+        "type": "ratio"
+    }, {
+        "label": "optional",
+        "temp_label": "ratio_of_optional",
+        "name": "Optional",
+        "type": "ratio"
+    }, {
+        "label": "nonnounstart",
+        "temp_label": "ratio_of_starts_without_nounphrase",
+        "name": "Non-noun Start",
+        "type": "ratio"
+    }, {
+        "label": "incompcomparison",
+        "temp_label": "ratio_of_incomplete_comparisons",
+        "name": "Incomplete Comparisons",
+        "type": "ratio"
+    }, {
+        "label": "passive",
+        "temp_label": "ratio_of_passive",
+        "name": "Passive Voice",
+        "type": "ratio"
+    }, {
+        "label": "negation",
+        "temp_label": "ratio_of_negation",
+        "name": "Negation",
+        "type": "ratio"
+    }, {
+        "label": "maxsteplength",
+        "temp_label": "max_requirements_length",
+        "name": "Maximum Step Length",
+        "type": "count"
+    }, {
+        "label": "sencomplexity",
+        "temp_label": "max_sentence_complexity",
+        "name": "Maximum Step Complexity",
+        "type": "count"
+    }, {
+        "label": "lostfr",
+        "name": "Mislocated Functional Requirements",
+        "type": "boolean"
+    }
+]

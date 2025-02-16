@@ -43,6 +43,7 @@ On the highest level, it contains the following executable scripts:
 | `get_item_list.py` | Generates a tables of indices from the raw data set | [Get Item List](#get-item-list) |
 | `parse.py` | Parses all text files into a common format | [Parse](#parse) |
 | `process.py` | Processes the parsed use cases | [Process](#process) |
+| `merge_data.py` | Merge all data sets with independent variables together | 
 
 The subsequent sections describe each executable in detail. 
 Consider the [system requirements](#system-requirements) for running the scripts.
@@ -195,6 +196,16 @@ def __init__(self):
 ```
 
 The next execution of `process.py` will execute the additional processor and add a column with the given `name` to the resulting table.
+
+### Merge
+
+The `merge_data.py` script reads all data sets containing independent variables, merges them together, and harmonizes the column names using the [variables.json](./../data/output/variables.json) overview.
+
+```
+python .\merge_data.py
+```
+
+The resulting `rq4tlr-merged.csv` file will be placed in the output folder.
 
 ## System Requirements
 
