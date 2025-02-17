@@ -17,13 +17,10 @@ This notebook contains the data preparation for the RQ4TLR study.
 
 ```{r data-loading}
 df.ind <- read.csv('../../data/output/rq4tlr-merged.csv')
-
-# drop unnecessary columns
-df.ind <- df.ind %>% select(!c(Done, Rater))
 ```
 
 ```{r data-casting-bool}
-vars.bool <- c("Functional.Duplication", "Use.Case.Naming.Problems", "Inappropriate.Scope", "Incoherent.Text.Order", "Inputs.or.Outputs.not.quantified", "Contains.NFRs", "Contains.Actor.Actor.Interaction", "Contains.justifications", "happy_ucs", "meaningless_uc", "nfrs")
+vars.bool <- c("duplicate", "nameproblem", "scope", "textorder", "iounquantified", "actoractor", "justification", "happy", "meanuc", "lostfr")
 
 to_bool <- function(value) {
   return(value=="True")
