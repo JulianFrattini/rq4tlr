@@ -11,30 +11,107 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 ```
 
-This notebook contains the data preparation for the RQ4TLR study.
+This notebook prepares the observational data for its subsequent analysis.
 
-## Data Loading
+## Indepedent Data
+
+Firstly, load the `csv` sheet containing all observations, which contains both manually and automatically annotated variables.
 
 ```{r data-loading}
 df.ind <- read.csv('../../data/output/rq4tlr-merged.csv')
 ```
 
+### Datatype Correction
+
+Several variables are Boolean but parsed as characters (`"TRUE"` and `"FALSE"`) in the data sheet.
+To mitigate this, cast these variables to actual Boolean values.
+
 ```{r data-casting-bool}
 vars.bool <- c("duplicate", "nameproblem", "scope", "textorder", "iounquantified", "actoractor", "justification", "happy", "meanuc", "lostfr")
 
 to_bool <- function(value) {
-  return(value=="True")
+  return(value == "True")
 }
 
 df.ind <- df.ind %>% 
   mutate_at(vars.bool, to_bool)
 ```
 
+The resulting independent data contains all variables in their correct format.
+
 ```{r data-status}
 str(df.ind)
 ```
 
+### Value Correction
+
+The values in the `coherence` column contain the value -1.0 whenever the use case subflow contained no more than 1 step.
+In this case, the coherence value is not meaningful because there cannot be coherence of any sentence to any predecessor.
+
+```{r coherence-hist}
+df.ind %>% ggplot(aes(x = coherence)) +
+  geom_histogram()
+```
+
+The value -1.0 would be misinterpreted by a regression model.
+Hence, replace it with `NA` to indicate that the value is not applicable.
+
+```{r coherence-adoption}
+df.ind <- df.ind %>% 
+  mutate(coherence = ifelse(coherence == -1.0, NA, coherence))
+```
+
+## Dependent Data
+
+The dependent variables are located in the `./data/TLR_results/` directory.
+The trace link recovery results per data set are stored in separate files. 
+
+```{r data-dependent}
+df.dep.etour <- read.csv('../../data/TLR_results/FTLR/etour_ORG_m59f44_FTLRMcCd_perArtifactMetrics.csv', sep=';') %>%
+  mutate(Dataset = 'etour')
+df.dep.itrust <- read.csv('../../data/TLR_results/FTLR/itrust_ORG_m59f44_FTLRMcCd_perArtifactMetrics.csv', sep=';') %>% 
+  mutate(Dataset = 'itrust')
+
+df.dep <- rbind(
+  df.dep.itrust,
+  df.dep.etour
+)
+```
+
+The `sourceID` column associates each row of the results with the requirements file that the TLR algorithm attempted to trace.
+However, the values in this column still contain the `.txt` file extension.
+To harmonize the file IDs of the dependent and independent data points, remove the file extensions.
+
+```{r data-dependent-file}
+df.dep <- df.dep %>% 
+  rowwise() %>% 
+  mutate(File = strsplit(sourceID, '\\.')[[1]][1])
+```
+
+Then, drop the now unnecessary `sourceID` column.
+
+```{r data-dependent-drop}
+df.dep <- df.dep %>%
+  select(!(sourceID))
+```
+
+The resulting data frame contains the following values.
+
+```{r data-dependent-head}
+head(df.dep)
+```
+
+## Finalization
+
+Finally, merge the dependent and independent data frames on the `Dataset` and `File` columns. 
+
+```{r data-merge}
+df <- merge(df.ind, df.dep, by=c('Dataset', 'File'), all=TRUE)
+```
+
+Then, store the file in a location accessible to the data analysis scripts.
+
 ```{r data-storing}
-write_csv(df.ind, file=file.path('../data/rq4tlr-data.csv'))
+write_csv(df, file=file.path('../data/rq4tlr-data.csv'))
 ```
 
