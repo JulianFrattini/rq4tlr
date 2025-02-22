@@ -54,11 +54,12 @@ df.ind %>% ggplot(aes(x = coherence)) +
 ```
 
 The value -1.0 would be misinterpreted by a regression model.
-Hence, replace it with `NA` to indicate that the value is not applicable.
+Replacing those values with `NA` will discard them for the regression analysis.
+Instead, we replace those values with 1: a subflow with only one step has perfect coherence by default.
 
 ```{r coherence-adoption}
 df.ind <- df.ind %>% 
-  mutate(coherence = ifelse(coherence == -1.0, NA, coherence))
+  mutate(coherence = ifelse(coherence == -1, 1, coherence))
 ```
 
 ## Dependent Data
