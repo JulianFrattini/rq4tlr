@@ -1,0 +1,136 @@
+---
+title: "Experimental Analysis"
+author: "Anonymous"
+date: '2025-02-26'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+
+library(brms)
+library(marginaleffects)
+```
+
+In this Notebook, we conduct an experimental analysis.
+As opposed to the observational analysis, the experimental analysis allows to fully control a factor and, hence, isolate its effect on the response variable of interest.
+
+```{r load-data}
+df <- read.csv('./data/rq4tlr-data.csv')
+
+head(df)
+```
+
+
+## Factor Selection
+
+We can only conduct an experimental analysis of a specific factor if
+
+1. the factor is sufficiently wide distributed in the data, and
+2. we can reliably manipulate the factor without requiring domain knowledge.
+
+Only one factor in our data meets both criteria: the ratio of sentences representing clarifications (`clarification`).
+The factor is at least spread a little in the `iTrust` data set.
+
+```{r visualize-clarifications}
+df %>% 
+  filter(Dataset == "itrust") %>% 
+  ggplot(aes(x = clarification, fill = Dataset)) +
+  geom_histogram(stat="count")
+```
+
+```{r}
+df.treatment <- read.csv('../data/TLR_results/FTLR/itrustClarificationCleaned_ORG_m59f44_FTLRMcCd_perArtifactMetrics.csv', sep=';') %>%
+  mutate(Dataset = 'itrust') %>% 
+  rowwise() %>% 
+  mutate(File = strsplit(sourceID, '\\.')[[1]][1]) %>% 
+  select(!c(sourceID, tp, fp, fn))
+
+df.treatment$clarification = 0.0
+
+head(df.treatment)
+```
+
+```{r}
+df.control <- df %>% 
+  filter(Dataset == "itrust") %>% 
+  select(c(Dataset, File, clarification, Precision, Recall, F1, AP, LAG))
+
+head(df.control)
+```
+
+```{r merge-data}
+d <- rbind(df.control, df.treatment)
+```
+
+
+## Data Analysis
+
+```{r outcome-distribution}
+d %>% 
+  select(c(Precision, Recall, F1)) %>% 
+  pivot_longer(cols=c(Precision, Recall, F1), names_to = "Metric") %>% 
+  ggplot(aes(x = value, fill=Metric)) +
+    geom_histogram()
+```
+
+```{r formula}
+f <- bf(F1 ~ 0 + Intercept + clarification + (1|File))
+```
+
+```{r}
+get_prior(f, d, family=zero_one_inflated_beta)
+```
+
+
+
+```{r select-priors}
+p1 <- c(
+  prior(normal(0, 0.5), class = b),
+  prior(gamma(4, 1), class = phi),
+  prior(beta(5, 2), class = coi), 
+  prior(beta(3, 2), class = zoi),
+  prior(weibull(2, 0.5), class = sd)
+)
+```
+
+```{r model-sample-priors}
+m1.prior <-
+  brm(data = d, family = zero_one_inflated_beta, f, prior = p1,
+    iter = 4000, warmup = 1000, chains = 4, cores = 4,
+    seed = 4, sample_prior="only",
+    file = "fits/exp.f1.prior"
+  )
+```
+
+```{r prior-predictive-checks}
+brms::pp_check(m1.prior, ndraws=100)
+```
+
+
+```{r model}
+m1 <-
+  brm(data = d, family = zero_one_inflated_beta, f, prior = p1,
+    iter = 4000, warmup = 1000, chains = 4, cores = 4, seed = 4,
+    file = "fits/exp.f1"
+  )
+```
+
+```{r}
+brms::pp_check(m1, ndraws=100)
+```
+
+
+```{r path-coefficients}
+summary(m1)
+```
+
+```{r}
+mcmc_plot(m1, variable=c("b_clarification", "sd_File__Intercept"))
+```
+
+```{r marginal}
+conditional_effects(m1, effects="clarification", method="posterior_epred")
+```
