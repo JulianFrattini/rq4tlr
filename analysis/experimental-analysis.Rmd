@@ -42,7 +42,7 @@ df %>%
 ```
 
 ```{r}
-df.treatment <- read.csv('../data/TLR_results/FTLR/itrustClarificationCleaned_ORG_m59f44_FTLRMcCd_perArtifactMetrics.csv', sep=';') %>%
+df.treatment <- read.csv('../data/TLR_results/FTLR/itrustClarificationCleaned_OPT_m52f42_FTLRMcCd_perArtifactMetrics.csv', sep=';') %>%
   mutate(Dataset = 'itrust') %>% 
   rowwise() %>% 
   mutate(File = strsplit(sourceID, '\\.')[[1]][1]) %>% 
@@ -80,7 +80,7 @@ d %>%
 f <- bf(F1 ~ 0 + Intercept + clarification + (1|File))
 ```
 
-```{r}
+```{r show-priors}
 get_prior(f, d, family=zero_one_inflated_beta)
 ```
 
@@ -118,7 +118,7 @@ m1 <-
   )
 ```
 
-```{r}
+```{r posterior-predictive-check}
 brms::pp_check(m1, ndraws=100)
 ```
 
@@ -127,7 +127,7 @@ brms::pp_check(m1, ndraws=100)
 summary(m1)
 ```
 
-```{r}
+```{r mcmc-plot}
 mcmc_plot(m1, variable=c("b_clarification", "sd_File__Intercept"))
 ```
 
