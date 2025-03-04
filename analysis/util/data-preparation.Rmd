@@ -68,9 +68,11 @@ The dependent variables are located in the `./data/TLR_results/` directory.
 The trace link recovery results per data set are stored in separate files. 
 
 ```{r data-dependent}
-df.dep.etour <- read.csv('../../data/TLR_results/FTLR/etour_ORG_m59f44_FTLRMcCd_perArtifactMetrics.csv', sep=';') %>%
+#df.dep.etour <- read.csv('../../data/TLR_results/FTLR/etour_ORG_m59f44_FTLRMcCd_perArtifactMetrics.csv', sep=';') %>%
+df.dep.etour <- read.csv('../../data/TLR_results/FTLR/etour_OPT_m57f41_FTLRMcCd_perArtifactMetrics.csv', sep=';') %>%
   mutate(Dataset = 'etour')
-df.dep.itrust <- read.csv('../../data/TLR_results/FTLR/itrust_ORG_m59f44_FTLRMcCd_perArtifactMetrics.csv', sep=';') %>% 
+#df.dep.itrust <- read.csv('../../data/TLR_results/FTLR/itrust_ORG_m59f44_FTLRMcCd_perArtifactMetrics.csv', sep=';') %>% 
+df.dep.itrust <- read.csv('../../data/TLR_results/FTLR/itrust_OPT_m52f42_FTLRMcCd_perArtifactMetrics.csv', sep=';') %>% 
   mutate(Dataset = 'itrust')
 
 df.dep <- rbind(
