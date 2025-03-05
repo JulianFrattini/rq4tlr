@@ -172,7 +172,7 @@ summary(m1)$fixed %>%
   rename(all_of(c(
     mean = "Estimate", 
     var = "Est.Error"))) %>% 
-  rownames_to_column("factor") %>% 
+  rownames_to_column("coef") %>% 
   write_csv(file = "../data/estimates/obs-precision.csv")
 ```
 

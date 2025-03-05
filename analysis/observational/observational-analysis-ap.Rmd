@@ -158,5 +158,6 @@ summary(m1)$fixed %>%
   rename(all_of(c(
     ap.mean = "Estimate", 
     ap.var = "Est.Error"))) %>% 
+  rownames_to_column("coef") %>% 
   write_csv(file = "../data/estimates/obs-ap.csv")
 ```
