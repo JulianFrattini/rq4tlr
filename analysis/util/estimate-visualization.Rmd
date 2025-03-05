@@ -18,7 +18,7 @@ This notebook visualizes the distributions of the coefficients for each factor a
 The observational study currently involves the following metrics.
 
 ```{r metrics}
-metrics <- c("precision", "recall", "f1")
+metrics <- c("precision", "recall", "f1", "f2")
 ```
 
 ## Data Preparation
@@ -30,6 +30,7 @@ Every observational analysis produced one such file per response variable metric
 d.precision <- read.csv(file.path(path.data, "obs-precision.csv"))
 d.recall <- read.csv(file.path(path.data, "obs-recall.csv"))
 d.f1 <- read.csv(file.path(path.data, "obs-f1.csv"))
+d.f2 <- read.csv(file.path(path.data, "obs-f2.csv"))
 ```
 
 Then, define a function that calculates the 95% and 50% confidence interval from the mean and variance.
@@ -41,13 +42,13 @@ calculate_ci <- function(df) {
     ci1.up = mean + 2*var,
     ci2.low = mean - var,
     ci2.up = mean + var
-  ) %>% 
-  rename(coef = "factor"))
+  ))
 }
 
 d.precision <- calculate_ci(d.precision)
 d.recall <- calculate_ci(d.recall)
 d.f1 <- calculate_ci(d.f1)
+d.f2 <- calculate_ci(d.f2)
 ```
 
 Add the response variable metric as a column in each data frame.
@@ -56,12 +57,13 @@ Add the response variable metric as a column in each data frame.
 d.precision$resp = "precision"
 d.recall$resp = "recall"
 d.f1$resp = "f1"
+d.f2$resp = "f2"
 ```
 
 Finally, combine the individual datasets to one.
 
 ```{r combine-data}
-d <- rbind(d.precision, d.recall, d.f1)
+d <- rbind(d.precision, d.recall, d.f1, d.f2)
 ```
 
 ## Data Visualization
@@ -69,7 +71,7 @@ d <- rbind(d.precision, d.recall, d.f1)
 Visualize the coefficients in an errorbar plot.
 
 ```{r figure-configuration}
-dodge = 0.5 # distance between errorbars of each metric
+dodge = 0.7 # distance between errorbars of each metric
 
 ci1.width = 0.6 # size of the whiskers of the outer confidence interval
 ci2.width = 0.6 # size of the whiskers of the inner confidence interval
