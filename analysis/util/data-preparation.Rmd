@@ -98,6 +98,19 @@ df.dep <- df.dep %>%
   select(!(sourceID))
 ```
 
+In addition to the $F_1$ metric, we calculate the $F_2$ metric (based on the more general $F_{\beta}$ metric) which puts double emphasis on recall over precision.
+
+```{r calculate-f2}
+calc_f_beta <- function(beta, precision, recall) {
+  f <- (1+beta^2) * ((precision * recall)/(beta^2*precision + recall))
+  return(ifelse(is.nan(f), 0, f))
+}
+
+df.dep <- df.dep %>% 
+  mutate( F2 = calc_f_beta(2, Precision, Recall) )
+```
+
+
 The resulting data frame contains the following values.
 
 ```{r data-dependent-head}
