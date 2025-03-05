@@ -1,0 +1,190 @@
+---
+title: "Observational Analysis"
+author: "Anonymous"
+date: '2025-02-17'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse) # R dialect for improved syntax and base functionality
+
+library(brms) # Bayesian regression modeling
+library(marginaleffects) # plotting of marginal and conditional effects
+```
+
+This notebook contains the observational analysis of the impact of requirements quality (RQ) on trace link recovery (TLR).
+
+## Data Loading
+
+First, load the data for the observational analysis.
+The data set is procured by the [data-preparation.Rmd](./util/data-preparation.Rmd) notebook.
+This notebook assembles and casts the data appropriately and stores the results in the `rq4tlr-dtata.csv` file.
+
+```{r data-independent}
+df <- read.csv('./../data/rq4tlr-data.csv')
+```
+
+## Analysis
+
+The analysis of the data employs a regression model in a Bayesian framework.
+
+### Distribution
+
+The three outcome variables `Precision`, `Recall`, and `F1` are all bounded $\in [0, 1]$.
+This makes a **Beta** distribution an eligible target distribution of the response variables.
+To determine which variant of the Beta distribution family can be chosen, we visualize the raw distribution.
+
+```{r outcome-distribution}
+df %>% 
+  select(F1) %>% 
+  ggplot(aes(x = F1)) +
+    geom_histogram(bins = 30)
+```
+
+A base Beta distribution would require that all values are bounded within $]0; 1[$.
+The observed values for the three outcome variables show a clear zero- and one-inflation.
+Hence, we chose the `zero_one_inflated_beta` distribution from the `brms` library.
+
+### Formula
+
+Next, we define regression formulae that put the outcome variable of interest in relation to the predictors with which we assume a causal relationship.
+
+```{r formula-f1}
+f1 <- F1 ~ 0 + Intercept + Dataset + sencomplexity + maxsteplength + size + inconsistentloa + uidesign + clarification + alternative + coherence + happy + lostfr + anaphora + nonnounstart + passive + negation + outlinks + maxinlinks
+```
+
+The `0 + Intercept` term instead of `1 +` or even complete omission stems from the fact that the regression formula contains at least one predictor that is not centered around 0.
+
+### Priors
+
+The selected regression formula requires the definition of prior distributions for the following parameters.
+
+```{r priors-eligible}
+get_prior(f1, data=df, family=zero_one_inflated_beta)
+```
+
+We select the following priors:
+
+- $N(0, 1)$ for the intercept, to allow a flexible baseline
+- $N(0, 0.5)$ centered, uninformative priors for all factors
+- $Gam(4, 1)$ for the concentration parameter $\phi$
+- $Beta(7, 2)$ for the zero-inflation
+- $Beta(4, 2)$ for the one-inflation
+
+```{r priors1}
+p1 <- c(
+  prior(normal(0, 1), class = b, coef = "Intercept", resp=c(F1, Precision, Recall)),
+  prior(normal(0, 0.5), class = b),
+  prior(gamma(4, 1), class = phi, coef="", resp=c(F1, Precision, Recall)),
+  prior(beta(7, 2), class = coi, resp=c(F1, Precision, Recall)), 
+  prior(beta(5, 2), class = zoi, resp=c(F1, Precision, Recall)) 
+)
+```
+
+### Prior Predictive Check
+
+The prior predictive check helps determine the eligibility of the priors.
+
+```{r model-sample-priors}
+m1.prior <-
+  brm(data = df, family = zero_one_inflated_beta, f1, prior = p1,
+    iter = 4000, warmup = 1000, chains = 4, cores = 4,
+    seed = 4, sample_prior="only",
+    file = "../fits/obs.f1.prior"
+  )
+```
+
+In our particular case, the large number of predictors will, however, push the accumulated value of $\mu$ in the Beta-distribution to the to extremes.
+
+```{r prior-predictive-check}
+brms::pp_check(m1.prior, ndraws=100)
+```
+
+The figure shows extreme concentrations of expected values $y_{rep}$ on the borders of the output space (at 0 and 1).
+Instead, we put more emphasis on the posterior predictive check.
+
+### Training
+
+Assuming the priors are reliable, we train the model by updating the coefficient parameters with the data `df`.
+
+```{r model}
+m1 <-
+  brm(data = df, family = zero_one_inflated_beta, f2, prior = p1,
+    iter = 4000, warmup = 1000, chains = 4, cores = 4, seed = 4,
+    file = "../fits/obs.f1"
+  )
+```
+
+To check whether the training completed successfully, we inspect the posterior predictive check.
+
+```{r posterior-predictive-check}
+brms::pp_check(m1, ndraws=100)
+```
+
+The output confirms that the model parameters have been updated properly and that the predicted outcomes $y_{rep}$ are close the the actual outcome $y$.
+
+### Evaluation
+
+Finally, we evaluate the model.
+
+#### Coefficients
+
+First, we look at the updated path coefficients in the model summary.
+
+```{r path-coefficients}
+summary(m1)
+```
+
+These coefficients can also be visualized via a `mcmc_plot`.
+
+```{r mcmc-plot}
+mcmc_plot(m1, variable=c("b_Datasetitrust", "b_sencomplexity", "b_maxsteplength", "b_size", "b_inconsistentloa", "b_uidesign", "b_clarification", "b_alternative", "b_coherence", "b_happyTRUE", "b_lostfrTRUE", "b_anaphora", "b_nonnounstart", "b_passive", "b_negation", "b_outlinks", "b_maxinlinks"))
+```
+
+Variables, where the 50% confidence interval of the intercept does not overlap 0, weakly impact the response variable.
+Variables, where the 95% confidence interval of the intercept does not overlap 0, strongly impact the response variable.
+
+#### Marginal Distributions
+
+For a clearer picture, we can plot the marginal distributions of the outcome variable when manipulating one specific factor while keeping the others at a constant level.
+
+```{r marginal-inconsistenloa}
+conditional_effects(m1, effects="inconsistentloa", method="posterior_epred")
+```
+
+```{r marginal-alternative}
+conditional_effects(m1, effects="alternative", method="posterior_epred")
+```
+
+```{r marginal-anaphora}
+conditional_effects(m1, effects="anaphora", method="posterior_epred")
+```
+
+```{r marginal-nonnounstart}
+conditional_effects(m1, effects="nonnounstart", method="posterior_epred")
+```
+
+```{r marginal-negation}
+conditional_effects(m1, effects="negation", method="posterior_epred")
+```
+
+```{r marginal-outlinks}
+conditional_effects(m1, effects="outlinks", method="posterior_epred")
+```
+
+
+## Store Data
+
+Finally, store the estimates of the posterior distributions.
+
+```{r export-estimates}
+summary(m1)$fixed %>% 
+  select(Estimate, Est.Error) %>% 
+  rename(all_of(c(
+    mean = "Estimate", 
+    var = "Est.Error"))) %>% 
+  rownames_to_column("factor") %>% 
+  write_csv(file = "../data/estimates/obs-f1.csv")
+```

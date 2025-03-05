@@ -23,9 +23,7 @@ The data set is procured by the [data-preparation.Rmd](./util/data-preparation.R
 This notebook assembles and casts the data appropriately and stores the results in the `rq4tlr-dtata.csv` file.
 
 ```{r data-independent}
-df <- read.csv('./data/rq4tlr-data.csv')
-
-head(df)
+df <- read.csv('./../data/rq4tlr-data.csv')
 ```
 
 ## Analysis
@@ -40,10 +38,9 @@ To determine which variant of the Beta distribution family can be chosen, we vis
 
 ```{r outcome-distribution}
 df %>% 
-  select(c(Precision, Recall, F1)) %>% 
-  pivot_longer(cols=c(Precision, Recall, F1), names_to = "Metric") %>% 
-  ggplot(aes(x = value, fill=Metric)) +
-    geom_histogram()
+  select(F2) %>% 
+  ggplot(aes(x = F2)) +
+    geom_histogram(bins = 30)
 ```
 
 A base Beta distribution would require that all values are bounded within $]0; 1[$.
@@ -54,12 +51,8 @@ Hence, we chose the `zero_one_inflated_beta` distribution from the `brms` librar
 
 Next, we define regression formulae that put the outcome variable of interest in relation to the predictors with which we assume a causal relationship.
 
-```{r formula-f1}
-f1 <- F1 ~ 0 + Intercept + Dataset + sencomplexity + maxsteplength + size + inconsistentloa + uidesign + clarification + alternative + coherence + happy + lostfr + anaphora + nonnounstart + passive + negation + outlinks + maxinlinks
-#f2 <- bf(
-#  mvbind(Precision, Recall, F1) ~ 0 + Intercept + Dataset + sencomplexity + maxsteplength + size + inconsistentloa + uidesign + happy,
-#  family = zero_one_inflated_beta
-#)
+```{r formula}
+f <- F2 ~ 0 + Intercept + Dataset + sencomplexity + maxsteplength + size + inconsistentloa + uidesign + clarification + alternative + coherence + happy + lostfr + anaphora + nonnounstart + passive + negation + outlinks + maxinlinks
 ```
 
 The `0 + Intercept` term instead of `1 +` or even complete omission stems from the fact that the regression formula contains at least one predictor that is not centered around 0.
@@ -69,7 +62,7 @@ The `0 + Intercept` term instead of `1 +` or even complete omission stems from t
 The selected regression formula requires the definition of prior distributions for the following parameters.
 
 ```{r priors-eligible}
-get_prior(f1, data=df, family=zero_one_inflated_beta)
+get_prior(f, data=df, family=zero_one_inflated_beta)
 ```
 
 We select the following priors:
@@ -96,10 +89,10 @@ The prior predictive check helps determine the eligibility of the priors.
 
 ```{r model-sample-priors}
 m1.prior <-
-  brm(data = df, family = zero_one_inflated_beta, f1, prior = p1,
+  brm(data = df, family = zero_one_inflated_beta, f, prior = p1,
     iter = 4000, warmup = 1000, chains = 4, cores = 4,
     seed = 4, sample_prior="only",
-    file = "fits/obs.f1.prior"
+    file = "../fits/obs.f2.prior"
   )
 ```
 
@@ -118,9 +111,9 @@ Assuming the priors are reliable, we train the model by updating the coefficient
 
 ```{r model}
 m1 <-
-  brm(data = df, family = zero_one_inflated_beta, f1, prior = p1,
+  brm(data = df, family = zero_one_inflated_beta, f, prior = p1,
     iter = 4000, warmup = 1000, chains = 4, cores = 4, seed = 4,
-    file = "fits/obs.f1"
+    file = "../fits/obs.f2"
   )
 ```
 
@@ -161,22 +154,16 @@ For a clearer picture, we can plot the marginal distributions of the outcome var
 conditional_effects(m1, effects="inconsistentloa", method="posterior_epred")
 ```
 
-```{r marginal-alternative}
-conditional_effects(m1, effects="alternative", method="posterior_epred")
-```
+## Store Data
 
-```{r marginal-anaphora}
-conditional_effects(m1, effects="anaphora", method="posterior_epred")
-```
+Finally, store the estimates of the posterior distributions.
 
-```{r marginal-nonnounstart}
-conditional_effects(m1, effects="nonnounstart", method="posterior_epred")
-```
-
-```{r marginal-negation}
-conditional_effects(m1, effects="negation", method="posterior_epred")
-```
-
-```{r marginal-outlinks}
-conditional_effects(m1, effects="outlinks", method="posterior_epred")
+```{r export-estimates}
+summary(m1)$fixed %>% 
+  select(Estimate, Est.Error) %>% 
+  rename(all_of(c(
+    mean = "Estimate", 
+    var = "Est.Error"))) %>% 
+  rownames_to_column("coef") %>% 
+  write_csv(file = "../data/estimates/obs-f2.csv")
 ```
