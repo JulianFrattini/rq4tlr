@@ -12,13 +12,15 @@ library(tidyverse)
 
 library(brms)
 library(marginaleffects)
+
+library(patchwork)
 ```
 
 In this Notebook, we conduct an experimental analysis.
 As opposed to the observational analysis, the experimental analysis allows to fully control a factor and, hence, isolate its effect on the response variable of interest.
 
 ```{r load-data}
-df <- read.csv('./data/rq4tlr-data.csv')
+d <- read.csv('./../data/rq4tlr-data.csv')
 
 head(df)
 ```
@@ -35,34 +37,44 @@ Only one factor in our data meets both criteria: the ratio of sentences represen
 The factor is at least spread a little in the `iTrust` data set.
 
 ```{r visualize-clarifications}
-df %>% 
+d %>% 
   filter(Dataset == "itrust") %>% 
   ggplot(aes(x = clarification, fill = Dataset)) +
   geom_histogram(stat="count")
 ```
 
 ```{r}
-df.treatment <- read.csv('../data/TLR_results/FTLR/itrustClarificationCleaned_OPT_m52f42_FTLRMcCd_perArtifactMetrics.csv', sep=';') %>%
+d.treatment <- read.csv('../../data/TLR_results/FTLR/itrustClarificationCleaned_OPT_m52f42_FTLRMcCd_perArtifactMetrics.csv', sep=';') %>%
   mutate(Dataset = 'itrust') %>% 
   rowwise() %>% 
   mutate(File = strsplit(sourceID, '\\.')[[1]][1]) %>% 
-  select(!c(sourceID, tp, fp, fn))
+  select(!c(sourceID, tp, fp, fn, LAG))
 
-df.treatment$clarification = 0.0
+d.treatment$clarification = 0.0
 
-head(df.treatment)
+head(d.treatment)
 ```
 
 ```{r}
-df.control <- df %>% 
+d.control <- d %>% 
   filter(Dataset == "itrust") %>% 
-  select(c(Dataset, File, clarification, Precision, Recall, F1, AP, LAG))
+  select(c(Dataset, File, clarification, Precision, Recall, F1, AP))
 
-head(df.control)
+head(d.control)
 ```
 
 ```{r merge-data}
-d <- rbind(df.control, df.treatment)
+d <- rbind(d.control, d.treatment)
+```
+
+```{r calculate-f2}
+calc_f_beta <- function(beta, precision, recall) {
+  f <- (1+beta^2) * ((precision * recall)/(beta^2*precision + recall))
+  return(ifelse(is.nan(f), 0, f))
+}
+
+d <- d %>% 
+  mutate(F2 = calc_f_beta(2, Precision, Recall))
 ```
 
 
@@ -70,29 +82,55 @@ d <- rbind(df.control, df.treatment)
 
 ```{r outcome-distribution}
 d %>% 
-  select(c(Precision, Recall, F1)) %>% 
-  pivot_longer(cols=c(Precision, Recall, F1), names_to = "Metric") %>% 
+  pivot_longer(cols=c(Precision, Recall, F1, F2, AP), names_to = "Metric") %>% 
   ggplot(aes(x = value, fill=Metric)) +
     geom_histogram()
 ```
 
 ```{r formula}
-f <- bf(F1 ~ 0 + Intercept + clarification + (1|File))
+f <- bf(mvbind(Precision, Recall, F1, F2, AP) ~ 0 + Intercept + clarification + (1|File)) + set_rescor(FALSE)
+#f <- bf(mvbind(Precision, Recall) ~ 0 + Intercept + clarification + (1|File)) + set_rescor(FALSE)
 ```
 
 ```{r show-priors}
 get_prior(f, d, family=zero_one_inflated_beta)
 ```
 
-
-
 ```{r select-priors}
 p1 <- c(
-  prior(normal(0, 0.5), class = b),
-  prior(gamma(4, 1), class = phi),
-  prior(beta(5, 2), class = coi), 
-  prior(beta(3, 2), class = zoi),
-  prior(weibull(2, 0.5), class = sd)
+  prior(normal(0, 0.3), class = b, resp=Precision),
+  prior(normal(0, 0.5), class = b, resp=Recall),
+  prior(normal(0, 0.5), class = b, resp=F1),
+  prior(normal(0, 0.5), class = b, resp=F2),
+  prior(normal(0, 0.5), class = b, resp=AP),
+  
+  # phi parameter
+  prior(gamma(4, 1), class = phi, resp=Precision),
+  prior(gamma(4, 1), class = phi, resp=Recall),
+  prior(gamma(4, 1), class = phi, resp=F1),
+  prior(gamma(4, 1), class = phi, resp=F2),
+  prior(gamma(4, 1), class = phi, resp=AP),
+  
+  # coi parameter
+  prior(beta(5, 2), class = coi, resp=Precision), 
+  prior(beta(5, 2), class = coi, resp=Recall), 
+  prior(beta(5, 2), class = coi, resp=F1), 
+  prior(beta(5, 2), class = coi, resp=F2), 
+  prior(beta(5, 2), class = coi, resp=AP), 
+  
+  # zoi parameter
+  prior(beta(3, 2), class = zoi, resp=Precision),
+  prior(beta(3, 2), class = zoi, resp=Recall),
+  prior(beta(3, 2), class = zoi, resp=F1),
+  prior(beta(3, 2), class = zoi, resp=F2),
+  prior(beta(3, 2), class = zoi, resp=AP),
+  
+  # standard deviation parameter
+  prior(weibull(2, 0.5), class = sd, resp=Precision),
+  prior(weibull(2, 0.5), class = sd, resp=Recall),
+  prior(weibull(2, 0.5), class = sd, resp=F1),
+  prior(weibull(2, 0.5), class = sd, resp=F2),
+  prior(weibull(2, 0.5), class = sd, resp=AP)
 )
 ```
 
@@ -101,35 +139,82 @@ m1.prior <-
   brm(data = d, family = zero_one_inflated_beta, f, prior = p1,
     iter = 4000, warmup = 1000, chains = 4, cores = 4,
     seed = 4, sample_prior="only",
-    file = "fits/exp.f1.prior"
+    file = "../fits/exp.prior"
   )
 ```
 
 ```{r prior-predictive-checks}
-brms::pp_check(m1.prior, ndraws=100)
-```
+prior.precision <- brms::pp_check(m1.prior, ndraws=100, resp="Precision")
+prior.recall <- brms::pp_check(m1.prior, ndraws=100, resp="Recall")
+prior.f1 <- brms::pp_check(m1.prior, ndraws=100, resp="F1")
+prior.f2 <- brms::pp_check(m1.prior, ndraws=100, resp="F2")
+prior.ap <- brms::pp_check(m1.prior, ndraws=100, resp="AP")
 
+(prior.precision | prior.recall) / (prior.f1 | prior.f2) / prior.ap
+```
 
 ```{r model}
 m1 <-
   brm(data = d, family = zero_one_inflated_beta, f, prior = p1,
     iter = 4000, warmup = 1000, chains = 4, cores = 4, seed = 4,
-    file = "fits/exp.f1"
+    file = "../fits/exp"
   )
 ```
 
 ```{r posterior-predictive-check}
-brms::pp_check(m1, ndraws=100)
-```
+posterior.precision <- brms::pp_check(m1, ndraws=100, resp="Precision")
+posterior.recall <- brms::pp_check(m1, ndraws=100, resp="Recall")
+posterior.f1 <- brms::pp_check(m1, ndraws=100, resp="F1")
+posterior.f2 <- brms::pp_check(m1, ndraws=100, resp="F2")
+posterior.ap <- brms::pp_check(m1, ndraws=100, resp="AP")
 
+(posterior.precision | posterior.recall) / (posterior.f1 | posterior.f2) / posterior.ap
+```
 
 ```{r path-coefficients}
 summary(m1)
 ```
 
 ```{r mcmc-plot}
-mcmc_plot(m1, variable=c("b_clarification", "sd_File__Intercept"))
+mcmc_plot(m1, variable=c("b_Precision_clarification", "b_Recall_clarification", "b_F1_clarification", "b_F2_clarification", "b_AP_clarification"))
 ```
+
+```{r}
+dodge = 0.8 # distance between errorbars of each metric
+
+ci1.width = 0.6 # size of the whiskers of the outer confidence interval
+ci2.width = 0.4 # size of the whiskers of the inner confidence interval
+
+ci1.thic = 0.1 # thickness of the outer confidence interval
+ci2.thic = 1.3 # thickness of the inner confidence interval
+
+summary(m1)$fixed %>% 
+  select(Estimate, Est.Error) %>% 
+  rownames_to_column("coef") %>% 
+  filter(endsWith(coef, "clarification")) %>% 
+  rowwise() %>% 
+  mutate(coef = strsplit(coef, "_")[[1]][1]) %>% 
+  rename(all_of(c(
+    avg = "Estimate",
+    var = "Est.Error"
+  ))) %>% 
+  ggplot(aes(y = "a", color = coef)) +
+    geom_point(aes(x = avg), position=position_dodge(width=dodge), size = 3) +
+    geom_errorbar(aes(xmin = avg-2*var, xmax = avg+2*var), 
+                  width=ci1.width, linewidth=ci1.thic, 
+                  position=position_dodge(width=dodge)) +
+    geom_errorbar(aes(xmin = avg-var, xmax = avg+var), 
+                  width=ci2.width, linewidth=ci2.thic, 
+                  position=position_dodge(width=dodge)) + 
+    geom_vline(xintercept=0, color = "grey") +
+    theme(axis.title.y=element_blank(), axis.ticks.y = element_blank(), axis.text.y = element_blank()) +
+    labs(
+      x = "Posterior distribution of the coefficient of the Clarification factor",
+      color = "Metric")
+```
+
+
+### Marginal Effects
 
 ```{r marginal}
 conditional_effects(m1, effects="clarification", method="posterior_epred")
