@@ -156,8 +156,8 @@ Finally, store the estimates of the posterior distributions.
 summary(m1)$fixed %>% 
   select(Estimate, Est.Error) %>% 
   rename(all_of(c(
-    ap.mean = "Estimate", 
-    ap.var = "Est.Error"))) %>% 
+    mean = "Estimate", 
+    var = "Est.Error"))) %>% 
   rownames_to_column("coef") %>% 
   write_csv(file = "../data/estimates/obs-ap.csv")
 ```
