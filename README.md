@@ -19,9 +19,12 @@ This repository consists of the following files.
 │   │   └── preprocessed : processed data put into a common json format
 │   ├── labeling/rq4tlr-manual-variables.xlsx : labels assigned manually for complex independent variables
 │   └── output/rq4tlr-automatic-variables.csv : labels assigned automatically for simpler independent variables
-├── documentation : directory for all additional documentation
-│   └── figures : directory containing figures and graphs
-│       └── rq4tlr-study-overview.graphml : visualization of the study process
+├── figures : directory for all additional documentation
+│   ├── distributions : visualization of the distribution of factors in the data
+│   ├── graphs : directory containing graphs
+│   │   └── rq4tlr-study-overview.graphml : visualization of the study process
+│   └── results : visualization of results from the inferential data analysis
+│       └── coefficients : visualization of coefficient CIs from posterior distributions
 ├── src : directory containing all source code
 └── requirements.txt : specification of required libraries to run the analysis
 ```
