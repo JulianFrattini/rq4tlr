@@ -14,17 +14,18 @@ library(brms)
 library(marginaleffects)
 
 library(patchwork)
+
+path.data.obs <- "./../data/"
+path.data.exp <- "../../data/TLR_results/FTLR/"
+path.figures <- "./../../figures/results/coefficients/"
 ```
 
 In this Notebook, we conduct an experimental analysis.
 As opposed to the observational analysis, the experimental analysis allows to fully control a factor and, hence, isolate its effect on the response variable of interest.
 
 ```{r load-data}
-d <- read.csv('./../data/rq4tlr-data.csv')
-
-head(df)
+d <- read.csv(file.path(path.data.obs, 'rq4tlr-data.csv'))
 ```
-
 
 ## Factor Selection
 
@@ -43,8 +44,24 @@ d %>%
   geom_histogram(stat="count")
 ```
 
-```{r}
-d.treatment <- read.csv('../../data/TLR_results/FTLR/itrustClarificationCleaned_OPT_m52f42_FTLRMcCd_perArtifactMetrics.csv', sep=';') %>%
+Still, a large number of use cases contained no clarification at all.
+The manipulation of the clarification factor will be meaningless (i.e., their level of clarification would not change when manipulating the factor).
+Hence, these data points are irrelevant for the experimental study.
+Instead, we are only interested in use cases with any clarification at all (i.e., `clarification > 0`).
+
+```{r ucs-with-clarification}
+ucs.with.clarification <- d %>% 
+  filter(Dataset == "itrust" & clarification > 0)
+
+ucs.with.clarification$File
+```
+
+## Data Preparation
+
+Since only the iTrust data set showed any values of `clarification` worth manipulating at all, we only load the data set containing the TLR results for the iTrust data set (where all clarifications were removed).
+
+```{r load-treatment}
+d.treatment <- read.csv(file.path(path.data.exp, 'itrustClarificationCleaned_OPT_m52f42_FTLRMcCd_perArtifactMetrics.csv'), sep=';') %>%
   mutate(Dataset = 'itrust') %>% 
   rowwise() %>% 
   mutate(File = strsplit(sourceID, '\\.')[[1]][1]) %>% 
@@ -55,7 +72,9 @@ d.treatment$clarification = 0.0
 head(d.treatment)
 ```
 
-```{r}
+The corresponding "control" data set is the original iTrust data set.
+
+```{r load-control}
 d.control <- d %>% 
   filter(Dataset == "itrust") %>% 
   select(c(Dataset, File, clarification, Precision, Recall, F1, AP))
@@ -63,9 +82,19 @@ d.control <- d %>%
 head(d.control)
 ```
 
+Then, we combine the two data sets via `rbind`.
+Since we reduced both data sets to the same set of columns (i.e., its identification via `Dataset` and `File`, the main independent factor `clarification`, and the four existing, dependent variables), we can just "stack them" on top of each other.
+At this step, we also remove all data points where the `clarification` value in the control data set was already 0.
+
 ```{r merge-data}
 d <- rbind(d.control, d.treatment)
+
+d <- d %>% 
+  filter(File %in% ucs.with.clarification$File)
 ```
+
+We additionally calculate a fifth response variable: the $F_2$-score. 
+Like the $F_1$-score, this is an operationalization of the more general $F_{\beta}$-score, but $F_2$ puts more emphasis on recall over precision.
 
 ```{r calculate-f2}
 calc_f_beta <- function(beta, precision, recall) {
@@ -77,8 +106,20 @@ d <- d %>%
   mutate(F2 = calc_f_beta(2, Precision, Recall))
 ```
 
-
 ## Data Analysis
+
+With the data set prepared, we can begin the data analysis.
+
+### Distribution and Formula
+
+The regression formula derived from our causal model (where only the `clarification` affects the response variables) can be modeled as a multivariate regression.
+
+```{r formula}
+f <- bf(mvbind(Precision, Recall, F1, F2, AP) ~ 0 + Intercept + clarification + (1|File)) + set_rescor(FALSE)
+```
+
+First, we need to select an appropriate distribution type for the response variables.
+Given that all response variables are bounded within $[0; 1]$, a distribution from the beta-family is appropriate.
 
 ```{r outcome-distribution}
 d %>% 
@@ -87,14 +128,19 @@ d %>%
     geom_histogram()
 ```
 
-```{r formula}
-f <- bf(mvbind(Precision, Recall, F1, F2, AP) ~ 0 + Intercept + clarification + (1|File)) + set_rescor(FALSE)
-#f <- bf(mvbind(Precision, Recall) ~ 0 + Intercept + clarification + (1|File)) + set_rescor(FALSE)
-```
+The distribution of the response variables shows that there are several 0 and 1 values.
+These are typically not expected in a classical `beta` distribution.
+Instead, we ought to select a `zero_one_inflated_beta` distribution.
+
+### Prior Selction and Prior Predictive Check
+
+The `zero_one_inflated_beta` distribution requires specifying the following priors.
 
 ```{r show-priors}
 get_prior(f, d, family=zero_one_inflated_beta)
 ```
+
+We select uninformative priors for each factor coefficient.
 
 ```{r select-priors}
 p1 <- c(
@@ -134,6 +180,9 @@ p1 <- c(
 )
 ```
 
+To confirm the eligibility of the priors, we run a prior predictive check, i.e., we sample from the specified model without updating the coefficient distributions.
+We achieve this via the `sample_prior="only"` flag.
+
 ```{r model-sample-priors}
 m1.prior <-
   brm(data = d, family = zero_one_inflated_beta, f, prior = p1,
@@ -142,6 +191,8 @@ m1.prior <-
     file = "../fits/exp.prior"
   )
 ```
+
+We can draw from this model to visually inspect the eligibility of the priors.
 
 ```{r prior-predictive-checks}
 prior.precision <- brms::pp_check(m1.prior, ndraws=100, resp="Precision")
@@ -153,6 +204,12 @@ prior.ap <- brms::pp_check(m1.prior, ndraws=100, resp="AP")
 (prior.precision | prior.recall) / (prior.f1 | prior.f2) / prior.ap
 ```
 
+The prior predictive check $y_{rep}$ overlaps with the actually observed data $y$, which confirms the eligibility of the priors.
+
+### Model Training
+
+With the eligibility of priors confirmed, we train the regression model, i.e., update the factor coefficient distributions given the observed data.
+
 ```{r model}
 m1 <-
   brm(data = d, family = zero_one_inflated_beta, f, prior = p1,
@@ -160,6 +217,8 @@ m1 <-
     file = "../fits/exp"
   )
 ```
+
+We can perform a similar predictive check by drawing samples from the (this time trained/updated) model.
 
 ```{r posterior-predictive-check}
 posterior.precision <- brms::pp_check(m1, ndraws=100, resp="Precision")
@@ -171,16 +230,23 @@ posterior.ap <- brms::pp_check(m1, ndraws=100, resp="AP")
 (posterior.precision | posterior.recall) / (posterior.f1 | posterior.f2) / posterior.ap
 ```
 
+The predictions $y_{rep}$ have moved closer to the actually observed data $y$.
+This confirms that the model has trained properly and gained predictive power.
+
+### Evaluation
+
+Finally, we can evaluate the resulting model.
+The summary of path coefficients gives a raw insight into the updated model parameters.
+
 ```{r path-coefficients}
 summary(m1)
 ```
 
-```{r mcmc-plot}
-mcmc_plot(m1, variable=c("b_Precision_clarification", "b_Recall_clarification", "b_F1_clarification", "b_F2_clarification", "b_AP_clarification"))
-```
+We can visualize the distribution of the interesting coefficients (e.g., `b_Precision_clarification`) in an errorbar plot.
+This shows, on which response variables the `clarification` has a significant impact.
 
-```{r}
-dodge = 0.8 # distance between errorbars of each metric
+```{r factor-distribution}
+dodge = 0.8 # distance between error bars of each metric
 
 ci1.width = 0.6 # size of the whiskers of the outer confidence interval
 ci2.width = 0.4 # size of the whiskers of the inner confidence interval
@@ -207,15 +273,28 @@ summary(m1)$fixed %>%
                   width=ci2.width, linewidth=ci2.thic, 
                   position=position_dodge(width=dodge)) + 
     geom_vline(xintercept=0, color = "grey") +
-    theme(axis.title.y=element_blank(), axis.ticks.y = element_blank(), axis.text.y = element_blank()) +
+    theme(axis.title.y=element_blank(), axis.ticks.y = element_blank(), axis.text.y = element_blank(),
+          legend.position = "bottom") +
     labs(
-      x = "Posterior distribution of the coefficient of the Clarification factor",
+      x = "Posterior coefficient distribution",
       color = "Metric")
 ```
 
+The results show that precision, and consequently the $F_1$-score, are affected the most.
+The $F_2$-score is more cautious since the recall is less affected.
 
-### Marginal Effects
+```{r export-figure}
+ggsave(
+  file = file.path(path.figures, "exp-coefs-clarification.pdf"), device = "pdf", 
+  width = 12, height = 8, units = "cm")
+```
+
+Finally, we can also look at the marginal plots.
+These visualize the effect of the independent variable `clarification` on the response variables while holding all other values at a constant, representative level.
+This way, marginal plots incorporate all the uncertainty encoded in the trained regression model.
 
 ```{r marginal}
 conditional_effects(m1, effects="clarification", method="posterior_epred")
 ```
+
+The marginal plots confirm that an increasing level of `clarification` has no strong, significant effect on any of the response variables.
