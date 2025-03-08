@@ -80,7 +80,7 @@ ci1.width = 0.6 # size of the whiskers of the outer confidence interval
 ci2.width = 0.6 # size of the whiskers of the inner confidence interval
 
 ci1.thic = 0.1 # thickness of the outer confidence interval
-ci2.thic = 1.3 # thickness of the inner confidence interval
+ci2.thic = 1 # thickness of the inner confidence interval
 ```
 
 ### Full Visualization
@@ -139,21 +139,22 @@ d %>%
   filter(coef %in% significant_coefs$coef) %>% # filter out all non-significant coefficients
   mutate(name = recode(coef, !!!factor.names)) %>% # replace all variable names with readable factor names
   ggplot(aes(x=name, color=resp)) +
-  geom_errorbar( # create one error bar for the "outer" confidence interval
-    aes(ymin = ci1.low, ymax = ci1.up), 
-    width=ci1.width, linewidth=ci1.thic, 
-    position=position_dodge(width=dodge)) +
-  geom_errorbar( # create one error bar for the "inner" confidence interval
-    aes(ymin = ci2.low, ymax = ci2.up),
-    width=ci2.width, linewidth=ci2.thic, 
-    position=position_dodge(width=dodge)) +
-  coord_flip() +
-  geom_hline(yintercept=0, color = "grey") + # add a vertical line around 0 to show the threshold for significance
-  theme(
-    axis.title.y=element_blank()) +#, # remove the label of the y axis
-    #legend.position = "bottom") + # place the legend of the color aesthetic below the plot
-  labs(color = "Response Variable") +
-  scale_color_discrete(labels = c("MAP", "F1", "F2", "Precision", "Recall"))
+    geom_point(aes(y = mean), position=position_dodge(width=dodge), size = 2) +
+    geom_errorbar( # create one error bar for the "outer" confidence interval
+      aes(ymin = ci1.low, ymax = ci1.up), 
+      width=ci1.width, linewidth=ci1.thic, 
+      position=position_dodge(width=dodge)) +
+    geom_errorbar( # create one error bar for the "inner" confidence interval
+      aes(ymin = ci2.low, ymax = ci2.up),
+      width=ci2.width, linewidth=ci2.thic, 
+      position=position_dodge(width=dodge)) +
+    coord_flip() +
+    geom_hline(yintercept=0, color = "grey") + # add a vertical line around 0 to show the threshold for significance
+    theme(
+      axis.title.y=element_blank()) +#, # remove the label of the y axis
+      #legend.position = "bottom") + # place the legend of the color aesthetic below the plot
+    labs(color = "Response Variable") +
+    scale_color_discrete(labels = c("MAP", "F1", "F2", "Precision", "Recall"))
 ```
 
 ```{r export-significant}
