@@ -55,7 +55,7 @@
     }, {
         "label": "size",
         "temp_label": "large_ucs",
-        "name": "Use Case Size",
+        "name": "Large Use Cases",
         "type": "count"
     }, {
         "label": "meanactor",
@@ -123,7 +123,7 @@
         "type": "count"
     }, {
         "label": "lostfr",
-        "name": "Mislocated Functional Requirements",
+        "name": "Mislocated Functional Requirement",
         "type": "boolean"
     }
 ]

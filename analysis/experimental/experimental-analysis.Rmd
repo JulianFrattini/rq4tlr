@@ -286,7 +286,7 @@ The $F_2$-score is more cautious since the recall is less affected.
 ```{r export-figure}
 ggsave(
   file = file.path(path.figures, "exp-coefs-clarification.pdf"), device = "pdf", 
-  width = 12, height = 8, units = "cm")
+  width = 12, height = 5, units = "cm")
 ```
 
 Finally, we can also look at the marginal plots.

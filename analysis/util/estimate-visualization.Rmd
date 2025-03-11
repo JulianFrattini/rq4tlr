@@ -120,12 +120,12 @@ For better readability, create a mapping between the names of the variables (as 
 
 ```{r factor-names}
 factor.names <- c(
-  "size" = "Requirements Length",
+  "size" = "Large Use Case",
   "sencomplexity" = "Sentence Level Complexity",
   "outlinks" = "Scattered Requirements",
-  "nonnounstart" = "Starts without noun phrase",
+  "nonnounstart" = "Starts without Noun Phrase",
   "maxinlinks" = "Tangled Requirements",
-  "lostfrTRUE" = "Lost Functional Requirement",
+  "lostfrTRUE" = "Mislocated Functional Requirement",
   "inconsistentloa" = "Inconsistent Level of Abstraction", 
   "happyTRUE" = "Happy Use Case",
   "coherence" = "Coherent"
@@ -151,14 +151,14 @@ d %>%
     coord_flip() +
     geom_hline(yintercept=0, color = "grey") + # add a vertical line around 0 to show the threshold for significance
     theme(
-      axis.title.y=element_blank()) +#, # remove the label of the y axis
-      #legend.position = "bottom") + # place the legend of the color aesthetic below the plot
-    labs(color = "Response Variable") +
-    scale_color_discrete(labels = c("MAP", "F1", "F2", "Precision", "Recall"))
+      axis.title.y=element_blank(), # remove the label of the y axis
+      legend.position = "bottom") + # place the legend of the color aesthetic below the plot
+    labs(color = "Response Variable", y = "Posterior coefficient distribution") +
+    scale_color_discrete(labels = c("AP", "F1", "F2", "Precision", "Recall"))
 ```
 
 ```{r export-significant}
 ggsave(
   file = file.path(path.figures, "obs-coefs-sig.pdf"), device = "pdf", 
-  width = 24, height = 11, units = "cm")
+  width = 24, height = 14, units = "cm")
 ```
