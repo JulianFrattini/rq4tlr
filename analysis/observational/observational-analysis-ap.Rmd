@@ -12,6 +12,8 @@ library(tidyverse) # R dialect for improved syntax and base functionality
 
 library(brms) # Bayesian regression modeling
 library(marginaleffects) # plotting of marginal and conditional effects
+
+library(patchwork) # arranging figures
 ```
 
 This notebook contains the observational analysis of the impact of requirements quality (RQ) on trace link recovery (TLR).
@@ -24,6 +26,15 @@ This notebook assembles and casts the data appropriately and stores the results 
 
 ```{r data-independent}
 df <- read.csv('./../data/rq4tlr-data.csv')
+
+df$Dataset <- factor(df$Dataset, levels=c("etour", "itrust"), ordered = FALSE)
+```
+
+```{r}
+df <- df %>% 
+  mutate(across(c("size", "outlinks", "maxinlinks", "maxsteplength", "sencomplexity"), scale, center = TRUE))
+
+str(df)
 ```
 
 ## Analysis
@@ -52,7 +63,15 @@ Hence, we chose the `zero_one_inflated_beta` distribution from the `brms` librar
 Next, we define regression formulae that put the outcome variable of interest in relation to the predictors with which we assume a causal relationship.
 
 ```{r formula-f1}
-f <- AP ~ 0 + Intercept + Dataset + sencomplexity + maxsteplength + size + inconsistentloa + uidesign + clarification + alternative + coherence + happy + lostfr + anaphora + nonnounstart + passive + negation + outlinks + maxinlinks
+f1 <- AP ~ 0 + Intercept + Dataset +
+  happy + outlinks + uidesign + alternative + clarification + coherence + anaphora + passive + negation +
+  sencomplexity + maxsteplength + size + inconsistentloa + lostfr  + nonnounstart + maxinlinks
+```
+
+```{r formula-f1}
+f2 <- AP ~ 0 + Intercept + 
+  happy*Dataset + outlinks*Dataset + uidesign*Dataset + alternative*Dataset + clarification*Dataset + coherence*Dataset + anaphora*Dataset + passive*Dataset + negation*Dataset +
+  sencomplexity + maxsteplength + size + inconsistentloa + lostfr  + nonnounstart + maxinlinks
 ```
 
 The `0 + Intercept` term instead of `1 +` or even complete omission stems from the fact that the regression formula contains at least one predictor that is not centered around 0.
@@ -62,7 +81,7 @@ The `0 + Intercept` term instead of `1 +` or even complete omission stems from t
 The selected regression formula requires the definition of prior distributions for the following parameters.
 
 ```{r priors-eligible}
-get_prior(f, data=df, family=zero_one_inflated_beta)
+get_prior(f2, data=df, family=zero_one_inflated_beta)
 ```
 
 We select the following priors:
@@ -73,7 +92,17 @@ p1 <- c(
   prior(normal(0, 0.5), class = b),
   prior(gamma(4, 1), class = phi),
   prior(beta(6, 2), class = coi), 
-  prior(beta(4, 2), class = zoi) 
+  prior(beta(4, 2), class = zoi)
+)
+```
+
+```{r priors2}
+p2 <- c(
+  prior(normal(0, 1), class = b, coef = "Intercept"),
+  prior(normal(0, 0.5), class = b),
+  prior(gamma(4, 1), class = phi),
+  prior(beta(6, 2), class = coi), 
+  prior(beta(4, 2), class = zoi)
 )
 ```
 
@@ -83,10 +112,10 @@ The prior predictive check helps determine the eligibility of the priors.
 
 ```{r model-sample-priors}
 m1.prior <-
-  brm(data = df, family = zero_one_inflated_beta, f, prior = p1,
+  brm(data = df, family = zero_one_inflated_beta, f1, prior = p1,
     iter = 4000, warmup = 1000, chains = 4, cores = 4,
     seed = 4, sample_prior="only",
-    file = "../fits/obs.ap.prior"
+    #file = "../fits/obs.ap.prior"
   )
 ```
 
@@ -103,21 +132,40 @@ Instead, we put more emphasis on the posterior predictive check.
 
 Assuming the priors are reliable, we train the model by updating the coefficient parameters with the data `df`.
 
-```{r model}
+```{r training-m1}
 m1 <-
-  brm(data = df, family = zero_one_inflated_beta, f, prior = p1,
+  brm(data = df, family = zero_one_inflated_beta, f1, prior = p1,
     iter = 4000, warmup = 1000, chains = 4, cores = 4, seed = 4,
-    file = "../fits/obs.ap"
+    file = "../fits/obs.ap1"
+  )
+```
+
+```{r training-m2}
+m2 <-
+  brm(data = df, family = zero_one_inflated_beta, f2, prior = p2,
+    iter = 4000, warmup = 1000, chains = 4, cores = 4, seed = 4,
+    file = "../fits/obs.ap2"
   )
 ```
 
 To check whether the training completed successfully, we inspect the posterior predictive check.
 
 ```{r posterior-predictive-check}
-brms::pp_check(m1, ndraws=100)
+post.m1 <- brms::pp_check(m1, ndraws=100)
+post.m2 <- brms::pp_check(m2, ndraws=100)
+
+post.m1 | post.m2
 ```
 
 The output confirms that the model parameters have been updated properly and that the predicted outcomes $y_{rep}$ are close the the actual outcome $y$.
+
+```{r loo-compare}
+m1 <- add_criterion(m1, criterion = "loo")
+m2 <- add_criterion(m2, criterion = "loo")
+
+loo_compare(m1, m2)
+```
+
 
 ### Evaluation
 
@@ -140,12 +188,14 @@ mcmc_plot(m1, variable=c("b_Datasetitrust", "b_sencomplexity", "b_maxsteplength"
 Variables, where the 50% confidence interval of the intercept does not overlap 0, weakly impact the response variable.
 Variables, where the 95% confidence interval of the intercept does not overlap 0, strongly impact the response variable.
 
+
+
 #### Marginal Distributions
 
 For a clearer picture, we can plot the marginal distributions of the outcome variable when manipulating one specific factor while keeping the others at a constant level.
 
 ```{r marginal-inconsistenloa}
-conditional_effects(m1, effects=c("coherence", "happy"), method="posterior_epred")
+conditional_effects(m1, effects="Dataset:happy", method="posterior_epred")
 ```
 
 ## Store Data
@@ -158,6 +208,6 @@ summary(m1)$fixed %>%
   rename(all_of(c(
     mean = "Estimate", 
     var = "Est.Error"))) %>% 
-  rownames_to_column("coef") %>% 
-  write_csv(file = "../data/estimates/obs-ap.csv")
+  rownames_to_column("coef")# %>% 
+  #write_csv(file = "../data/estimates/obs-ap.csv")
 ```
