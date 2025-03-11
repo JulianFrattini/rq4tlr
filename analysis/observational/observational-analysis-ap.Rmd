@@ -30,7 +30,9 @@ df <- read.csv('./../data/rq4tlr-data.csv')
 df$Dataset <- factor(df$Dataset, levels=c("etour", "itrust"), ordered = FALSE)
 ```
 
-```{r}
+Scale all numeric variables to make their coefficient distributions easier to sample from.
+
+```{r data-scaling}
 df <- df %>% 
   mutate(across(c("size", "outlinks", "maxinlinks", "maxsteplength", "sencomplexity"), scale, center = TRUE))
 
@@ -115,7 +117,7 @@ m1.prior <-
   brm(data = df, family = zero_one_inflated_beta, f1, prior = p1,
     iter = 4000, warmup = 1000, chains = 4, cores = 4,
     seed = 4, sample_prior="only",
-    #file = "../fits/obs.ap.prior"
+    file = "../fits/obs.ap.prior"
   )
 ```
 
@@ -195,7 +197,7 @@ Variables, where the 95% confidence interval of the intercept does not overlap 0
 For a clearer picture, we can plot the marginal distributions of the outcome variable when manipulating one specific factor while keeping the others at a constant level.
 
 ```{r marginal-inconsistenloa}
-conditional_effects(m1, effects="Dataset:happy", method="posterior_epred")
+conditional_effects(m2, effects="Dataset:happy", method="posterior_epred")
 ```
 
 ## Store Data
@@ -208,6 +210,6 @@ summary(m1)$fixed %>%
   rename(all_of(c(
     mean = "Estimate", 
     var = "Est.Error"))) %>% 
-  rownames_to_column("coef")# %>% 
-  #write_csv(file = "../data/estimates/obs-ap.csv")
+  rownames_to_column("coef") %>% 
+  write_csv(file = "../data/estimates/obs-ap.csv")
 ```
