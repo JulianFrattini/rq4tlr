@@ -1,5 +1,5 @@
 ---
-title: "Observational Analysis"
+title: "Observational Analysis: Average Precision"
 author: "Anonymous"
 date: '2025-02-17'
 output: html_document
@@ -16,7 +16,7 @@ library(marginaleffects) # plotting of marginal and conditional effects
 library(patchwork) # arranging figures
 ```
 
-This notebook contains the observational analysis of the impact of requirements quality (RQ) on trace link recovery (TLR).
+This notebook contains the observational analysis of the impact of requirements quality (RQ) on the performance of trace link recovery (TLR) in terms of average precision (AP) score.
 
 ## Data Loading
 
@@ -39,14 +39,16 @@ df <- df %>%
 str(df)
 ```
 
+The output shows by what factors the numeric variables were centered and scaled.
+
 ## Analysis
 
 The analysis of the data employs a regression model in a Bayesian framework.
 
 ### Distribution
 
-The three outcome variables `Precision`, `Recall`, and `F1` are all bounded $\in [0, 1]$.
-This makes a **Beta** distribution an eligible target distribution of the response variables.
+The outcome variable is bounded within $\in [0, 1]$.
+This makes a **Beta** distribution an eligible target distribution for the response variables.
 To determine which variant of the Beta distribution family can be chosen, we visualize the raw distribution.
 
 ```{r outcome-distribution}
@@ -57,7 +59,7 @@ df %>%
 ```
 
 A base Beta distribution would require that all values are bounded within $]0; 1[$.
-The observed values for the three outcome variables show a clear zero- and one-inflation.
+The observed values for the outcome variable show a clear zero- and one-inflation.
 Hence, we chose the `zero_one_inflated_beta` distribution from the `brms` library.
 
 ### Formula
@@ -70,7 +72,7 @@ f1 <- AP ~ 0 + Intercept + Dataset +
   sencomplexity + maxsteplength + size + inconsistentloa + lostfr  + nonnounstart + maxinlinks
 ```
 
-```{r formula-f1}
+```{r formula-f2}
 f2 <- AP ~ 0 + Intercept + 
   happy*Dataset + outlinks*Dataset + uidesign*Dataset + alternative*Dataset + clarification*Dataset + coherence*Dataset + anaphora*Dataset + passive*Dataset + negation*Dataset +
   sencomplexity + maxsteplength + size + inconsistentloa + lostfr  + nonnounstart + maxinlinks
@@ -80,13 +82,13 @@ The `0 + Intercept` term instead of `1 +` or even complete omission stems from t
 
 ### Priors
 
-The selected regression formula requires the definition of prior distributions for the following parameters.
+The selected regression formulae require the definition of prior distributions for the following parameters.
 
 ```{r priors-eligible}
 get_prior(f2, data=df, family=zero_one_inflated_beta)
 ```
 
-We select the following priors:
+We select uninformative prior distributions for all coefficients to allow the model to learn any effect from the data.
 
 ```{r priors1}
 p1 <- c(
@@ -128,11 +130,12 @@ brms::pp_check(m1.prior, ndraws=100)
 ```
 
 The figure shows extreme concentrations of expected values $y_{rep}$ on the borders of the output space (at 0 and 1).
-Instead, we put more emphasis on the posterior predictive check.
+This is expected due to the large number of predictors. 
+Hence, we put more emphasis on the posterior predictive check.
 
 ### Training
 
-Assuming the priors are reliable, we train the model by updating the coefficient parameters with the data `df`.
+Assuming the priors are reliable, we train the models by updating the coefficient parameters with the data `df`.
 
 ```{r training-m1}
 m1 <-
@@ -161,6 +164,10 @@ post.m1 | post.m2
 
 The output confirms that the model parameters have been updated properly and that the predicted outcomes $y_{rep}$ are close the the actual outcome $y$.
 
+#### Model Comparison
+
+We can compare the two models via leave-one-out cross-validation (LOO) which assesses the predictive power of the two models.
+
 ```{r loo-compare}
 m1 <- add_criterion(m1, criterion = "loo")
 m2 <- add_criterion(m2, criterion = "loo")
@@ -168,6 +175,7 @@ m2 <- add_criterion(m2, criterion = "loo")
 loo_compare(m1, m2)
 ```
 
+$m_1$ outperforms $m_2$ and, therefore, will be used in the subsequent evaluation.
 
 ### Evaluation
 
@@ -190,11 +198,10 @@ mcmc_plot(m1, variable=c("b_Datasetitrust", "b_sencomplexity", "b_maxsteplength"
 Variables, where the 50% confidence interval of the intercept does not overlap 0, weakly impact the response variable.
 Variables, where the 95% confidence interval of the intercept does not overlap 0, strongly impact the response variable.
 
+#### Marginal Effects
 
-
-#### Marginal Distributions
-
-For a clearer picture, we can plot the marginal distributions of the outcome variable when manipulating one specific factor while keeping the others at a constant level.
+For a clearer picture, we can plot the marginal effect of any predictor on the outcome variable.
+The marginal effect isolates the effect of the predictor on the outcome while keeping all other predictors constant at a representative level.
 
 ```{r marginal-inconsistenloa}
 conditional_effects(m2, effects="Dataset:happy", method="posterior_epred")
@@ -202,7 +209,8 @@ conditional_effects(m2, effects="Dataset:happy", method="posterior_epred")
 
 ## Store Data
 
-Finally, store the estimates of the posterior distributions.
+Finally, we store the estimates of the posterior distributions in a new data frame and export it.
+This allows the [estimate-visualization](../util/estimate-visualization.Rmd) script to generate one figure of the posterior distributions from all response variables.
 
 ```{r export-estimates}
 summary(m1)$fixed %>% 

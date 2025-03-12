@@ -1,5 +1,5 @@
 ---
-title: "Observational Analysis"
+title: "Observational Analysis: F1-Score"
 author: "Anonymous"
 date: '2025-02-17'
 output: html_document
@@ -14,18 +14,17 @@ library(brms) # Bayesian regression modeling
 library(marginaleffects) # plotting of marginal and conditional effects
 ```
 
-This notebook contains the observational analysis of the impact of requirements quality (RQ) on trace link recovery (TLR).
+This notebook contains the observational analysis of the impact of requirements quality (RQ) on the performance of trace link recovery (TLR) in terms of $F_1$-score.
 
 ## Data Loading
 
 First, load the data for the observational analysis.
 The data set is procured by the [data-preparation.Rmd](./util/data-preparation.Rmd) notebook.
-This notebook assembles and casts the data appropriately and stores the results in the `rq4tlr-dtata.csv` file.
+This notebook assembles and casts the data appropriately and stores the results in the `rq4tlr-data.csv` file.
 
 ```{r data-independent}
 df <- read.csv('./../data/rq4tlr-data.csv')
 ```
-
 
 Scale all numeric variables to make their coefficient distributions easier to sample from.
 
@@ -36,14 +35,16 @@ df <- df %>%
 str(df)
 ```
 
+The output shows by what factors the numeric variables were centered and scaled.
+
 ## Analysis
 
 The analysis of the data employs a regression model in a Bayesian framework.
 
 ### Distribution
 
-The three outcome variables `Precision`, `Recall`, and `F1` are all bounded $\in [0, 1]$.
-This makes a **Beta** distribution an eligible target distribution of the response variables.
+The outcome variable is bounded within $\in [0, 1]$.
+This makes a **Beta** distribution an eligible target distribution for the response variables.
 To determine which variant of the Beta distribution family can be chosen, we visualize the raw distribution.
 
 ```{r outcome-distribution}
@@ -54,12 +55,12 @@ df %>%
 ```
 
 A base Beta distribution would require that all values are bounded within $]0; 1[$.
-The observed values for the three outcome variables show a clear zero- and one-inflation.
+The observed values for the outcome variable show a clear zero- and one-inflation.
 Hence, we chose the `zero_one_inflated_beta` distribution from the `brms` library.
 
 ### Formula
 
-Next, we define regression formulae that put the outcome variable of interest in relation to the predictors with which we assume a causal relationship.
+Next, we define a regression formula that puts the outcome variable of interest in relation to the predictors with which we assume a causal relationship.
 
 ```{r formula-f1}
 f1 <- F1 ~ 0 + Intercept + Dataset + sencomplexity + maxsteplength + size + inconsistentloa + uidesign + clarification + alternative + coherence + happy + lostfr + anaphora + nonnounstart + passive + negation + outlinks + maxinlinks
@@ -75,13 +76,7 @@ The selected regression formula requires the definition of prior distributions f
 get_prior(f1, data=df, family=zero_one_inflated_beta)
 ```
 
-We select the following priors:
-
-- $N(0, 1)$ for the intercept, to allow a flexible baseline
-- $N(0, 0.5)$ centered, uninformative priors for all factors
-- $Gam(4, 1)$ for the concentration parameter $\phi$
-- $Beta(7, 2)$ for the zero-inflation
-- $Beta(4, 2)$ for the one-inflation
+We select uninformative prior distributions for all coefficients to allow the model to learn any effect from the data.
 
 ```{r priors1}
 p1 <- c(
@@ -113,7 +108,8 @@ brms::pp_check(m1.prior, ndraws=100)
 ```
 
 The figure shows extreme concentrations of expected values $y_{rep}$ on the borders of the output space (at 0 and 1).
-Instead, we put more emphasis on the posterior predictive check.
+This is expected due to the large number of predictors. 
+Hence, we put more emphasis on the posterior predictive check.
 
 ### Training
 
@@ -156,9 +152,10 @@ mcmc_plot(m1, variable=c("b_Datasetitrust", "b_sencomplexity", "b_maxsteplength"
 Variables, where the 50% confidence interval of the intercept does not overlap 0, weakly impact the response variable.
 Variables, where the 95% confidence interval of the intercept does not overlap 0, strongly impact the response variable.
 
-#### Marginal Distributions
+#### Marginal Effects
 
-For a clearer picture, we can plot the marginal distributions of the outcome variable when manipulating one specific factor while keeping the others at a constant level.
+For a clearer picture, we can plot the marginal effect of any predictor on the outcome variable.
+The marginal effect isolates the effect of the predictor on the outcome while keeping all other predictors constant at a representative level.
 
 ```{r marginal-inconsistenloa}
 conditional_effects(m1, effects="inconsistentloa", method="posterior_epred")
@@ -187,7 +184,8 @@ conditional_effects(m1, effects="outlinks", method="posterior_epred")
 
 ## Store Data
 
-Finally, store the estimates of the posterior distributions.
+Finally, we store the estimates of the posterior distributions in a new data frame and export it.
+This allows the [estimate-visualization](../util/estimate-visualization.Rmd) script to generate one figure of the posterior distributions from all response variables.
 
 ```{r export-estimates}
 summary(m1)$fixed %>% 
