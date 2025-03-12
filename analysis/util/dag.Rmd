@@ -14,15 +14,19 @@ library(ggdag)
 
 This notebook visualizes the causal assumptions about the collected data in the RQ4TLR study.
 
+## Variables
+
+In the `vars` data frame, we capture all variables that we can involve in our observational study.
+Immeasurable variables are not listed here, but variables that we excluded due to their lack of distribution are listed below.
+
 ```{r variables-structure}
 vars = data.frame(varname = character(), # short variable name (e.g., perf)
                   fullname = character(), # full, expressive name of the variable (e.g., TLR performance)
                   x = double(), y = double(), # x and y coordinates of this variable in the figure
                   stringsAsFactors=FALSE)
-
 ```
 
-Add each variable to consider in the analysis to the `vars` data frame.
+Each variable is associated to a short variable name, its full name, and coordinates.
 
 ```{r variables}
 vars <- vars %>% add_row(varname = "perf", fullname = "TLR Performance", x = 2, y = 0)
@@ -49,7 +53,22 @@ vars <- vars %>% add_row(varname = "maxinlinks", fullname = "Tangle", x = 0, y =
 
 ```
 
-Extract named lists out of the data frame (one for the full name, one for the x and one for the y positions).
+The following variables were ignored due to their imbalanced distribution in the data set:
+
+- *Meaningless Actors* (`meanuc`): the variable perfectly correlates with the `dataset` variable and, therefore, bears no information
+- *Functional Duplication* (`duplicate`): the data set did not contain a single instance of functional duplication
+- *Meaningless Use Case* (`meanuc`): the data set contained too few instances of meaningless use cases
+- *Use Case Naming Problems* (`nameproblem`): there are only a few instances in the iTrust data set with naming problems
+- *Inappropriate Scope* (`scope`): there are hardly any instances of scoping problems encountered in the data set
+- *Incoherent Test Order* (`textorder`): there are only a few instances in the iTrust data set with an incoherent text order
+- *Inputs or Outputs not quantified* (`iounquantified`): there are only a few instances in the etour data set where the inputs/outputs are not quantified
+- *Contains Actor-Actor Interaction* (`actoractor`): there are hardly any instances of actor-actor interactions encountered in the data set
+- *Contains justifications* (`justification`): the data set did not contain a single justification
+- *Coordination Ambiguity* (`coordambiguity`): there are only very few instances of coordination ambiguity at all
+- *Optional* (`optional`): there are too few instances of optional parts in the data set
+- *Incomplete Comparisons*: there are too few instances of incomplete comparisons and they only occur in the eTour data set
+
+The data frame allows extracting named lists from the data frame (one for the full name, one for the x and one for the y positions).
 
 ```{r variables-data}
 map.name <- setNames(vars$fullname, vars$varname)
@@ -57,7 +76,9 @@ map.x <- setNames(vars$x, vars$varname)
 map.y <- setNames(vars$y, vars$varname)
 ```
 
-Visualize the causal directed, acyclic graph from the variables.
+## Directed Acyclic Graph
+
+With the variables defined, we can specify and visualize the causal directed, acyclic graph (DAG).
 
 ```{r dag}
 dag <- dagify(
@@ -90,27 +111,5 @@ ggdag_status(dag, use_labels = "label", text = FALSE) +
   theme_dag()
 ```
 
-The following table justifies the inclusion of each relationship between two variables in the causal DAG:
-
-| Relationship | Reasoning |
-|---|---|
-| `dataset` $\rightarrow$ `TLR performance` | The TLR algorithm may perform differently on different data sets due to their differing complexity, etc. |
-| `maximum step complexity` $\rightarrow$ `TLR performance` | The more complex the steps of a use case are, the more difficult it is to trace the use case to source code elements. |
-| `maximum step length` $\rightarrow$ `TLR performance` | The longer the steps of a use case are, the more difficult it is to trace the use case to source code elements. |
-| `number of steps` $\rightarrow$ `TLR performance` | The more steps a use case has, the more difficult it is to trace the use case to all source code elements. |
-
-The following variables were ignored due to their imbalanced distribution in the data set:
-
-- *Meaningless Actors* (`meanuc`): the variable perfectly correlates with the `dataset` variable and, therefore, bears no information
-- *Functional Duplication* (`duplicate`): the data set did not contain a single instance of functional duplication
-- *Meaningless Use Case* (`meanuc`): the data set contained too few instances of meaningless use cases
-- *Use Case Naming Problems* (`nameproblem`): there are only a few instances in the iTrust data set with naming problems
-- *Inappropriate Scope* (`scope`): there are hardly any instances of scoping problems encountered in the data set
-- *Incoherent Test Order* (`textorder`): there are only a few instances in the iTrust data set with an incoherent text order
-- *Inputs or Outputs not quantified* (`iounquantified`): there are only a few instances in the etour data set where the inputs/outputs are not quantified
-- *Contains Actor-Actor Interaction* (`actoractor`): there are hardly any instances of actor-actor interactions encountered in the data set
-- *Contains justifications* (`justification`): the data set did not contain a single justification
-- *Coordination Ambiguity* (`coordambiguity`): there are only very few instances of coordination ambiguity at all
-- *Optional* (`optional`): there are too few instances of optional parts in the data set
-- *Incomplete Comparisons*: there are too few instances of incomplete comparisons and they only occur in the eTour data set
-
+This DAG represents the foundation of our causal assumptions.
+Based on our domain knowledge and prior literature, we expect some sort of effect of these variables on the performance of traceability link recovery.

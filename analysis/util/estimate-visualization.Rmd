@@ -9,6 +9,7 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 
 library(tidyverse)
+library(RColorBrewer)
 
 path.data <- "./../data/estimates/"
 path.figures <- "./../../figures/results/coefficients/"
@@ -18,7 +19,7 @@ This notebook visualizes the distributions of the coefficients for each factor a
 The observational study currently involves the following metrics.
 
 ```{r metrics}
-metrics <- c("precision", "recall", "f1", "f2", "ap")
+metrics <- c("Precision", "Recall", "F1", "F2", "AP")
 ```
 
 ## Data Preparation
@@ -56,18 +57,24 @@ d.ap <- calculate_ci(d.ap)
 Add the response variable metric as a column in each data frame.
 
 ```{r explicate-metric}
-d.precision$resp = "precision"
-d.recall$resp = "recall"
-d.f1$resp = "f1"
-d.f2$resp = "f2"
-d.ap$resp = "ap"
+d.precision$resp = "Precision"
+d.recall$resp = "Recall"
+d.f1$resp = "F1"
+d.f2$resp = "F2"
+d.ap$resp = "AP"
 ```
 
-Finally, combine the individual datasets to one.
+Finally, combine the individual datasets to one and cast the response variable column `resp` to an ordered factor such that it is displayed sequentially.
 
 ```{r combine-data}
 d <- rbind(d.precision, d.recall, d.f1, d.f2, d.ap)
+
+d <- d %>% 
+  mutate(resp = factor(d$resp, levels = metrics, ordered = TRUE)) %>% 
+  mutate(resp = fct_rev(resp))
 ```
+
+The `forcats::fct_rev` is necessary since horizontal errorbars with a `color` aesthetic will show the factor levels in reverse order otherwise.
 
 ## Data Visualization
 
@@ -79,8 +86,8 @@ dodge = 0.8 # distance between errorbars of each metric
 ci1.width = 0.6 # size of the whiskers of the outer confidence interval
 ci2.width = 0.6 # size of the whiskers of the inner confidence interval
 
-ci1.thic = 0.1 # thickness of the outer confidence interval
-ci2.thic = 1 # thickness of the inner confidence interval
+ci1.thic = 0.7 # thickness of the outer confidence interval
+ci2.thic = 1.2 # thickness of the inner confidence interval
 ```
 
 ### Full Visualization
@@ -93,13 +100,20 @@ d %>%
   geom_errorbar(aes(ymin = ci1.low, ymax = ci1.up), width=ci1.width, linewidth=ci1.thic, position=position_dodge(width=dodge)) +
   geom_errorbar(aes(ymin = ci2.low, ymax = ci2.up), width=ci2.width, linewidth=ci2.thic, position=position_dodge(width=dodge)) +
   coord_flip() +
-  geom_hline(yintercept=0, color = "grey")
+  geom_hline(yintercept=0, color = "grey") +
+  theme_bw() +
+    theme(
+      axis.title.y=element_blank(), # remove the label of the y axis
+      legend.position = "bottom") + # place the legend of the color aesthetic below the plot
+    # axis labels
+    labs(color = "Metric", x = "Posterior coefficient distribution") +
+    scale_color_manual(values = brewer.pal(n = 5, name = "Set1"), limits=metrics)
 ```
 
 ```{r export-full}
 ggsave(
   file = file.path(path.figures, "obs-coefs-full.pdf"), device = "pdf", 
-  width = 16, height = 20, units = "cm")
+  width = 16, height = 28, units = "cm")
 ```
 
 ### Significant Visualization
@@ -121,15 +135,17 @@ For better readability, create a mapping between the names of the variables (as 
 ```{r factor-names}
 factor.names <- c(
   "size" = "Large Use Case",
-  "sencomplexity" = "Sentence Level Complexity",
-  "outlinks" = "Scattered Requirements",
+  "maxinlinks" = "Scattered Requirements",
+  "outlinks" = "Tangled Requirements",
   "nonnounstart" = "Starts without Noun Phrase",
-  "maxinlinks" = "Tangled Requirements",
-  "lostfrTRUE" = "Mislocated Functional Requirement",
   "inconsistentloa" = "Inconsistent Level of Abstraction", 
+  "lostfrTRUE" = "Mislocated Functional Requirement",
   "happyTRUE" = "Happy Use Case",
-  "coherence" = "Coherent"
+  "coherence" = "Coherent",
+  "sencomplexity" = "Sentence Level Complexity"
 )
+
+factor.order <- c("Large Use Case", "Scattered Requirements", "Tangled Requirements", "Starts without Noun Phrase", "Inconsistent Level of Abstraction", "Mislocated Functional Requirement", "Happy Use Case", "Coherent", "Sentence Level Complexity")
 ```
 
 Display the significant factors.
@@ -138,27 +154,34 @@ Display the significant factors.
 d %>% 
   filter(coef %in% significant_coefs$coef) %>% # filter out all non-significant coefficients
   mutate(name = recode(coef, !!!factor.names)) %>% # replace all variable names with readable factor names
-  ggplot(aes(x=name, color=resp)) +
-    geom_point(aes(y = mean), position=position_dodge(width=dodge), size = 2) +
-    geom_errorbar( # create one error bar for the "outer" confidence interval
-      aes(ymin = ci1.low, ymax = ci1.up), 
-      width=ci1.width, linewidth=ci1.thic, 
+  ggplot(aes(y=factor(name, levels=factor.order, ordered = TRUE), color=resp)) +
+    # mean value
+    geom_point(aes(x = mean), position=position_dodge(width=dodge), size = 2) +
+    # error bar for the "outer" confidence interval
+    geom_errorbar(
+      aes(xmin = ci1.low, xmax = ci1.up),
+      width=ci1.width, linewidth=ci1.thic,
       position=position_dodge(width=dodge)) +
-    geom_errorbar( # create one error bar for the "inner" confidence interval
-      aes(ymin = ci2.low, ymax = ci2.up),
-      width=ci2.width, linewidth=ci2.thic, 
+    # error bar for the "inner" confidence interval
+    geom_errorbar(
+      aes(xmin = ci2.low, xmax = ci2.up),
+      width=ci2.width, linewidth=ci2.thic,
       position=position_dodge(width=dodge)) +
-    coord_flip() +
-    geom_hline(yintercept=0, color = "grey") + # add a vertical line around 0 to show the threshold for significance
+    # vertical line around 0 to show the threshold for significance
+    geom_vline(xintercept=0, color = "grey") +
+    theme_bw() +
     theme(
       axis.title.y=element_blank(), # remove the label of the y axis
       legend.position = "bottom") + # place the legend of the color aesthetic below the plot
-    labs(color = "Response Variable", y = "Posterior coefficient distribution") +
-    scale_color_discrete(labels = c("AP", "F1", "F2", "Precision", "Recall"))
+    # axis labels
+    labs(color = "Metric", x = "Posterior coefficient distribution") +
+    scale_color_manual(values = brewer.pal(n = 5, name = "Set1"), limits=metrics) +
+    scale_y_discrete(limits = rev) #+
+    #scale_color_discrete(limits = metrics, labels = c("Precision", "Recall", "F1", "F2", "AP"))
 ```
 
 ```{r export-significant}
 ggsave(
   file = file.path(path.figures, "obs-coefs-sig.pdf"), device = "pdf", 
-  width = 24, height = 14, units = "cm")
+  width = 24, height = 18, units = "cm")
 ```
