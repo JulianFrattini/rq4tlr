@@ -261,7 +261,7 @@ Quality Factors<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelMod
                   <y:Geometry height="45.0" width="180.0" x="718.0" y="587.6235351562499"/>
                   <y:Fill color="#FFFFFF" transparent="false"/>
                   <y:BorderStyle color="#000000" raised="false" type="line" width="1.0"/>
-                  <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="16" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="43.203125" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="162.2890625" x="8.85546875" xml:space="preserve" y="0.8984375">3168 sufficiently distri-
+                  <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="16" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="43.203125" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="162.2890625" x="8.85546875" xml:space="preserve" y="0.8984375">3024 sufficiently distri-
 buted Measurements<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
                   <y:Shape type="rectangle"/>
                   <y:DropShadow color="#B3A691" offsetX="5" offsetY="5"/>
@@ -667,7 +667,6 @@ Impact<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:Mod
       </data>
     </edge>
     <edge id="n0::e5" source="n0::n3::n0" target="n0::n4::n0">
-      <data key="d9"/>
       <data key="d10">
         <y:PolyLineEdge>
           <y:Path sx="89.99077504000024" sy="-9.623535156249886" tx="-89.99102848000041" ty="13.904506240000046">
