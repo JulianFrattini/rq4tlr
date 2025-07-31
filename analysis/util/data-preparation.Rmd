@@ -9,6 +9,9 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 
 library(tidyverse)
+
+# location of the TLR results
+data.path <- '../../data/TLR_results/'
 ```
 
 This notebook prepares the observational data for its subsequent analysis.
@@ -67,38 +70,55 @@ df.ind <- df.ind %>%
 The dependent variables are located in the `./data/TLR_results/` directory.
 The trace link recovery results per data set are stored in separate files. 
 
-```{r data-dependent}
-#df.dep.etour <- read.csv('../../data/TLR_results/FTLR/etour_ORG_m59f44_FTLRMcCd_perArtifactMetrics.csv', sep=';') %>%
-df.dep.etour <- read.csv('../../data/TLR_results/FTLR/etour_OPT_m57f41_FTLRMcCd_perArtifactMetrics.csv', sep=';') %>%
-  mutate(Dataset = 'etour')
-#df.dep.itrust <- read.csv('../../data/TLR_results/FTLR/itrust_ORG_m59f44_FTLRMcCd_perArtifactMetrics.csv', sep=';') %>% 
-df.dep.itrust <- read.csv('../../data/TLR_results/FTLR/itrust_OPT_m52f42_FTLRMcCd_perArtifactMetrics.csv', sep=';') %>% 
-  mutate(Dataset = 'itrust')
-
-df.dep <- rbind(
-  df.dep.itrust,
-  df.dep.etour
-)
+```{r load-tlr-function}
+load.tlr.results <- function(filename.etour, filename.itrust, approach, category, separator=';') {
+  df.dep.etour <- read.csv(file.path(data.path, filename.etour), sep=separator) %>%
+    mutate(Dataset = 'etour')
+  df.dep.itrust <- read.csv(file.path(data.path, filename.itrust), sep=separator) %>% 
+    mutate(Dataset = 'itrust')
+  
+  # join the TLR results from the two data sets and declare the approach and category
+  df.dep <- rbind(df.dep.etour, df.dep.itrust) %>% 
+    mutate(
+      Approach = approach,
+      Category = category
+    )
+  
+  # clean the sourceID column
+  df.dep <- df.dep %>% 
+    rowwise() %>% 
+    mutate(File = strsplit(sourceID, '\\.')[[1]][1]) %>%
+    select(!(sourceID))
+  
+  return(df.dep)
+}
 ```
 
-The `sourceID` column associates each row of the results with the requirements file that the TLR algorithm attempted to trace.
-However, the values in this column still contain the `.txt` file extension.
-To harmonize the file IDs of the dependent and independent data points, remove the file extensions.
+Load the data for each of the approaches.
 
-```{r data-dependent-file}
-df.dep <- df.dep %>% 
-  rowwise() %>% 
-  mutate(File = strsplit(sourceID, '\\.')[[1]][1])
+```{r load-tlr}
+tlr.ftlr <- load.tlr.results(filename.etour = 'FTLR/etour_OPT_m57f41_FTLRMcCd_perArtifactMetrics.csv',
+                 filename.itrust = 'FTLR/itrust_OPT_m52f42_FTLRMcCd_perArtifactMetrics.csv',
+                 approach = 'FTLR', category = 'Embedding')
+
+tlr.ir <- load.tlr.results(filename.etour = 'LiSSA/eTour_LiSSA_IR_Only_perArtifactMetrics.csv',
+                 filename.itrust = 'LiSSA/iTrust_LiSSA_IR_Only_perArtifactMetrics.csv',
+                 approach = 'IR', category = 'Embedding', separator = ',')
+
+tlr.lissa <- load.tlr.results(filename.etour = 'LiSSA/eTour_LiSSA_GPT-4o_CoT_None_None_perArtifactMetrics.csv',
+                 filename.itrust = 'LiSSA/iTrust_LiSSA_GPT-4o_CoT_None_None_perArtifactMetrics.csv',
+                 approach = 'LiSSA', category = 'LLM', separator = ';')
+
+tlr.lsi <- load.tlr.results(filename.etour = 'LSI/eTour_LSI_0.19_perArtifactMetrics.csv',
+                 filename.itrust = 'LSI/iTrust_LSI_0.29_perArtifactMetrics.csv',
+                 approach = 'LSI', category = 'Traditional', separator = ';')
+
+tlr.vsm <- load.tlr.results(filename.etour = 'VSM/eTour_VSM_0.15_perArtifactMetrics.csv',
+                 filename.itrust = 'VSM/iTrust_VSM_0.17_perArtifactMetrics.csv',
+                 approach = 'VSM', category = 'Traditional', separator = ';')
 ```
 
-Then, drop the now unnecessary `sourceID` column.
-
-```{r data-dependent-drop}
-df.dep <- df.dep %>%
-  select(!(sourceID))
-```
-
-In addition to the $F_1$ metric, we calculate the $F_2$ metric (based on the more general $F_{\beta}$ metric) which puts double emphasis on recall over precision.
+The results from TLR do not have data for the F2 results yet, but they can easily be calculated from the available precision and recall values.
 
 ```{r calculate-f2}
 calc_f_beta <- function(beta, precision, recall) {
@@ -106,8 +126,14 @@ calc_f_beta <- function(beta, precision, recall) {
   return(ifelse(is.nan(f), 0, f))
 }
 
-df.dep <- df.dep %>% 
+tlr.ftlr <- tlr.ftlr %>% 
   mutate( F2 = calc_f_beta(2, Precision, Recall) )
+```
+
+Finally, merge the TLR results from the different approaches together.
+
+```{r merge-tlr-results}
+df.dep <- rbind(tlr.ftlr, tlr.ir, tlr.lissa, tlr.lsi, tlr.vsm)
 ```
 
 
