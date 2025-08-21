@@ -1,0 +1,117 @@
+---
+title: "marginal-approaches"
+author: "Anonymous"
+date: "2025-08-21"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(RColorBrewer)
+
+path.data <- "./../data/estimates/"
+path.figures <- "./../../figures/results/coefficients/"
+```
+
+This notebook visualizes the baseline performance of the five approaches regarding the four studied metrics (precision, recall, $F_1$-score, and $F_2$-score).
+
+```{r metrics}
+metrics <- c("Precision", "Recall", "F1", "F2")
+approaches <- c("VSM", "LSI", "FTLR", "IR", "LiSSA")
+```
+
+## Data Preparation
+
+First, load the respective data.
+Every observational analysis produced one such file per response variable metric.
+
+```{r load-data}
+d.precision <- read.csv(file.path(path.data, "marginal-approaches-precision.csv"))
+d.recall <- read.csv(file.path(path.data, "marginal-approaches-recall.csv"))
+d.f1 <- read.csv(file.path(path.data, "marginal-approaches-f1.csv"))
+d.f2 <- read.csv(file.path(path.data, "marginal-approaches-f2.csv"))
+```
+
+Then, define a function that calculates the 95% and 50% confidence interval from the mean and variance.
+
+```{r calculate-cis}
+calculate_ci <- function(df) {
+  return(df %>% mutate(
+    ci1.low = estimate__ - 2*se__,
+    ci1.up = estimate__ + 2*se__,
+    ci2.low = estimate__ - se__,
+    ci2.up = estimate__ + se__
+  ))
+}
+
+d.precision <- calculate_ci(d.precision)
+d.recall <- calculate_ci(d.recall)
+d.f1 <- calculate_ci(d.f1)
+d.f2 <- calculate_ci(d.f2)
+```
+
+Add the response variable metric as a column in each data frame.
+
+```{r explicate-metric}
+d.precision$resp = "Precision"
+d.recall$resp = "Recall"
+d.f1$resp = "F1"
+d.f2$resp = "F2"
+```
+
+Finally, combine the individual datasets to one and put the approach column in order
+
+```{r combine-data}
+d <- rbind(d.precision, d.recall, d.f1, d.f2)
+
+d <- d %>% 
+  mutate(Approach = factor(d$Approach, levels = approaches, ordered = TRUE)) %>% 
+  mutate(Approach = fct_rev(Approach)) %>% 
+  mutate(resp = factor(d$resp, levels = metrics, ordered = TRUE)) %>% 
+  mutate(resp = fct_rev(resp))
+```
+
+The `forcats::fct_rev` is necessary since horizontal errorbars with a `color` aesthetic will show the factor levels in reverse order otherwise.
+
+## Data Visualization
+
+Visualize the coefficients in an errorbar plot.
+
+```{r figure-configuration}
+dodge = 0.6 # distance between errorbars of each metric
+
+ci1.width = 0.6 # size of the whiskers of the outer confidence interval
+ci2.width = 0.6 # size of the whiskers of the inner confidence interval
+
+ci1.thic = 0.7 # thickness of the outer confidence interval
+ci2.thic = 1.2 # thickness of the inner confidence interval
+```
+
+```{r visualize-distribution}
+ggplot(d, aes(y = resp, color=Approach)) +
+  geom_point(aes(x = estimate__), position=position_dodge(width=dodge), size = 2) + 
+   # error bar for the "outer" confidence interval
+    geom_errorbar(
+      aes(xmin = ci1.low, xmax = ci1.up),
+      width=ci1.width, linewidth=ci1.thic,
+      position=position_dodge(width=dodge)) +
+    # error bar for the "inner" confidence interval
+    geom_errorbar(
+      aes(xmin = ci2.low, xmax = ci2.up),
+      width=ci2.width, linewidth=ci2.thic,
+      position=position_dodge(width=dodge)) +
+    # vertical line around 0 to show the threshold for significance
+    geom_vline(xintercept=0, color = "grey") +
+    theme_bw() +
+    theme(axis.title.y=element_blank()) + 
+    labs(x = "Average expected value") +
+    scale_color_manual(values = brewer.pal(n = 5, name = "Set1"), limits = approaches)
+```
+
+```{r export-figure}
+ggsave(
+  file = file.path(path.figures, "obs-marginal-approaches.pdf"), device = "pdf", 
+  width = 18, height = 10, units = "cm")
+```

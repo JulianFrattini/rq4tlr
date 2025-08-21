@@ -19,7 +19,7 @@ This notebook visualizes the distributions of the coefficients for each factor a
 The observational study currently involves the following metrics.
 
 ```{r metrics}
-metrics <- c("Precision", "Recall", "F1", "F2", "AP")
+metrics <- c("Precision", "Recall", "F1", "F2") #, "AP")
 ```
 
 ## Data Preparation
@@ -32,7 +32,7 @@ d.precision <- read.csv(file.path(path.data, "obs-precision.csv"))
 d.recall <- read.csv(file.path(path.data, "obs-recall.csv"))
 d.f1 <- read.csv(file.path(path.data, "obs-f1.csv"))
 d.f2 <- read.csv(file.path(path.data, "obs-f2.csv"))
-d.ap <- read.csv(file.path(path.data, "obs-ap.csv"))
+#d.ap <- read.csv(file.path(path.data, "obs-ap.csv"))
 ```
 
 Then, define a function that calculates the 95% and 50% confidence interval from the mean and variance.
@@ -51,7 +51,7 @@ d.precision <- calculate_ci(d.precision)
 d.recall <- calculate_ci(d.recall)
 d.f1 <- calculate_ci(d.f1)
 d.f2 <- calculate_ci(d.f2)
-d.ap <- calculate_ci(d.ap)
+#d.ap <- calculate_ci(d.ap)
 ```
 
 Add the response variable metric as a column in each data frame.
@@ -61,13 +61,13 @@ d.precision$resp = "Precision"
 d.recall$resp = "Recall"
 d.f1$resp = "F1"
 d.f2$resp = "F2"
-d.ap$resp = "AP"
+#d.ap$resp = "AP"
 ```
 
 Finally, combine the individual datasets to one and cast the response variable column `resp` to an ordered factor such that it is displayed sequentially.
 
 ```{r combine-data}
-d <- rbind(d.precision, d.recall, d.f1, d.f2, d.ap)
+d <- rbind(d.precision, d.recall, d.f1, d.f2)#, d.ap)
 
 d <- d %>% 
   mutate(resp = factor(d$resp, levels = metrics, ordered = TRUE)) %>% 
@@ -75,6 +75,19 @@ d <- d %>%
 ```
 
 The `forcats::fct_rev` is necessary since horizontal errorbars with a `color` aesthetic will show the factor levels in reverse order otherwise.
+
+Finally, split the dataset into two: one containing the impact of the quality factors, one containing the impact of the approaches.
+
+```{r dataset-split}
+d.quality <- d %>% 
+  filter(!grepl("Dataset", coef)) %>% 
+  filter(!grepl("Approach", coef))
+
+d.approach <- d %>% 
+  filter(!grepl("Dataset", coef)) %>% 
+  filter(grepl("Approach", coef))
+```
+
 
 ## Data Visualization
 
@@ -95,7 +108,7 @@ ci2.thic = 1.2 # thickness of the inner confidence interval
 The first figure displays the coefficient distributions of all factors, regardless of their significance.
 
 ```{r visualize-all}
-d %>% 
+d.quality %>% 
   ggplot(aes(x=coef, color=resp)) +
   geom_errorbar(aes(ymin = ci1.low, ymax = ci1.up), width=ci1.width, linewidth=ci1.thic, position=position_dodge(width=dodge)) +
   geom_errorbar(aes(ymin = ci2.low, ymax = ci2.up), width=ci2.width, linewidth=ci2.thic, position=position_dodge(width=dodge)) +
@@ -116,13 +129,13 @@ ggsave(
   width = 16, height = 28, units = "cm")
 ```
 
-### Significant Visualization
+### Visualization of significant Quality Coefficients
 
 For better understandability, also create a visualization only involving the significant factors.
 A factor is considered significant if any of the metric distributions has a inner confidence interval that is not consistent with 0.
 
 ```{r filter-significant}
-significant_coefs <- d %>% 
+significant_coefs <- d.quality %>% 
   filter(coef != "Intercept") %>% # ignore the Intercept coefficient
   mutate(significant = !(ci2.low < 0 & ci2.up > 0)) %>% # determine a coefficient as significant if the inner (50%) confidence interval does not overlap with zero
   group_by(coef) %>% # group by coefficient
@@ -142,16 +155,21 @@ factor.names <- c(
   "lostfrTRUE" = "Mislocated Functional Requirement",
   "happyTRUE" = "Happy Use Case",
   "coherence" = "Coherent",
-  "sencomplexity" = "Sentence Level Complexity"
+  "sencomplexity" = "Sentence Level Complexity",
+  "maxsteplength" = "Requirements Length",
+  "alternative" = "Contains Alternatives",
+  "anaphora" = "Anaphora",
+  "negation" = "Negatives"
 )
 
-factor.order <- c("Large Use Case", "Scattered Requirements", "Tangled Requirements", "Starts without Noun Phrase", "Inconsistent Level of Abstraction", "Mislocated Functional Requirement", "Happy Use Case", "Coherent", "Sentence Level Complexity")
+factor.order <- c("Large Use Case", "Scattered Requirements", "Tangled Requirements", "Starts without Noun Phrase", "Inconsistent Level of Abstraction", "Mislocated Functional Requirement", "Happy Use Case", "Coherent", "Sentence Level Complexity",
+                  "Requirements Length", "Contains Alternatives", "Anaphora", "Negatives")
 ```
 
 Display the significant factors.
 
 ```{r visualize-significant}
-d %>% 
+d.quality %>% 
   filter(coef %in% significant_coefs$coef) %>% # filter out all non-significant coefficients
   mutate(name = recode(coef, !!!factor.names)) %>% # replace all variable names with readable factor names
   ggplot(aes(y=factor(name, levels=factor.order, ordered = TRUE), color=resp)) +
@@ -182,6 +200,7 @@ d %>%
 
 ```{r export-significant}
 ggsave(
-  file = file.path(path.figures, "obs-coefs-sig.pdf"), device = "pdf", 
+  file = file.path(path.figures, "obs-coefs-sig2.pdf"), device = "pdf", 
   width = 24, height = 18, units = "cm")
 ```
+

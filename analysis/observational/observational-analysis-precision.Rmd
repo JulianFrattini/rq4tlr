@@ -30,7 +30,13 @@ Scale all numeric variables to make their coefficient distributions easier to sa
 
 ```{r data-scaling}
 df <- df %>% 
-  mutate(across(c("size", "outlinks", "maxinlinks", "maxsteplength", "sencomplexity"), scale, center = TRUE))
+  mutate(across(
+    c("size", "outlinks", "maxinlinks", "maxsteplength", "sencomplexity"), 
+    \(x) scale(x, center = TRUE))) %>% 
+  mutate(
+    Approach = factor(Approach, levels=c("FTLR", "LiSSA", "IR", "VSM", "LSI"), ordered = FALSE),
+    Category = factor(Category, levels=c("Embedding", "LLM", "Traditional"), ordered = FALSE),
+  )
 
 str(df)
 ```
@@ -64,7 +70,7 @@ Hence, we chose the `zero_one_inflated_beta` distribution from the `brms` librar
 Next, we define a regression formula that puts the outcome variable of interest in relation to the predictors with which we assume a causal relationship.
 
 ```{r formula}
-f <- Precision ~ 0 + Intercept + Dataset + sencomplexity + maxsteplength + size + inconsistentloa + uidesign + clarification + alternative + coherence + happy + lostfr + anaphora + nonnounstart + passive + negation + outlinks + maxinlinks
+f <- Precision ~ 0 + Intercept + Dataset + Approach + sencomplexity + maxsteplength + size + inconsistentloa + uidesign + clarification + alternative + coherence + happy + lostfr + anaphora + nonnounstart + passive + negation + outlinks + maxinlinks
 ```
 
 The `0 + Intercept` term instead of `1 +` or even complete omission stems from the fact that the regression formula contains at least one predictor that is not centered around 0.
@@ -171,6 +177,10 @@ conditional_effects(m1, effects="nonnounstart", method="posterior_epred")
 conditional_effects(m1, effects="outlinks", method="posterior_epred")
 ```
 
+```{r marginal-outlinks}
+conditional_effects(m1, effects="Approach", method="posterior_epred")
+```
+
 ## Store Data
 
 Finally, we store the estimates of the posterior distributions in a new data frame and export it.
@@ -184,5 +194,15 @@ summary(m1)$fixed %>%
     var = "Est.Error"))) %>% 
   rownames_to_column("coef") %>% 
   write_csv(file = "../data/estimates/obs-precision.csv")
+```
+
+Additionally, we store the the draws from the expected value of the posterior predictive distribution for the different approaches to compare how they perform in general.
+This is the data from the above rendered marginal plots.
+
+```{r export-approach-marginal}
+t <- conditional_effects(m1, effects="Approach", method="posterior_epred")
+t$Approach %>% 
+  select(c("Approach", "estimate__", "se__")) %>% 
+  write_csv(file = "../data/estimates/marginal-approaches-precision.csv")
 ```
 
