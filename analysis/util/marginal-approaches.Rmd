@@ -19,7 +19,7 @@ This notebook visualizes the baseline performance of the five approaches regardi
 
 ```{r metrics}
 metrics <- c("Precision", "Recall", "F1", "F2")
-approaches <- c("VSM", "LSI", "FTLR", "IR", "LiSSA")
+approaches <- c("VSM", "LSI", "FTLR", "LiSSA_IR-only", "LiSSA")
 ```
 
 ## Data Preparation
