@@ -1,0 +1,119 @@
+---
+title: 'Interaction: Approach x Tangled Requirements'
+author: "Anonymous"
+date: "2025-08-30"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse) # R dialect for improved syntax and base functionality
+
+library(brms) # Bayesian regression modeling
+library(marginaleffects) # plotting of marginal and conditional effects
+```
+
+This notebook contains the analysis of the potential interaction effect between *TLR approach* (`approach`) and *Tangled Requirements* (`outlinks`) on the outcome (here: `f2`).
+The analysis provides insight into the hypothesis that some approaches perform differently well for different levels of tangle.
+
+## Data Loading
+
+First, load the data for the observational analysis.
+The data set is procured by the [data-preparation.Rmd](./util/data-preparation.Rmd) notebook.
+This notebook assembles and casts the data appropriately and stores the results in the `rq4tlr-data.csv` file.
+
+```{r data-independent}
+df <- read.csv('./../data/rq4tlr-data.csv')
+```
+
+Scale all numeric variables to make their coefficient distributions easier to sample from.
+
+```{r data-scaling}
+df <- df %>% 
+  mutate(across(
+    c("size", "outlinks", "maxinlinks", "maxsteplength", "sencomplexity"), 
+    \(x) scale(x, center = TRUE))) %>% 
+  mutate(
+    Approach = factor(Approach, levels=c("FTLR", "LiSSA", "IR", "VSM", "LSI"), ordered = FALSE),
+    Category = factor(Category, levels=c("Embedding", "LLM", "Traditional"), ordered = FALSE),
+  )
+
+str(df)
+```
+
+The output shows by what factors the numeric variables were centered and scaled.
+
+## Analysis
+
+The analysis of the data employs a regression model in a Bayesian framework.
+The utilized formula only assumes an intercept (i.e., a baseline), an offset per dataset, and the interaction effect between `approach` and the current variable of interest.
+
+```{r formula}
+f <- F2 ~ 0 + Intercept + Dataset + Approach*outlinks
+get_prior(f, data=df, family=zero_one_inflated_beta)
+```
+
+Given this formula, select uninformative distributions for each of the coefficient distributions.
+
+```{r priors}
+p1 <- c(
+  prior(normal(0, 1), class = b, coef = "Intercept"),
+  prior(normal(0, 0.5), class = b),
+  prior(gamma(4, 1), class = phi),
+  prior(beta(7, 2), class = coi), 
+  prior(beta(5, 2), class = zoi) 
+)
+```
+
+To confirm the eligibility of the prior distributions, perform a prior predictive check (skipped in the version produced by `knitr`).
+
+```{r model-sample-priors, eval = FALSE}
+m.prior <-
+  brm(data = df, family = zero_one_inflated_beta, f, prior = p1,
+    iter = 4000, warmup = 1000, chains = 4, cores = 4,
+    seed = 4, sample_prior="only",
+    file = "../fits/int.f2.approach.outlinks.prior"
+  )
+
+brms::pp_check(m.prior, ndraws=100)
+```
+
+Given the eligibility of the priors, train the full model by updating the coefficient distributions in light of the observed data.
+
+```{r model}
+m <-
+  brm(data = df, family = zero_one_inflated_beta, f, prior = p1,
+    iter = 4000, warmup = 1000, chains = 4, cores = 4, seed = 4,
+    file = "../fits/int.f2.approach.outlinks"
+  )
+
+brms::pp_check(m, ndraws=100)
+```
+
+The posterior predictive check confirms that the model trained properly.
+
+### Evaluation
+
+To evaluate the trained model and draw conclusions about the hypothesized conditional effect, we first look at the updated path coefficients in the model summary.
+These coefficients are in relation to one selected baseline approach (here: `FTLR`) and represent the average slope difference.
+
+```{r path-coefficients}
+summary(m)
+```
+
+More contextualized insights can be derived by plotting the conditional effect.
+
+```{r conditional-effect}
+conditional_effects(m, effects="outlinks:Approach", 
+                    prob = 0.5, method="posterior_epred")
+```
+
+These results invite the following interpretations:
+
+- IR is overwhelmingly positive as it retrieves the top 20 target artifacts and 20 is way too high on average in our projects. Thus those requirements that have many outlinks improve the precision a lot.
+- VSM and LSI are threshold-optimized for F1 and as a lower number of outlinks is more common in the dataset they decline here. 
+- FTLR is also threshold optimized, but links from the code files such that it is less sensitive to this smell (in contrast to `interaction-approach-maxinlinks`). 
+- LiSSA is stable as it additionally classifies the top 20 retrieved from IR and thus enhances the precision independently from the number of links.
+
+These results show nicely that the most recently proposed LiSSA approach works.

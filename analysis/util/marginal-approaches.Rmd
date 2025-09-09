@@ -12,7 +12,7 @@ library(tidyverse)
 library(RColorBrewer)
 
 path.data <- "./../data/estimates/"
-path.figures <- "./../../figures/results/coefficients/"
+path.figures <- "./../../figures/results/marginal/"
 ```
 
 This notebook visualizes the baseline performance of the five approaches regarding the four studied metrics (precision, recall, $F_1$-score, and $F_2$-score).

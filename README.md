@@ -18,6 +18,8 @@ This repository consists of the following files.
 │   ├── experimental/experimental-analysis.Rmd : multivariate regression analysis on the experimental data
 │   ├── html : directory containing all pre-compiled data analysis notebooks
 │   ├── observational : directory containing all regression analysis on the observational data
+│   │   ├── observational-analysis-x.Rmd : observational analysis of all variables per outcome
+│   │   └── interaction-approach-x.Rmd : interaction analysis between approach and variable x
 │   └── util : directory for utility scripts
 │       ├── dag.Rmd : specification of the causal assumptions
 │       └── data-preparation.Rmd : compilation and casting of final data set
