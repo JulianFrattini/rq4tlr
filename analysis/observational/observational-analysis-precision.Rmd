@@ -181,7 +181,7 @@ conditional_effects(m1, effects="outlinks", method="posterior_epred")
 conditional_effects(m1, effects="Approach", method="posterior_epred")
 ```
 
-Particularly, we extract the marginal values for the effect on *Contains Alternatives* (`alternative`) and *Tangled Requirements* (`outlinks`) to visualize them (side-by-side with all other metrics).
+Particularly, we extract the marginal values for the effect on *Contains Alternatives* (`alternative`), *Contains Anaphora* (`anaphora`), and *Tangled Requirements* (`outlinks`) to visualize them (side-by-side with all other metrics).
 
 ```{r marginal-alternatives-data}
 c.eff.alternatives <- conditional_effects(m1, effects="alternative", method="posterior_epred")
@@ -195,6 +195,20 @@ c.eff.alternatives$alternative %>%
   ))) %>% 
   mutate(metric = "Precision") %>% 
   write_csv(file = "../data/estimates/marginal-alternatives-precision.csv")
+```
+
+```{r marginal-anaphora-data}
+c.eff.anaphora <- conditional_effects(m1, effects="anaphora", method="posterior_epred")
+
+c.eff.anaphora$anaphora %>% 
+  select(anaphora, estimate__, lower__, upper__) %>% 
+  rename(all_of(c(
+    mean = "estimate__", 
+    lower = "lower__", 
+    upper = "upper__"
+  ))) %>% 
+  mutate(metric = "Precision") %>% 
+  write_csv(file = "../data/estimates/marginal-anaphora-precision.csv")
 ```
 
 When exporting the marginal effects of the `outlinks` variable, we can directly revert the centering and scaling from the beginning (with $\mu=3.15$ and $\sigma=2.46$). 

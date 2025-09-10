@@ -1,0 +1,68 @@
+---
+title: "Marginal Effects of Contains Anaphora"
+author: "Anonymous"
+date: "2025-08-21"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(RColorBrewer)
+
+path.data <- "./../data/estimates/"
+path.figures <- "./../../figures/results/marginal/"
+```
+
+This notebook visualizes the marginal effect of *Contains Anaphora* (`anaphora`) on the four studied metrics (precision, recall, $F_1$-score, and $F_2$-score).
+
+```{r metrics}
+metrics <- c("Precision", "Recall", "F1", "F2")
+```
+
+## Data Preparation
+
+First, load the respective data.
+Every observational analysis produced one such file per response variable metric.
+
+```{r load-data}
+d.precision <- read.csv(file.path(path.data, "marginal-anaphora-precision.csv"))
+d.recall <- read.csv(file.path(path.data, "marginal-anaphora-recall.csv"))
+d.f1 <- read.csv(file.path(path.data, "marginal-anaphora-f1.csv"))
+d.f2 <- read.csv(file.path(path.data, "marginal-anaphora-f2.csv"))
+```
+
+Finally, combine the individual datasets to one and put the approach column in order
+
+```{r combine-data}
+d <- rbind(d.precision, d.recall, d.f1, d.f2)
+
+d <- d %>% 
+  mutate(metric = factor(d$metric, levels = metrics, ordered = TRUE))
+```
+
+The `forcats::fct_rev` is necessary since horizontal errorbars with a `color` aesthetic will show the factor levels in reverse order otherwise.
+
+## Data Visualization
+
+Visualize the marginal effects in a line plot with ribbons.
+
+```{r visualize-plot}
+ggplot(d, aes(x = anaphora)) + 
+  geom_line(aes(y = mean, color = metric)) +
+  geom_ribbon(aes(ymin = lower, ymax = upper, fill = metric), alpha = 0.1) +
+  labs(x = "Fraction of Steps containing Anaphora", y = "Average Metric Value", color = "Metric", fill = "Metric") +
+  scale_color_manual(values = brewer.pal(n = 4, name = "Set1"), limits = metrics) +
+  scale_fill_manual(values = brewer.pal(n = 4, name = "Set1"), limits = metrics) +
+  scale_x_continuous(labels = scales::percent) +
+  ylim(0.18, 0.6) +
+  theme_bw() +
+  theme(legend.position = "bottom")
+```
+
+```{r export-figure}
+ggsave(
+  file = file.path(path.figures, "obs-marginal-anaphora.pdf"), device = "pdf", 
+  width = 4, height = 3)
+```
