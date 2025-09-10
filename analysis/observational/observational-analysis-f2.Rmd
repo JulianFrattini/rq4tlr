@@ -167,8 +167,43 @@ The marginal effect isolates the effect of the predictor on the outcome while ke
 conditional_effects(m1, effects="inconsistentloa", method="posterior_epred")
 ```
 
-```{r marginal-inconsistenloa}
+```{r marginal-approach}
 conditional_effects(m1, effects="Approach", method="posterior_epred")
+```
+
+Particularly, we extract the marginal values for the effect on *Contains Alternatives* (`alternative`) and *Tangled Requirements* (`outlinks`) to visualize them (side-by-side with all other metrics).
+
+```{r marginal-alternatives-data}
+c.eff.alternatives <- conditional_effects(m1, effects="alternative", method="posterior_epred")
+
+c.eff.alternatives$alternative %>% 
+  select(alternative, estimate__, lower__, upper__) %>% 
+  rename(all_of(c(
+    mean = "estimate__", 
+    lower = "lower__", 
+    upper = "upper__"
+  ))) %>% 
+  mutate(metric = "F2") %>% 
+  write_csv(file = "../data/estimates/marginal-alternatives-f2.csv")
+```
+
+When exporting the marginal effects of the `outlinks` variable, we can directly revert the centering and scaling from the beginning (with $\mu=3.15$ and $\sigma=2.46$). 
+
+```{r marginal-outlinks-data}
+c.eff.outlinks <- conditional_effects(m1, effects="outlinks", method="posterior_epred")
+
+c.eff.outlinks$outlinks %>% 
+  select(outlinks, estimate__, lower__, upper__) %>% 
+  rename(all_of(c(
+    mean = "estimate__", 
+    lower = "lower__", 
+    upper = "upper__"
+  ))) %>% 
+  mutate(
+    outlinks = outlinks*2.46 + 3.15,
+    metric = "F2"
+    ) %>% 
+  write_csv(file = "../data/estimates/marginal-outlinks-f2.csv")
 ```
 
 ## Store Data
