@@ -12,6 +12,9 @@ library(tidyverse) # R dialect for improved syntax and base functionality
 
 library(brms) # Bayesian regression modeling
 library(marginaleffects) # plotting of marginal and conditional effects
+
+library(RColorBrewer) # color palettes for nominal data
+path.figures <- "./../../figures/results/conditional/"
 ```
 
 This notebook contains the analysis of the potential interaction effect between *TLR approach* (`approach`) and *Tangled Requirements* (`outlinks`) on the outcome (here: `f2`).
@@ -105,8 +108,30 @@ summary(m)
 More contextualized insights can be derived by plotting the conditional effect.
 
 ```{r conditional-effect}
-conditional_effects(m, effects="outlinks:Approach", 
+c.eff <- conditional_effects(m, effects="outlinks:Approach", 
                     prob = 0.5, method="posterior_epred")
+
+approaches = c("VSM", "LSI", "FTLR", "LiSSA", "LiSSA_IR-only")
+
+c.eff$`outlinks:Approach` %>% 
+  mutate(Approach = as.character(Approach)) %>% 
+  mutate(Approach = ifelse(Approach == "IR", "LiSSA_IR-only", Approach)) %>% 
+  mutate(Approach = factor(Approach, levels = approaches, ordered = TRUE)) %>% 
+  mutate(outlinks = outlinks*2.46 + 3.15) %>% 
+  ggplot(aes(x = outlinks)) +
+    geom_line(aes(y = estimate__, color = Approach)) +
+    geom_ribbon(aes(ymin = lower__, ymax = upper__, fill = Approach), alpha = 0.2) +
+    scale_color_manual(values = brewer.pal(n = 5, name = "Set1"), limits = approaches) +
+    scale_fill_manual(values = brewer.pal(n = 5, name = "Set1"), limits = approaches) +
+    scale_x_continuous(breaks = c(0, 3, 6, 9, 12)) +
+    labs(x = "Number of outgoing links", y = "Average F2 Value") +
+    ylim(0.2, 0.5) +
+    theme_bw() +
+    theme(legend.position = "bottom")
+
+ggsave(
+  file = file.path(path.figures, "obs-approach-outlinks.pdf"), device = "pdf", 
+  width = 5.3, height = 3.5)
 ```
 
 These results invite the following interpretations:

@@ -12,6 +12,9 @@ library(tidyverse) # R dialect for improved syntax and base functionality
 
 library(brms) # Bayesian regression modeling
 library(marginaleffects) # plotting of marginal and conditional effects
+
+library(RColorBrewer) # color palettes for nominal data
+path.figures <- "./../../figures/results/conditional/"
 ```
 
 This notebook contains the analysis of the potential interaction effect between *TLR approach* (`approach`) and *Large Use Case* (`size`) on the outcome (here: `f2`).
@@ -105,8 +108,29 @@ summary(m)
 More contextualized insights can be derived by plotting the conditional effect.
 
 ```{r conditional-effect}
-conditional_effects(m, effects="size:Approach", 
+c.eff <- conditional_effects(m, effects="size:Approach", 
                     prob = 0.5, method="posterior_epred")
+
+approaches = c("VSM", "LSI", "FTLR", "LiSSA", "LiSSA_IR-only")
+
+c.eff$`size:Approach` %>% 
+  mutate(Approach = as.character(Approach)) %>% 
+  mutate(Approach = ifelse(Approach == "IR", "LiSSA_IR-only", Approach)) %>% 
+  mutate(Approach = factor(Approach, levels = approaches, ordered = TRUE)) %>% 
+  mutate(size = size*11.3 + 10.9) %>% 
+  ggplot(aes(x = size)) +
+    geom_line(aes(y = estimate__, color = Approach)) +
+    geom_ribbon(aes(ymin = lower__, ymax = upper__, fill = Approach), alpha = 0.2) +
+    scale_color_manual(values = brewer.pal(n = 5, name = "Set1"), limits = approaches) +
+    scale_fill_manual(values = brewer.pal(n = 5, name = "Set1"), limits = approaches) +
+    labs(x = "Total number of steps", y = "Average F2 Value") +
+    ylim(0.2, 0.5) +
+    theme_bw() +
+    theme(legend.position = "bottom")
+
+ggsave(
+ file = file.path(path.figures, "obs-approach-size.pdf"), device = "pdf", 
+ width = 5.3, height = 3.5)
 ```
 
 The results invite the following interpretation:
