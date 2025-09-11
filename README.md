@@ -39,7 +39,10 @@ This repository consists of the following files.
 ├── figures : directory for all additional documentation
 │   ├── distributions : visualization of the distribution of factors in the data
 │   ├── graphs/rq4tlr-study-overview.graphml : visualization of the study process
-│   └── results/coefficients : visualization of coefficient CIs from posterior distributions
+│   └── results : 
+│       ├── coefficients : visualization of coefficient CIs from posterior distributions
+│       ├── conditional : visualization of conditional effects
+│       └── marginal : visualization of marginal effects
 ├── src : directory containing all source code
 └── requirements.txt : specification of required libraries to run the analysis
 ```
