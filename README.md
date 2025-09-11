@@ -36,6 +36,7 @@ This repository consists of the following files.
 │   │   ├── rq4tlr-merged.csv : merged data from automatically and manually labeled variables
 │   │   └── variables.json : specification of variable names
 │   └── TLR_results/FTLR : results from the FTLR tool performing TLR on the data set
+├── doc/Extraction Guidelines.pdf : codebook for extracting manual quality factors
 ├── figures : directory for all additional documentation
 │   ├── distributions : visualization of the distribution of factors in the data
 │   ├── graphs/rq4tlr-study-overview.graphml : visualization of the study process
