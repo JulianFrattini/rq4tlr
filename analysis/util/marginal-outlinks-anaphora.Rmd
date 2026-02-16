@@ -1,0 +1,80 @@
+---
+title: "Marginal Effects of Tangled Requirements"
+author: "Anonymous"
+date: "2025-08-21"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(RColorBrewer)
+
+path.data <- "./../data/estimates/"
+path.figures <- "./../../figures/results/marginal/"
+```
+
+This notebook visualizes the marginal effect of *Contains Anaphora* (`anaphora`) and of *Tangled Requirements* (`outlinks`) on the four studied metrics (precision, recall, $F_1$-score, and $F_2$-score).
+
+```{r metrics}
+metrics <- c("Precision", "Recall", "F1", "F2")
+```
+
+## Data Preparation
+
+First, load the respective data.
+Every observational analysis produced one such file per response variable metric.
+
+```{r load-data-outlinks}
+d.outlinks.precision <- read.csv(file.path(path.data, "marginal-outlinks-precision.csv"))
+d.outlinks.recall <- read.csv(file.path(path.data, "marginal-outlinks-recall.csv"))
+d.outlinks.f1 <- read.csv(file.path(path.data, "marginal-outlinks-f1.csv"))
+d.outlinks.f2 <- read.csv(file.path(path.data, "marginal-outlinks-f2.csv"))
+```
+
+```{r load-data-anaphora}
+d.anaphora.precision <- read.csv(file.path(path.data, "marginal-anaphora-precision.csv"))
+d.anaphora.recall <- read.csv(file.path(path.data, "marginal-anaphora-recall.csv"))
+d.anaphora.f1 <- read.csv(file.path(path.data, "marginal-anaphora-f1.csv"))
+d.anaphora.f2 <- read.csv(file.path(path.data, "marginal-anaphora-f2.csv"))
+```
+
+Finally, combine the individual datasets to one and put the approach column in order
+
+```{r combine-data}
+d.outlinks <- rbind(d.outlinks.precision, d.outlinks.recall, d.outlinks.f1, d.outlinks.f2) %>% 
+  mutate(outcome = "Number of outgoing Traceability Links") %>% 
+  rename(qf = "outlinks")
+d.anaphora <- rbind(d.anaphora.precision, d.anaphora.recall, d.anaphora.f1, d.anaphora.f2) %>% 
+  mutate(outcome = "Fraction of Steps containing Anaphora") %>% 
+  rename(qf = "anaphora")
+
+d <- rbind(d.outlinks, d.anaphora) %>% 
+  mutate(metric = factor(metric, levels = metrics, ordered = TRUE))# %>% 
+  #mutate(metric = fct_rev(metric))
+```
+
+The `forcats::fct_rev` is necessary since horizontal errorbars with a `color` aesthetic will show the factor levels in reverse order otherwise.
+
+## Data Visualization
+
+Visualize the marginal effects in a line plot with ribbons.
+
+```{r visualize-plot}
+ggplot(d, aes(x = qf)) +
+  geom_line(aes(y = mean, color = metric)) +
+  geom_ribbon(aes(ymin = lower, ymax = upper, fill = metric), alpha = 0.1) +
+  facet_wrap(~outcome, scales = "free") +
+  labs(x = element_blank(), y = "Average Metric Value", color = "Metric", fill = "Metric") +
+  scale_color_manual(values = brewer.pal(n = 4, name = "Set1"), limits = metrics) +
+  scale_fill_manual(values = brewer.pal(n = 4, name = "Set1"), limits = metrics) +
+  theme_bw() +
+  theme(legend.position = "bottom")
+```
+
+```{r export-figure}
+ggsave(
+  file = file.path(path.figures, "obs-marginal-outlinks-anaphora.pdf"), device = "pdf", 
+  width = 5.5, height = 3)
+```
