@@ -1,0 +1,71 @@
+---
+title: "Multiple Conditional Effects"
+author: "Anonymous"
+date: "2025-08-21"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(RColorBrewer)
+
+path.data <- "./../data/estimates/"
+path.figures <- "./../../figures/results/conditional/"
+```
+
+This notebook visualizes how the TLR approach moderates the three effect of the three quality factors *Inconsistent Levels of Abstraction* (`inconsistentloa`), *Tangled Requirements* (`outlinks`), and *Large Use Case* (`size`) on the $F_2$-score.
+
+## Data Preparation
+
+First, load the respective data, annotate the quality factor as `qFactor`, and combine the three data sets.
+
+```{r load-data}
+d.inconsistentloa <- read.csv(file.path(path.data, "conditional-inconsistentloa.csv")) %>% 
+  mutate(qFactor = "inconsistentloa")
+d.outlinks <- read.csv(file.path(path.data, "conditional-outlinks.csv")) %>% 
+  mutate(qFactor = "outlinks")
+d.size <- read.csv(file.path(path.data, "conditional-size.csv")) %>% 
+  mutate(qFactor = "size")
+
+d <- rbind(d.inconsistentloa, d.outlinks, d.size) %>% 
+  mutate(
+    Approach = factor(Approach, levels=c("FTLR", "LiSSA", "IR", "VSM", "LSI"), 
+                      labels = c("FTLR", "LiSSA", "LiSSA_IR-only", "VSM", "LSI"), 
+                      ordered = FALSE),
+    qf = ifelse(qFactor == "outlinks", 
+                qf*2.46 + 3.15,
+                ifelse(qFactor == "size", 
+                       qf*11.3 + 10.9,
+                       qf)),
+    qFactor = factor(qFactor, levels = c("inconsistentloa", "outlinks", "size"),
+                     labels = c("Fraction of Steps on an inconsistent Level of Abstraction", 
+                                "Number of outgoing Traceability Links",
+                                "Total Number of Steps"), ordered = FALSE)
+    )
+```
+
+## Data Visualization
+
+Visualize the conditional effects in a line plot with ribbons.
+
+```{r visualize-plot}
+approaches = c("VSM", "LSI", "FTLR", "LiSSA", "LiSSA_IR-only")
+
+ggplot(d, aes(x = qf)) +
+  geom_line(aes(y = estimate__, color = Approach)) +
+  geom_ribbon(aes(ymin = lower__, ymax = upper__, fill = Approach), alpha = 0.1) +
+  facet_wrap(~qFactor, scale = "free_x") +
+  labs(y = "Average F2 Value") +
+  scale_color_manual(values = brewer.pal(n = 5, name = "Set1"), limits = approaches) +
+  scale_fill_manual(values = brewer.pal(n = 5, name = "Set1"), limits = approaches) +
+  theme_bw() +
+  theme(axis.title.x = element_blank())
+```
+
+```{r export-figure}
+ggsave(
+  file = file.path(path.figures, "obs-conditional-inconsistentloa-outlinks-size.pdf"), device = "pdf", 
+  width = 12, height = 3)
+```

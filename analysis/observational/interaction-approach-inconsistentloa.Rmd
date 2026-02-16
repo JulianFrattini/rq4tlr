@@ -138,3 +138,15 @@ These results invite the following interpretation:
 
 - All approaches respond quite similar.
 - VSM improves most, maybe because the named implementation details more effect the keyword-focused approaches and VSM is the only approach that is fully dependent on the same words occurring in the different artifacts.
+
+For joint figures, we extract the data that produces the marginal plot into a file
+
+```{r export-figure-data}
+conditional_effects(m, 
+                    effects="inconsistentloa:Approach",
+                    method="posterior_epred")$`inconsistentloa:Approach` %>% 
+  select(c("inconsistentloa", "Approach", "estimate__", "lower__", "upper__")) %>% 
+  rename(qf = "inconsistentloa") %>% 
+  write_csv(file = "../data/estimates/conditional-inconsistentloa.csv")
+```
+

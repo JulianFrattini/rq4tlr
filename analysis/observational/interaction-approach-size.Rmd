@@ -138,3 +138,12 @@ The results invite the following interpretation:
 - LiSSA can cope with large use cases better, as GPT-4o is the most capable approach in interpreting semantics.LiSSA seems to be able to retrieve the different referred steps anyways (probably because it is the only classification-based approach: it classifies each combination of source and target retrieved by the Lissa_IR independently, instead of retrieving everything at once as VSM LSI and IR).
 - FTLR works on single steps and aggregates from the code side and is, thus, less sensitive than the other embedding-based approaches (LSI,IR) to many different concerns in the source artifact.
 - More words seem to help VSM, maybe because this way TF-IDF works better.
+
+```{r export-figure-data}
+conditional_effects(m, 
+                    effects="size:Approach",
+                    method="posterior_epred")$`size:Approach` %>% 
+  select(c("size", "Approach", "estimate__", "lower__", "upper__")) %>% 
+  rename(qf = "size") %>% 
+  write_csv(file = "../data/estimates/conditional-size.csv")
+```

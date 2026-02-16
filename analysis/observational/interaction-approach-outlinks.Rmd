@@ -142,3 +142,12 @@ These results invite the following interpretations:
 - LiSSA is stable as it additionally classifies the top 20 retrieved from IR and thus enhances the precision independently from the number of links.
 
 These results show nicely that the most recently proposed LiSSA approach works.
+
+```{r export-figure-data}
+conditional_effects(m, 
+                    effects="outlinks:Approach",
+                    method="posterior_epred")$`outlinks:Approach` %>% 
+  select(c("outlinks", "Approach", "estimate__", "lower__", "upper__")) %>% 
+  rename(qf = "outlinks") %>% 
+  write_csv(file = "../data/estimates/conditional-outlinks.csv")
+```
