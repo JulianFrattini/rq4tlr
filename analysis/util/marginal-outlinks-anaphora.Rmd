@@ -65,7 +65,7 @@ Visualize the marginal effects in a line plot with ribbons.
 ggplot(d, aes(x = qf)) +
   geom_line(aes(y = mean, color = metric)) +
   geom_ribbon(aes(ymin = lower, ymax = upper, fill = metric), alpha = 0.1) +
-  facet_wrap(~outcome, scales = "free") +
+  facet_wrap(~outcome, scales = "free_x") +
   labs(x = element_blank(), y = "Average Metric Value", color = "Metric", fill = "Metric") +
   scale_color_manual(values = brewer.pal(n = 4, name = "Set1"), limits = metrics) +
   scale_fill_manual(values = brewer.pal(n = 4, name = "Set1"), limits = metrics) +

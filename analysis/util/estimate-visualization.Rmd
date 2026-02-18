@@ -190,7 +190,9 @@ d.quality %>%
     theme_bw() +
     theme(
       axis.title.y=element_blank(), # remove the label of the y axis
-      legend.position = c(0.9, 0.87)) + # place the legend of the color aesthetic below the plot
+      axis.text = element_text(size = 13),
+      legend.position = c(0.9, 0.87), # place the legend of the color aesthetic below the plot
+    ) + 
     # axis labels
     labs(color = "Metric", x = "Posterior coefficient distribution") +
     scale_color_manual(values = brewer.pal(n = 5, name = "Set1"), limits=metrics) +
@@ -201,6 +203,6 @@ d.quality %>%
 ```{r export-significant}
 ggsave(
   file = file.path(path.figures, "obs-coefs-sig2.pdf"), device = "pdf", 
-  width = 24, height = 18, units = "cm")
+  width = 26, height = 18, units = "cm")
 ```
 
