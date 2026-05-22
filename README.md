@@ -1,8 +1,12 @@
-# Requirements Quality for Trace Link Recovery
+# How Requirements Quality Makes (or Breaks) Traceability Link Recovery - Replication Packa
+[![Author: Tobias Hey](https://img.shields.io/badge/Author-Tobias%20Hey-blue)](https://github.com/tobhey)
+[![Author: Julian Frattini](https://img.shields.io/badge/Author-Julian%20Frattini-blue)](https://github.com/JulianFrattini)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
 
 This repository contains the replication package for the study on how requirements quality affects the performance of automatic trace link recovery tools.
-In the scope of this study, we address the question "Which factors of requirements quality impact the performance of automatic traceability like recovery?"
-We implement both an observational and an experimental study to answer this research question.
+In the scope of this study, we address the questions "Which factors of requirements quality impact the per-
+formance of automated traceability link recovery?" and "Do different approaches for automated traceability link
+recovery respond differently to these factors?"
 
 ![Overview of the study method](./figures/graphs/rq4tlr-study-overview.png)
 
@@ -81,6 +85,23 @@ To reproduce the study that this replication package accompanies, we recommend t
 
 For all `.Rmd` files, there is also a precompiled `.html` file in [analysis/html/](./analysis/html/) to ease their access.
 When compiling the data analysis notebooks yourself, keep in mind that training Bayesian models may take several minutes.
+
+## Citation
+
+If you use this artifact in your research, please cite:
+
+```bibtex
+@inproceedings{hey_frattini_2026_rq4tlr,
+  title={How Requirements Quality Makes (or Breaks) Traceability Link Recovery},
+  author={Hey, Tobias and Frattini, Julian},
+  booktitle={Proceedings of the 2026 IEEE International Requirements Engineering Conference (RE)},
+  year={2026},
+  organization={IEEE},
+  note={Available at: [DOI to be added]}
+}
+```
+
+For machine-readable citation information, please refer to the [CITATION.cff](./CITATION.cff) file in this repository.
 
 ## License
 

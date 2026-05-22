@@ -1,0 +1,41 @@
+cff-version: 1.2.0
+message: "If you use this artifact, please cite it as below."
+type: software
+title: >-
+  How Requirements Quality Makes (or Breaks) Traceability Link Recovery - Replication Package
+authors:
+  - given-names: Tobias
+    family-names: Hey
+    email: hey@kit.edu
+    affiliation: Karlsruhe Institute of Technology (KIT)
+    orcid: 'https://orcid.org/0000-0003-0381-1020'
+  - given-names: Julian
+    family-names: Frattini
+    affiliation: >-
+      Chalmers University of Technology and University of
+      Gothenburg
+    email: julian.frattini@chalmers.se
+    orcid: 'https://orcid.org/0000-0003-3995-6125'
+repository-code: "https://github.com/JulianFrattini/rq4tlr"
+url: "https://github.com/JulianFrattini/rq4tlr"
+license: MIT
+preferred-citation:
+  type: conference-paper
+  title: "How Requirements Quality Makes (or Breaks) Traceability Link Recovery"
+  authors:
+    - family-names: "Hey"
+      given-names: "Tobias"
+    - family-names: "Frattini"
+      given-names: "Julian"
+  collection-title: "Proceedings of the 2026 IEEE International Requirements Engineering Conference (RE)"
+  year: 2026
+  conference:
+    name: "IEEE International Requirements Engineering Conference"
+    alias: "RE"
+    date-start: 2026-08-17
+    date-end: 2026-08-21
+  publisher:
+    name: "IEEE"
+  # doi: "10.1109/RE.2026.XXXXX"  # Add when available
+  # start: 1  # Add page numbers when available
+  # end: 10
