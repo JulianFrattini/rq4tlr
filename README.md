@@ -1,4 +1,4 @@
-# How Requirements Quality Makes (or Breaks) Traceability Link Recovery - Replication Packa
+# How Requirements Quality Makes (or Breaks) Traceability Link Recovery - Replication Package
 [![Author: Tobias Hey](https://img.shields.io/badge/Author-Tobias%20Hey-blue)](https://github.com/tobhey)
 [![Author: Julian Frattini](https://img.shields.io/badge/Author-Julian%20Frattini-blue)](https://github.com/JulianFrattini)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
