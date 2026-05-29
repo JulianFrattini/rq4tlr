@@ -1,6 +1,6 @@
 ---
 title: "Causal DAG"
-author: "Anonymous"
+author: "Julian Frattini"
 date: '2025-02-10'
 output: html_document
 ---

@@ -1,6 +1,6 @@
 ---
 title: "Marginal Effects of Contains Alternatives"
-author: "Anonymous"
+author: "Julian Frattini"
 date: "2025-08-21"
 output: html_document
 ---

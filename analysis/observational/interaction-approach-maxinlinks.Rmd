@@ -1,6 +1,6 @@
 ---
 title: 'Interaction: Approach x Scattered Requirements'
-author: "Anonymous"
+author: "Julian Frattini"
 date: "2025-08-30"
 output: html_document
 ---
