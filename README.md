@@ -2,6 +2,7 @@
 [![Author: Tobias Hey](https://img.shields.io/badge/Author-Tobias%20Hey-blue)](https://github.com/tobhey)
 [![Author: Julian Frattini](https://img.shields.io/badge/Author-Julian%20Frattini-blue)](https://github.com/JulianFrattini)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20448215.svg)](https://doi.org/10.5281/zenodo.20448215)
 
 This repository contains the replication package for the study on how requirements quality affects the performance of automatic trace link recovery tools.
 In the scope of this study, we address the questions "Which factors of requirements quality impact the per-
