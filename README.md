@@ -163,7 +163,7 @@ For both reuse scenarios, the stable handoff points are the normalized input fil
 
 Primary immutable artifact location:
 
-1. DOI: https://doi.org/10.5281/zenodo.20448216
+1. DOI: https://doi.org/10.5281/zenodo.20479037
 
 Project source location:
 
