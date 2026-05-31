@@ -134,7 +134,6 @@ Reuse guidance for non-executable material:
 1. The extraction/codebook document in [doc](./doc) can be reused for qualitative labeling protocols.
 2. Input/output datasets in [data](./data) can be reused for benchmarking or secondary analysis.
 
-
 ## Steps to Reproduce
 
 ### Full regeneration path (computationally expensive)
@@ -150,6 +149,15 @@ Reuse guidance for non-executable material:
 
 1. Numeric differences in posterior summaries can occur across operating systems, compiler toolchains, and package patch versions.
 2. Re-rendered notebook HTML files may differ in metadata/timestamps while preserving substantive results.
+
+## Reuse with other Data Sets and TLR Approaches
+
+This artifact is not limited to the data sets and traceability link recovery approaches included in this repository. The workflow can be reused with additional inputs as long as they are mapped to the expected interfaces of the parsing, processing, and analysis pipeline.
+
+1. **Other data sets**: New requirements data sets can be incorporated by implementing or adapting parsers in [src/parsers](./src/parsers) so that the raw inputs are transformed into the normalized intermediate representation consumed by the Python pipeline. The resulting normalized files are stored in [data/input/formatted](./data/input/formatted) and can then be processed using the existing scripts documented in [src/README.md](./src/README.md).
+2. **Other TLR approaches**: Additional traceability link recovery approaches can be evaluated by exporting their results into the schema expected in [data/TLR_results](./data/TLR_results). Once these outputs follow the repository's naming and column conventions, they can be merged with the independent variables and reused in the downstream analysis notebooks.
+
+For both reuse scenarios, the stable handoff points are the normalized input files in [data/input/formatted](./data/input/formatted), the merged variable tables in [data/output](./data/output), the TLR result files in [data/TLR_results](./data/TLR_results), and the prepared analysis data set in [analysis/data/rq4tlr-data.csv](./analysis/data/rq4tlr-data.csv).
 
 ## Artifact Location
 
