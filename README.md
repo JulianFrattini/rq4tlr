@@ -2,9 +2,9 @@
 [![Author: Tobias Hey](https://img.shields.io/badge/Author-Tobias%20Hey-blue)](https://github.com/tobhey)
 [![Author: Julian Frattini](https://img.shields.io/badge/Author-Julian%20Frattini-blue)](https://github.com/JulianFrattini)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20448215.svg)](https://doi.org/10.5281/zenodo.20448215)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20448216.svg)](https://doi.org/10.5281/zenodo.20448216)
 
-This repository contains the replication package for the study on how requirements quality affects the performance of automatic trace link recovery tools.
+This repository contains the replication package for the study on how requirements quality affects the performance of automatic traceabitlity link recovery tools.
 In the scope of this study, we address the questions "Which factors of requirements quality impact the per-
 formance of automated traceability link recovery?" and "Do different approaches for automated traceability link
 recovery respond differently to these factors?"
@@ -17,21 +17,24 @@ This repository consists of the following files.
 
 ```
 ├── analysis : directory containing all files for the final data analysis
-│   ├── data : directory for data directly for the analysis 
-│   │   ├── estimates : directory of outputs produced during the data analysis
-│   │   └── rq4tlr.csv : data parsed into a format usable for the final data analysis
+│   ├── data
+│   │   ├── estimates : outputs produced during the data analysis
+│   │   └── rq4tlr-data.csv : data parsed into a format usable for the final data analysis
 │   ├── experimental/experimental-analysis.Rmd : multivariate regression analysis on the experimental data
 │   ├── html : directory containing all pre-compiled data analysis notebooks
 │   ├── observational : directory containing all regression analysis on the observational data
-│   │   ├── observational-analysis-x.Rmd : observational analysis of all variables per outcome
-│   │   └── interaction-approach-x.Rmd : interaction analysis between approach and variable x
-│   └── util : directory for utility scripts
+│   │   ├── observational-analysis-*.Rmd : observational analysis of all variables per outcome
+│   │   └── interaction-approach-*.Rmd : interaction analysis between approach and variable x
+│   └── util : utility notebooks for the analysis workflow
+│       ├── conditional-inconsistentloa-outlinks-size.Rmd : conditional-effects analysis
 │       ├── dag.Rmd : specification of the causal assumptions
-│       └── data-preparation.Rmd : compilation and casting of final data set
+│       ├── data-preparation.Rmd : compilation and casting of the final data set
+│       ├── estimate-visualization.Rmd : visualization of posterior estimates
+│       └── marginal-*.Rmd : marginal-effects analyses
 ├── data : directory containing all data collected for and produced during the study
-│   ├── input : data sets composed from a series of use cases from different domains
-│   │   ├── raw : original data as obtained from previous studies (see below)
-│   │   └── preprocessed : processed data put into a common json format
+│   ├── ├── formatted : normalized source data used by the Python pipeline
+│   │   ├── raw : original data as obtained from previous studies
+│   │   └── supplementary : generated tables for manual labeling and inspection
 │   ├── labeling/rq4tlr-manual-variables.xlsx : labels assigned manually for complex independent variables
 │   ├── output/ : labels assigned automatically for simpler independent variables
 │   │   ├── rq4tlr-automatic-aggregated.csv : automatically labeled variables aggregated to file-level
@@ -40,7 +43,7 @@ This repository consists of the following files.
 │   │   ├── rq4tlr-automatic-usecase.csv : automatically labeled variables on usecase-level
 │   │   ├── rq4tlr-merged.csv : merged data from automatically and manually labeled variables
 │   │   └── variables.json : specification of variable names
-│   └── TLR_results/FTLR : results from the FTLR tool performing TLR on the data set
+│   └── TLR_results : results from the different TLR approaches on the data set
 ├── doc/Extraction Guidelines.pdf : codebook for extracting manual quality factors
 ├── figures : directory for all additional documentation
 │   ├── distributions : visualization of the distribution of factors in the data
@@ -50,11 +53,11 @@ This repository consists of the following files.
 │       ├── conditional : visualization of conditional effects
 │       └── marginal : visualization of marginal effects
 ├── src : directory containing all source code
-└── requirements.txt : specification of required libraries to run the analysis
+└── requirements.txt : specification of required Python libraries
 ```
 
 The src subdirectory contains its own [README.md](./src/README.md) with more detailed descriptions.
-The data used in this study stems from the repository [tobhey/**finegrained-traceability**](https://github.com/tobhey/finegrained-traceability). 
+The datasets used in this study stem from the repository [tobhey/**finegrained-traceability**](https://github.com/tobhey/finegrained-traceability). 
 
 ## System Requirements
 
@@ -95,10 +98,9 @@ If you use this artifact in your research, please cite:
 @inproceedings{hey_frattini_2026_rq4tlr,
   title={How Requirements Quality Makes (or Breaks) Traceability Link Recovery},
   author={Hey, Tobias and Frattini, Julian},
-  booktitle={Proceedings of the 2026 IEEE International Requirements Engineering Conference (RE)},
+  booktitle={2026 34th IEEE International Requirements Engineering Conference (RE)},
   year={2026},
-  organization={IEEE},
-  note={Available at: [DOI to be added]}
+  organization={IEEE}
 }
 ```
 
