@@ -1,6 +1,6 @@
-from src.processor.subflow.subflowprocessor import SubflowProcessor
+from processor.subflow.subflowprocessor import SubflowProcessor
 
-from src.structure.subflow import SubFlow
+from structure.subflow import SubFlow
 
 
 class CalculateMaxNumberOfReferencesToTargetArtifact(SubflowProcessor):

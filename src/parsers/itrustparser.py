@@ -17,9 +17,9 @@ class ItrustParser(AbstractUseCaseParser):
         uc: RawUseCase = RawUseCase(id=ucid, dataset="itrust", name=uc_name)
 
         # determine the main flows
-        main_flows: list[str] = [ucfile for ucfile in uc_texts.keys() if 'E' not in ucfile]
-        alternative_flows: list[str] = [ucfile for ucfile in uc_texts.keys() if 'E' in ucfile]
-        
+        main_flows: list[str] = sorted([ucfile for ucfile in uc_texts.keys() if 'E' not in ucfile])
+        alternative_flows: list[str] = sorted([ucfile for ucfile in uc_texts.keys() if 'E' in ucfile])
+                
         # parse the main sub flows
         for flow in main_flows:
             # parse the steps of the subflow

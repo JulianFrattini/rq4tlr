@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 
-from src.structure.usecase import UseCase
+from structure.usecase import UseCase
 
 
 @dataclass

@@ -98,11 +98,15 @@ def main(selected_level: str):
 
     # STEP 4: aggregate to goldstandard level
     final_df = aggregate_dataframes(level_results)
-    output_filename: str = os.path.join(PATH_OUTPUT, f'rq4tlr-automatic-aggregated.csv')
-    final_df.to_csv(output_filename, index=False)
+    if final_df is not None:
+        output_filename: str = os.path.join(PATH_OUTPUT, f'rq4tlr-automatic-aggregated.csv')
+        final_df.to_csv(output_filename, index=False)
 
 
 def aggregate_dataframes(level_results):
+    if 'sentence' not in level_results:
+        return None
+
     # First merge subflow and sentence
     # Identify key columns
     key_columns = ["dataset", "uc", "file"]
@@ -120,11 +124,17 @@ def aggregate_dataframes(level_results):
     aggregated_df = aggregated_df.rename(columns={col: f'max_{col}' for col in aggregated_df.columns if
                                                   col not in key_columns and 'max' in agg_funcs.get(col, '')})
 
+    if 'subflow' not in level_results:
+        return aggregated_df
+
     merged_df = pd.merge(level_results["subflow"], aggregated_df, on=["dataset", "uc", "file"], how="inner")
 
 
     # Second merge use case results with dataframe
     # Rename `id` to `uc` for merging
+    if 'usecase' not in level_results:
+        return merged_df
+
     extra_df = level_results["usecase"].rename(columns={"id": "uc"})
     # Merge DataFrames
     final_df = pd.merge(extra_df, merged_df, on=["dataset", "uc"], how="right")

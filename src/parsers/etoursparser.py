@@ -26,7 +26,7 @@ class EtoursParser(AbstractUseCaseParser):
                 uc.actors.append(line.split(':')[1].strip())
             elif line.startswith('Entry Operator conditions:'):
                 uc.preconditions = line.split(':')[1].strip()
-            elif line.startswith('Flow of events User System:'):
+            elif line.startswith('Flow of events User System:') or line.startswith('Flow of events Gps System:'):
                 is_parsing_steps = True
                 continue
             elif line.startswith('Exit conditions:'):

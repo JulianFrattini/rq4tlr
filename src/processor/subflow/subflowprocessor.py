@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from src.structure.subflow import SubFlow
+from structure.subflow import SubFlow
 
 
 class SubflowProcessor(ABC):

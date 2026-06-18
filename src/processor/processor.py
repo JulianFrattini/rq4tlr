@@ -18,11 +18,11 @@ from processor.sentence.detect_passive import DetectPassive
 from processor.sentence.calc_complexity import CalcComplexity
 from processor.sentence.detect_negation import DetectNegation
 
-from src.processor.sentence.detect_starts_without_nounphrase import DetectStartsWithoutNounPhrase
-from src.processor.subflow.calc_max_number_of_refs_to_target_artifacts import \
+from processor.sentence.detect_starts_without_nounphrase import DetectStartsWithoutNounPhrase
+from processor.subflow.calc_max_number_of_refs_to_target_artifacts import \
     CalculateMaxNumberOfReferencesToTargetArtifact
-from src.processor.subflow.calc_number_of_target_artifacts import CalculateNumberOfTargetArtifacts
-from src.structure.subflow import SubFlow
+from processor.subflow.calc_number_of_target_artifacts import CalculateNumberOfTargetArtifacts
+from structure.subflow import SubFlow
 
 
 class Processor:

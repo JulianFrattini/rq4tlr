@@ -1,8 +1,8 @@
 import pytest
 
-from src.processor.subflow.calc_coherence import CalculateCoherence
+from processor.subflow.calc_coherence import CalculateCoherence
 
-from src.structure.sentence import sentence
+from structure.sentence import sentence
 
 class TestCalcCoherence:
 

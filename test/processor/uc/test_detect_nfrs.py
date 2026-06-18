@@ -1,8 +1,8 @@
 import pytest
 
-from src.processor.uc.detect_nfrs import DetectNonFunctionalRequirements
+from processor.uc.detect_nfrs import DetectNonFunctionalRequirements
 
-from src.structure.usecase import UseCase
+from structure.usecase import UseCase
 
 class TestDetectNFRs:
 
