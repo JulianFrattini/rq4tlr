@@ -75,6 +75,6 @@ ggplot(d, aes(x = qf)) +
 
 ```{r export-figure}
 ggsave(
-  file = file.path(path.figures, "obs-marginal-outlinks-anaphora.pdf"), device = "pdf", 
-  width = 5.5, height = 3)
+  file = file.path(path.figures, "obs-marginal-outlinks-anaphora.pdf"), 
+  device = cairo_pdf, width = 5.5, height = 3)
 ```
