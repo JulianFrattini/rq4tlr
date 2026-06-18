@@ -6,3 +6,4 @@ spacy==3.8.2
 negspacy==1.0.4
 numpy==1.26.4
 pytest-cov==6.0.0
+click==8.4.1

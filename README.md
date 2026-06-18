@@ -2,15 +2,12 @@
 [![Author: Tobias Hey](https://img.shields.io/badge/Author-Tobias%20Hey-blue)](https://github.com/tobhey)
 [![Author: Julian Frattini](https://img.shields.io/badge/Author-Julian%20Frattini-blue)](https://github.com/JulianFrattini)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE.md)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20448216.svg)](https://doi.org/10.5281/zenodo.20448216)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20479037.svg)](https://doi.org/10.5281/zenodo.20479037)
 
 ## Summary of Artifact
-This repository contains the replication package for the study on how requirements quality affects the performance of automatic traceabitlity link recovery tools.
-Our objective is to contribute empirical evidence on this impact.
-At the same time, we aim to understand how the performance of Traceability Link Recovery approaches varies given quality defects.
-In the scope of this study, we address the questions "Which factors of requirements quality impact the per-
-formance of automated traceability link recovery?" and "Do different approaches for automated traceability link
-recovery respond differently to these factors?"
+This repository contains the replication package for the study on how requirements quality affects the performance of automated traceability link recovery (TLR). It bundles the source data, Python preprocessing pipeline, R analysis notebooks, and pre-rendered analysis outputs used in the paper.
+By reusing this artifact, you can reproduce the published analyses, inspect each intermediate dataset, and extend the workflow to additional datasets or TLR approaches.
+The study investigates two questions: which requirements-quality factors impact automated TLR performance, and whether different TLR approaches react differently to these factors.
 
 ![Overview of the study method](./figures/graphs/rq4tlr-study-overview.png)
 
@@ -91,7 +88,7 @@ The datasets used in this study stem from the repository [tobhey/**finegrained-t
 
 To run the processing steps implemented using Python, consider the [README file in the src directory](./src/README.md) which contains both system requirements and usage instructions.
 
-To run the data analysis scripts implemented in R, ensure that you have [R](https://ftp.acc.umu.se/mirror/CRAN/) (version > 4.0) and an IDE like [RStudio](https://posit.co/download/rstudio-desktop/#download) installed on your machine. 
+To run the data analysis scripts implemented in R, ensure that you have [R](https://ftp.acc.umu.se/mirror/CRAN/) (version > 4.0) and either [RStudio Desktop](https://posit.co/download/rstudio-desktop/#download) (recommended) or another R-capable IDE/editor that can open the `rq4tlr.Rproj` project. 
 
 
 ## Installation Instructions
@@ -163,7 +160,7 @@ For both reuse scenarios, the stable handoff points are the normalized input fil
 
 Primary immutable artifact location:
 
-1. DOI: https://doi.org/10.5281/zenodo.20448216
+1. DOI: https://doi.org/10.5281/zenodo.20479037
 
 Project source location:
 

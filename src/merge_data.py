@@ -51,7 +51,7 @@ def load_automatic_data() -> pd.DataFrame:
 
 def determine_nfr_variable(df: pd.DataFrame) -> pd.DataFrame:
     # determine the relevant NFR variable from the two existing ones
-    df['Mislocated Functional Requirements'] = df.apply(
+    df['Mislocated Functional Requirement'] = df.apply(
         lambda row: row['nfrs'] and not row['Contains NFRs'], 
         axis=1)
 
