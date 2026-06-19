@@ -49,6 +49,8 @@ On the highest level, it contains the following executable scripts:
 The subsequent sections describe each executable in detail. 
 Consider the [system requirements](#system-requirements) for running the scripts.
 
+Run all executable commands in this README from within the `src/` directory. The imports are standardized for src-local execution (e.g., `python process.py --level all` from `src/`).
+
 ### Disagreements
 
 The `disagreements.py` script detects and prints all disagreements between the manual ratings of two raters.
@@ -215,6 +217,8 @@ Then, execute the following steps:
 
 1. Optionally, create a virtual environment via `python -m venv .venv` and activate it using the command for your shell
 2. Install the necessary requirements via `pip install -r requirements.txt`
-3. Install the spaCy language model via `python -m spacy download en_core_web_md`
+3. Install the spaCy language models used by this project:
+    - `python -m spacy download en_core_web_sm` (used by the iTrust parser)
+    - `python -m spacy download en_core_web_md` (used by preprocessing and sentence processors)
 
 Afterwards, you can continue with the usage of the scripts.
