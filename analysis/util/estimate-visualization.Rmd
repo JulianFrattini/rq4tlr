@@ -202,7 +202,7 @@ d.quality %>%
 
 ```{r export-significant}
 ggsave(
-  file = file.path(path.figures, "obs-coefs-sig2.pdf"), device = "pdf", 
+  file = file.path(path.figures, "obs-coefs-sig2.pdf"), device = cairo_pdf, 
   width = 26, height = 18, units = "cm")
 ```
 

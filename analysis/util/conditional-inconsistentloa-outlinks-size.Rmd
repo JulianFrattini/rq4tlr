@@ -66,6 +66,6 @@ ggplot(d, aes(x = qf)) +
 
 ```{r export-figure}
 ggsave(
-  file = file.path(path.figures, "obs-conditional-inconsistentloa-outlinks-size.pdf"), device = "pdf", 
-  width = 12, height = 3)
+  file = file.path(path.figures, "obs-conditional-inconsistentloa-outlinks-size.pdf"), 
+  device = cairo_pdf, width = 12, height = 3)
 ```

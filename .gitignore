@@ -166,3 +166,4 @@ analysis/fits/
 renv/library/
 renv/staging/
 renv/python/
+.positai

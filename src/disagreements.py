@@ -1,7 +1,7 @@
 import pandas as pd
 import argparse
 
-file_name: str = '../data/labeling/rq4tlr-manual-variables.xlsx'
+file_name: str = '../data/labeling/rq4tlr-manual-variables-vo.xlsx'
 
 factors_requirement: list[str] = ['Functional Duplication', 
                       'Use Case Naming Problems', 
@@ -10,13 +10,14 @@ factors_requirement: list[str] = ['Functional Duplication',
                       'Inputs or Outputs not quantified', 
                       'Contains NFRs', 
                       'Contains Actor-Actor Interaction',
+                               'Inconsistent Level of Abstraction',
+                               #'Contains clarification',
                       'Contains justifications']
 
 factors_sentence: list[str] = ['Coordination Ambiguity', 
                                'Contains UI Design Details',
-                               'Contains Alternative',
-                               'Inconsistent Level of Abstraction',
-                               'Contains Clarification']
+                               #'Contains Alternative'
+                               ]
 
 def compare(rating1: pd.DataFrame, rating2: pd.DataFrame, factors: list[str], compose_id: callable) -> int:
     # drop rows with missing values
@@ -64,13 +65,13 @@ if __name__ == "__main__":
 
     disagreements: int = 0
     if args.level == 'requirements':
-        rating1 = pd.read_excel(file_name, sheet_name='Requirements R1')
-        rating2 = pd.read_excel(file_name, sheet_name='Requirements R2')
+        rating1 = pd.read_excel(file_name, sheet_name='Requirements')
+        rating2 = pd.read_excel(file_name, sheet_name='Requirements Overlap')
         compose_id = lambda row: f'{row["Dataset"]}-{row["File"]}'
         disagreements = compare(rating1, rating2, factors_requirement, compose_id)
     elif args.level == 'sentences':
-        rating1 = pd.read_excel(file_name, sheet_name='Sentences R1')
-        rating2 = pd.read_excel(file_name, sheet_name='Sentences R2')
+        rating1 = pd.read_excel(file_name, sheet_name='Sentence')
+        rating2 = pd.read_excel(file_name, sheet_name='Sentence Overlap')
         compose_id = lambda row: f'{row["Dataset"]}-{row["File"]}-{row["Line"]}'
         disagreements = compare(rating1, rating2, factors_sentence, compose_id)
     print(f'Total disagreements: {disagreements}')
