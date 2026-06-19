@@ -2,6 +2,7 @@ import csv
 import os, json
 import argparse
 from collections import defaultdict
+import re
 
 from util.static import LEVELS
 
@@ -17,6 +18,13 @@ from processor.processor import Processor
 
 from util.static import PATH_OUTPUT, PATH_RAW_OUTPUT
 
+
+def formatted_uc_sort_key(filename: str) -> tuple[int, str]:
+    match = re.match(r'UC(\d+)\.json$', filename)
+    if not match:
+        return (10**9, filename)
+    return (int(match.group(1)), filename)
+
 def get_use_cases(dataset: str) -> list[RawUseCase]:
     """Read the use cases from the dataset folder and return them as a list of RawUseCase objects
     
@@ -26,7 +34,7 @@ def get_use_cases(dataset: str) -> list[RawUseCase]:
     path: str = os.path.join(PATH_RAW_OUTPUT, dataset)
     
     items: list[RawUseCase] = []
-    for filename in os.listdir(path):
+    for filename in sorted(os.listdir(path), key=formatted_uc_sort_key):
         file_path = os.path.join(path, filename)
         if os.path.isfile(file_path):
             with open(file_path, 'r', encoding='utf-8') as file:
@@ -46,7 +54,7 @@ def get_TLR_goldstandard(dataset) -> TLR_goldstandard:
     path: str = os.path.join(PATH_RAW_GOLDSTANDARDS, dataset)
 
     goldstandards: list[TLR_goldstandard] = []
-    for filename in os.listdir(path):
+    for filename in sorted(os.listdir(path)):
         file_path = os.path.join(path, filename)
         if os.path.isfile(file_path):
             with open(file_path, 'r', encoding='utf-8') as file:
