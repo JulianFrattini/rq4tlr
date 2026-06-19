@@ -11,7 +11,8 @@ class UseCasePreprocessor:
     def __init__(self):
         self.preprocessor = Preprocessor()
         # Load the English model
-        # to utilize the spacy model, run python -m spacy download en_core_web_md
+        # Preprocessing uses en_core_web_md
+        # Install via: python -m spacy download en_core_web_md
         self.nlp = spacy.load("en_core_web_md")
 
     def preprocess_use_case(self, raw_use_case: RawUseCase, goldstandards, raw_use_cases: list[RawUseCase]) -> UseCase:
