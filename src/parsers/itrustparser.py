@@ -7,6 +7,8 @@ import spacy
 CONJUNCTION_START_PATTERN = re.compile(r"^(and|or|but|nor|so|yet)\b", flags=re.IGNORECASE)
 TAG_SPLIT_PATTERN = re.compile(r"(\[[A-Z0-9, ]+\])\s+(The\b.*)$")
 TAG_AT_END_PATTERN = re.compile(r"\.\[[A-Z0-9, ]+\]$")
+TAG_ONLY_SENTENCE_PATTERN = re.compile(r"^\[[A-Z0-9, ]+\]\.$")
+NUMERIC_PAREN_END_PATTERN = re.compile(r"\b\d+\)$")
 WORD_PATTERN = re.compile(r"\b\w+\b")
 GLOSSARY_TAIL_PATTERN = re.compile(r"^[A-Z][A-Za-z0-9/&\-]*(?:\s+[A-Za-z0-9/&\-]+){0,3}\)")
 
@@ -25,6 +27,8 @@ class ItrustParser(AbstractUseCaseParser):
 
         # Minimal corpus-specific merge rules for obvious line-wrap artifacts.
         if cur.startswith('['):
+            if TAG_ONLY_SENTENCE_PATTERN.match(cur) and NUMERIC_PAREN_END_PATTERN.search(prev):
+                return False
             return True
 
         if prev.endswith('/'):
