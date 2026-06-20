@@ -67,9 +67,9 @@ p1 <- c(
 )
 ```
 
-To confirm the eligibility of the prior distributions, perform a prior predictive check (skipped in the version produced by `knitr`).
+To confirm the eligibility of the prior distributions, perform a prior predictive check.
 
-```{r model-sample-priors, eval = FALSE}
+```{r model-sample-priors}
 m.prior <-
   brm(data = df, family = zero_one_inflated_beta, f, prior = p1,
     iter = 4000, warmup = 1000, chains = 4, cores = 4,
@@ -79,6 +79,9 @@ m.prior <-
 
 brms::pp_check(m.prior, ndraws=100)
 ```
+
+Due to the number of interaction effects and the relatively wide priors, the estimation ($y_{rep}$) clusters around the extremes of the spectrum.
+This is, however, expected and will be overwhelmed by the number of data points.
 
 Given the eligibility of the priors, train the full model by updating the coefficient distributions in light of the observed data.
 
